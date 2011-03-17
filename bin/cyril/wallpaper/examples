@@ -1,0 +1,33 @@
+-- AlertDialog --
+
+LayoutInflater factory = LayoutInflater.from(view.getContext());
+final View alertDialogView = factory.inflate(R.layout.alertdialog, null);
+ 
+//Création de l'AlertDialog
+AlertDialog.Builder adb = new AlertDialog.Builder(view.getContext());
+ 
+//On affecte la vue personnalisé que l'on a crée à notre AlertDialog
+adb.setMessage(wallpaperManager.getDesiredMinimumWidth()+"");
+ 
+//On donne un titre à l'AlertDialog
+adb.setTitle("WallpaperInfo");
+adb.show();
+
+
+-- LinearLayout --
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+ android:layout_width="fill_parent" android:layout_height="wrap_content"> 
+
+ <ListView android:id="@+id/android:list" android:layout_width="fill_parent" 
+ android:layout_height="wrap_content"/> 
+ 
+ <Button android:id="@+id/savewallpaper" android:layout_width="fill_parent" 
+ android:layout_height="wrap_content" android:text="save current wallpaper" 
+ android:layout_gravity="center_horizontal"/> 
+</LinearLayout> 
+
+-- Metrics --
+
+final DisplayMetrics metrics = new DisplayMetrics();
+getWindowManager().getDefaultDisplay().getMetrics(metrics);

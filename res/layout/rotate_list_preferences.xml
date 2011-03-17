@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<ListPreference android:title="Rotate time"
+		android:summary="the time before wallpaper change" android:key="rotate_time"
+		android:defaultValue="hour" android:entries="@array/rotate_time_entries"
+		android:entryValues="@array/rotate_time_values" />
+	<Preference android:title="Disable rotate list"
+		android:summary="Unselect the selected rotate list" android:key="disable_rotate_list" />
+	<Preference android:title="Start rotate list"
+		android:summary="Start the selected rotate list" android:key="start_rotate_list" />
+	<Preference android:title="Stop rotate list"
+		android:summary="Stop the selected rotate list" android:key="stop_rotate_list" />
+</PreferenceScreen>
