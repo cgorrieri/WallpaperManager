@@ -115,6 +115,10 @@ public class RotateListWallpapersDBAdapter {
 		return myDataBase.delete(TABLE, WALLPAPER_ID+" = "+ rtlWpp.getWpp_id()+" AND "+ROTATELIST_ID+" = "+ rtlWpp.getRtl_id(), null);
 	}
 	
+	public int removeFromWallpaperId(int wpp_id) {
+		return myDataBase.delete(TABLE, WALLPAPER_ID+" = "+ wpp_id, null);
+	}
+	
 	public int removeFromRotateListId(int rtl_id) {
 		return myDataBase.delete(TABLE, ROTATELIST_ID+" = "+ rtl_id, null);
 	}
