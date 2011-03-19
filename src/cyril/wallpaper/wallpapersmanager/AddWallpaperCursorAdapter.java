@@ -1,10 +1,5 @@
 package cyril.wallpaper.wallpapersmanager;
 
-import cyril.wallpaper.R;
-import cyril.wallpaper.WallpapersTabActivityGroup;
-import cyril.wallpaper.rotatelistsmanager.RotateList;
-import cyril.wallpaper.rotatelistsmanager.RotateListWallpaper;
-import cyril.wallpaper.rotatelistsmanager.RotateListWallpapersDBAdapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +11,11 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import cyril.wallpaper.R;
+import cyril.wallpaper.WallpapersTabActivityGroup;
 
 public class AddWallpaperCursorAdapter extends CursorAdapter {
 	private Wallpaper wpp;
-	private Folder fd;
 	private Dialog dg;
 	protected final LayoutInflater mInflater;
 	protected final Context mContext;
