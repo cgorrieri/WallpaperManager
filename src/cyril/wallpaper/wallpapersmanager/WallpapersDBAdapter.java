@@ -2,13 +2,12 @@ package cyril.wallpaper.wallpapersmanager;
 
 import java.util.ArrayList;
 
-import cyril.wallpaper.WMSQLiteOpenHelper;
-
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import cyril.wallpaper.WMSQLiteOpenHelper;
+import cyril.wallpaper.rotatelistsmanager.RotateListWallpapersDBAdapter;
 
 public class WallpapersDBAdapter {
 
@@ -19,11 +18,13 @@ public class WallpapersDBAdapter {
 	private static final String FOLDER = "folder_id";
 	private static final String ADDRESS = "address";
 	
+	private Context mContext;
 	private SQLiteDatabase myDataBase;
 	private WMSQLiteOpenHelper baseHelper;
 	
 	public WallpapersDBAdapter(Context context) {
 		baseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
+		mContext = context;
 	}
 	
 	public void open() {
@@ -88,10 +89,19 @@ public class WallpapersDBAdapter {
 	}
 	
 	public int removeWallpaper(int id) {
+		RotateListWallpapersDBAdapter rtlWppDBA = new RotateListWallpapersDBAdapter(mContext);
+		rtlWppDBA.open();
+		rtlWppDBA.removeFromWallpaperId(id);
+		rtlWppDBA.close();
 		return myDataBase.delete(TABLE, ID+" = "+ id, null);
 	}
 	
 	public int removeWallpaperFromFolder(Folder fd) {
+		ArrayList<Wallpaper> wpps = getWallpapersFromFolder(fd);
+		int result = 0;
+		for(Wallpaper wpp : wpps) {
+			result += removeWallpaper(wpp.getId());
+		}
 		return myDataBase.delete(TABLE, FOLDER+" = "+ fd.getId(), null);
 	}
 	
