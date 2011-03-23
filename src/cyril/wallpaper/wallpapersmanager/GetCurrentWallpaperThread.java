@@ -44,7 +44,7 @@ public class GetCurrentWallpaperThread extends Thread {
         	
             long date = new Date().getTime();
             
-            String filename = "wallpaper_"+date+".png";
+            String filename = "wpp_"+date+".png";
             
 			OutputStream fOut = null;
 			File file = new File(WallpaperManagerConstants.registrationFilesDir, filename);
