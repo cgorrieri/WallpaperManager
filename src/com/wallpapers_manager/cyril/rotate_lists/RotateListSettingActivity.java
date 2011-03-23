@@ -2,17 +2,19 @@ package com.wallpapers_manager.cyril.rotate_lists;
 
 import java.util.List;
 
-import com.wallpapers_manager.cyril.R;
-import com.wallpapers_manager.cyril.RotateWallpaperService;
-
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+
+import com.wallpapers_manager.cyril.R;
+import com.wallpapers_manager.cyril.RotateWallpaperService;
 
 public class RotateListSettingActivity extends PreferenceActivity {
 	
@@ -43,32 +45,27 @@ public class RotateListSettingActivity extends PreferenceActivity {
 			disable_rotate_list.setEnabled(false);
 		}
 		
-		final Preference start_rotate_list = (Preference) findPreference("start_rotate_list");
-		final Preference stop_rotate_list = (Preference) findPreference("stop_rotate_list");
+		final CheckBoxPreference chBxPref = (CheckBoxPreference) findPreference("start_stop_rotate_list");
 		
 		if(isServiceRunning()) {
-			start_rotate_list.setEnabled(false);
+			chBxPref.setChecked(true);
 		} else {
-			stop_rotate_list.setEnabled(false);
+			chBxPref.setChecked(false);
 		}
 		
 		final Intent service = new Intent(ctxt, RotateWallpaperService.class);
 		
-		start_rotate_list.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			public boolean onPreferenceClick(Preference preference) {
-				ctxt.startService(service);
-				stop_rotate_list.setEnabled(true);
-				preference.setEnabled(false);
-				return true;
-			}
-		});
-		
-		stop_rotate_list.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			public boolean onPreferenceClick(Preference preference) {
-				ctxt.stopService(service);
-				start_rotate_list.setEnabled(true);
-				preference.setEnabled(false);
-				return true;
+		chBxPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				boolean newBool = (Boolean) newValue;
+				chBxPref.setChecked(newBool);
+				if(newBool) {
+					ctxt.startService(service);
+				} else {
+					ctxt.stopService(service);
+				}
+				return false;
 			}
 		});
 	}

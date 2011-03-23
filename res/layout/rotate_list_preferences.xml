@@ -6,8 +6,9 @@
 		android:entryValues="@array/rotate_time_values" />
 	<Preference android:title="Disable rotate list"
 		android:summary="Unselect the selected rotate list" android:key="disable_rotate_list" />
-	<Preference android:title="Start rotate list"
-		android:summary="Start the selected rotate list" android:key="start_rotate_list" />
-	<Preference android:title="Stop rotate list"
-		android:summary="Stop the selected rotate list" android:key="stop_rotate_list" />
+	<CheckBoxPreference
+        android:title="Run rotate list"
+        android:defaultValue="false"
+        android:summary=""
+        android:key="start_stop_rotate_list" />
 </PreferenceScreen>
