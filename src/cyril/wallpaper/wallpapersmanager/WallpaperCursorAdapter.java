@@ -74,7 +74,7 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				final CharSequence[] items = {"Apply", "Add to playlist", "Move to", "Delete"};
+				final CharSequence[] items = {"Apply", "Add to playlist", "Move to", "Copy in", "Delete"};
 				
 				final Wallpaper wp = wpp; 
 
@@ -120,6 +120,20 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				    		fdDBA.close();
 				    		break;
 				    	case 3:
+				    		final Dialog dg3 = new Dialog(mContext);
+				    		
+				    		final FoldersDBAdapter fdDBA2 = new FoldersDBAdapter(mContext);
+				    		fdDBA2.open();
+				            Cursor cur3 = fdDBA2.getCursor();
+				    		ListView lstA3 = new ListView(mContext);
+				    		CursorAdapter ca3 = new AddWallpaperCursorAdapter(mContext, cur3, wp, dg3, true);
+				    		lstA3.setAdapter(ca3);
+				    		fdDBA2.close();
+				    		dg3.setContentView(lstA3);
+				    		dg3.setTitle("Copy in");
+				    		dg3.show();
+				    		break;
+				    	case 4:
 				    		WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(mContext);
 				            wppDBA.open();
 					        	wpp.delete(wppDBA);
