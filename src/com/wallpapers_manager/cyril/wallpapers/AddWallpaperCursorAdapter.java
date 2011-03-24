@@ -26,11 +26,12 @@ import com.wallpapers_manager.cyril.WallpaperManagerConstants;
 import com.wallpapers_manager.cyril.WallpapersTabActivityGroup;
 
 public class AddWallpaperCursorAdapter extends CursorAdapter {
-	private Wallpaper mWpp;
-	private Dialog mDialog;
-	protected final LayoutInflater mInflater;
-	protected final Context mContext;
-	private boolean mCopy;
+	protected final LayoutInflater 	mInflater;
+	protected final Context 		mContext;
+	
+	private Wallpaper 	mWallpaper;
+	private Dialog 		mDialog;
+	private boolean 	mCopy;
 	
 	public AddWallpaperCursorAdapter(Context context, Cursor cursor, Wallpaper wpp, Dialog dg) {
 		this(context, cursor, wpp, dg, false);
@@ -40,42 +41,42 @@ public class AddWallpaperCursorAdapter extends CursorAdapter {
 		super(context, cursor);
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
-		mWpp = wpp;
+		mWallpaper = wpp;
 		mDialog = dg;
 		mCopy = copy;
 	}
 	
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final Folder fd = new Folder(cursor.getInt(0),	cursor.getString(1));
+		final Folder folder = new Folder(cursor.getInt(0),	cursor.getString(1));
 
-		ImageView image_view = (ImageView) view.findViewById(R.id.image);
-		image_view.setImageResource(R.drawable.folder);
+		ImageView imageView = (ImageView) view.findViewById(R.id.image);
+		imageView.setImageResource(R.drawable.folder);
 
-		TextView name_view = (TextView) view.findViewById(R.id.name);
-		name_view.setText(cursor.getString(1));
+		TextView nameTextView = (TextView) view.findViewById(R.id.name);
+		nameTextView.setText(cursor.getString(1));
 
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(mContext);
-				mWpp.setFolderId(fd.getId());
-				wppDBA.open();
+				WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
+				mWallpaper.setFolderId(folder.getId());
+				wallpapersDBAdapter.open();
 				if(mCopy) {
-					String old_name = mWpp.getAddress();
-					mWpp.setAddress(mWpp.getAddress().replace(".", "c."));
-					copy_file(old_name, mWpp.getAddress());
-					wppDBA.insertWallpaper(mWpp);
+					String oldName = mWallpaper.getAddress();
+					mWallpaper.setAddress(mWallpaper.getAddress().replace(".", "c."));
+					copy_file(oldName, mWallpaper.getAddress());
+					wallpapersDBAdapter.insertWallpaper(mWallpaper);
 				} else {
-					wppDBA.updateWallpaper(mWpp);
+					wallpapersDBAdapter.updateWallpaper(mWallpaper);
 				}
-				wppDBA.close();
+				wallpapersDBAdapter.close();
 				mDialog.dismiss();
 				
 				
-				WallpapersTabActivityGroup.group.finishFromChild(WallpapersTabActivityGroup.group.getCurrentActivity());
+				WallpapersTabActivityGroup._group.finishFromChild(WallpapersTabActivityGroup._group.getCurrentActivity());
 				Intent wallpapers = new Intent(mContext, WallpapersActivity.class);
-				wallpapers.putExtra("folder_id", mWpp.getFolderId());
-				WallpapersTabActivityGroup.group.startChildActivity(
+				wallpapers.putExtra("folder_id", mWallpaper.getFolderId());
+				WallpapersTabActivityGroup._group.startChildActivity(
 						"WallpapersActivity",
 						wallpapers.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
@@ -87,16 +88,16 @@ public class AddWallpaperCursorAdapter extends CursorAdapter {
 		return mInflater.inflate(R.layout.folder, parent, false);
 	}
 	
-	private void copy_file(String name, String dest_name)
+	private void copy_file(String name, String nameDest)
 	{
 		
-		File file = new File(WallpaperManagerConstants.registrationFilesDir, name);
-		File file_dest = new File(WallpaperManagerConstants.registrationFilesDir, dest_name);
+		File file = new File(WallpaperManagerConstants._registrationFilesDir, name);
+		File fileDest = new File(WallpaperManagerConstants._registrationFilesDir, nameDest);
 
 		OutputStream fos;
 		FileInputStream fis;
 		try {
-			fos = new FileOutputStream(file_dest);
+			fos = new FileOutputStream(fileDest);
 			fis = new FileInputStream(file);
 			Bitmap res = BitmapFactory.decodeStream(fis);
 	        fis.close();

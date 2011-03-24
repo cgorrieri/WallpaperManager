@@ -24,13 +24,13 @@ public class WallpapersActivity extends Activity {
 	private static final int MENU_SET_AND_ADD_NEW_WALLPAPER = 1;
 	private static final int REQUEST_CODE = 0;
 	
-	private Context mContext;
-	private Folder mFolder;
-	private ProgressDialog dialog;
-	private GetCurrentWallpaperThread getCurrentWallpaper;
+	private Context 		mContext;
+	private Folder 			mFolder;
+	private ProgressDialog 	mDialog;
+	private GetCurrentWallpaperThread 	mGetCurrentWallpaperThread;
 	
-	private GridView gridview;
-	private TextView textview;
+	private GridView mGridView;
+	private TextView mTextView;
 	
     /** Called when the activity is first created. */
     @Override
@@ -38,37 +38,37 @@ public class WallpapersActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallpapers_grid);
         
-        mContext = WallpapersTabActivityGroup.group;
+        mContext = WallpapersTabActivityGroup._group;
         
-        int folder_id = this.getIntent().getIntExtra("folder_id", 0);
-        FoldersDBAdapter fdDBA = new FoldersDBAdapter(mContext);
-        fdDBA.open();
-        mFolder = fdDBA.getFolder(folder_id);
-        fdDBA.close();
+        int folderId = this.getIntent().getIntExtra("folderId", 0);
+        FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
+        foldersDBAdapter.open();
+        mFolder = foldersDBAdapter.getFolder(folderId);
+        foldersDBAdapter.close();
 
-        final WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(this);
-        wppDBA.open();
-        Cursor curs = wppDBA.getCursor(folder_id);
+        final WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
+        wallpapersDBAdapter.open();
+        Cursor cursor = wallpapersDBAdapter.getCursor(folderId);
   
-        this.textview = (TextView) findViewById(R.id.name);
-        this.textview.setText(mFolder.getName());
+        this.mTextView = (TextView) findViewById(R.id.name);
+        this.mTextView.setText(mFolder.getName());
         
-        this.gridview = (GridView) findViewById(R.id.gridview);
-        this.gridview.setAdapter(new WallpaperCursorAdapter(mContext,curs));
+        this.mGridView = (GridView) findViewById(R.id.gridview);
+        this.mGridView.setAdapter(new WallpaperCursorAdapter(mContext,cursor));
         
-        this.dialog = ProgressDialog.show(mContext, "", "geting current wallpaper", true);
-        this.dialog.cancel();
+        mDialog = ProgressDialog.show(mContext, "", "geting current wallpaper", true);
+        mDialog.cancel();
 		
 		Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
-				wppDBA.close();
-                wppDBA.open();
-                gridview.setAdapter(new WallpaperCursorAdapter(mContext,wppDBA.getCursor(mFolder.getId())));
-                dialog.dismiss();
+				wallpapersDBAdapter.close();
+                wallpapersDBAdapter.open();
+                mGridView.setAdapter(new WallpaperCursorAdapter(mContext,wallpapersDBAdapter.getCursor(mFolder.getId())));
+                mDialog.dismiss();
 			}
 		};
         
-		this.getCurrentWallpaper = new GetCurrentWallpaperThread(getWindowManager().getDefaultDisplay(), handler, mContext, mFolder.getId());
+		mGetCurrentWallpaperThread = new GetCurrentWallpaperThread(getWindowManager().getDefaultDisplay(), handler, mContext, mFolder.getId());
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +86,7 @@ public class WallpapersActivity extends Activity {
 	        case MENU_SET_AND_ADD_NEW_WALLPAPER:
 	        	Intent intent = new Intent();
 	        	intent.setAction(Intent.ACTION_SET_WALLPAPER);
-	        	WallpapersTabActivityGroup.group.startActivityForResult(intent, REQUEST_CODE);
+	        	WallpapersTabActivityGroup._group.startActivityForResult(intent, REQUEST_CODE);
 	            return true;
         }
         return false;
@@ -103,12 +103,12 @@ public class WallpapersActivity extends Activity {
     }
     
     private void startGetCurrentWallpaper() {
-    	dialog.show();
+    	mDialog.show();
     	try {
-        	getCurrentWallpaper.start();
+    		mGetCurrentWallpaperThread.start();
         }
         catch (IllegalThreadStateException e) {
-        	getCurrentWallpaper.run();
+        	mGetCurrentWallpaperThread.run();
         }
     }       
 }

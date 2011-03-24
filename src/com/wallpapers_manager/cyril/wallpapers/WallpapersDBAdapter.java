@@ -14,52 +14,55 @@ public class WallpapersDBAdapter {
 
 	private static final int VERSION = 1;
 	
-	private static final String TABLE = "wallpapers";
-	private static final String ID = "_id";
-	private static final String FOLDER = "folder_id";
-	private static final String ADDRESS = "address";
+	private static final String 	TABLE = "wallpapers";
+	private static final String 	ID = "_id";
+	public static final int 		ID_IC = 0;
+	private static final String 	FOLDER_ID = "folder_id";
+	public static final int 		FOLDER_ID_IC = 1;
+	private static final String 	ADDRESS = "address";
+	public static final int 		ADDRESS_IC = 2;
 	
-	private Context mContext;
-	private SQLiteDatabase myDataBase;
-	private WMSQLiteOpenHelper baseHelper;
+	private Context 			mContext;
+	private SQLiteDatabase 		mDataBase;
+	private WMSQLiteOpenHelper 	mBaseHelper;
 	
 	public WallpapersDBAdapter(Context context) {
-		baseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
+		mBaseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
 		mContext = context;
 	}
 	
 	public void open() {
-		myDataBase = baseHelper.getWritableDatabase();
+		mDataBase = mBaseHelper.getWritableDatabase();
 	}
 	
 	public void close() {
-		myDataBase.close();
+		mDataBase.close();
 	}
 	
 	public SQLiteDatabase getDataBase() {
-		return myDataBase;
+		return mDataBase;
 	}
 	
 	public Cursor getCursor(){
-		return myDataBase.query(TABLE, new String[] {ID,FOLDER,ADDRESS}, null, null, null, null, null);
+		return mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, null, null, null, null, null);
 	}
 	
-	public Cursor getCursor(int e_folder_id){
-		return myDataBase.query(TABLE, new String[] {ID,FOLDER,ADDRESS}, FOLDER+" = "+e_folder_id+"", null, null, null, null);
+	public Cursor getCursor(int folderId){
+		return mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, FOLDER_ID+" = "+folderId+"", null, null, null, null);
 	}
 	
-	public Wallpaper getWallpaper(String e_address){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,FOLDER,ADDRESS}, null, null, null, ADDRESS+" = '"+e_address+"'", null);
+	public Wallpaper getWallpaper(String address){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, null, null, null, ADDRESS+" = '"+address+"'", null);
 		return cursorToWallpaper(c);
 	}
 
-	public Wallpaper getWallpaper(int e_id){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,FOLDER,ADDRESS}, ID+" = "+e_id+"", null, null, null, null);
+	public Wallpaper getWallpaper(int id){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, ID+" = "+id+"", null, null, null, null);
 		return cursorToWallpaper(c);
 	}
 
-	public ArrayList<Wallpaper> getWallpapersFromFolder(Folder fd){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,FOLDER,ADDRESS}, FOLDER+" = "+fd.getId()+"", null, null, null, null);
+	public ArrayList<Wallpaper> getWallpapersFromFolder(Folder folder){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, FOLDER_ID+" = "+folder.getId()+"", null, null, null, null);
 		return cursorToWallpapers(c);
 	}
 	
@@ -67,61 +70,61 @@ public class WallpapersDBAdapter {
 		return cursorToWallpapers(this.getCursor());
 	}
 	
-	public long insertWallpaper(Wallpaper wpp) {
+	public long insertWallpaper(Wallpaper wallpaper) {
 		ContentValues values = new ContentValues();
-		values.put(FOLDER, wpp.getFolderId());
-		values.put(ADDRESS, wpp.getAddress());
-		return myDataBase.insert(TABLE, null, values);
+		values.put(FOLDER_ID, wallpaper.getFolderId());
+		values.put(ADDRESS, wallpaper.getAddress());
+		return mDataBase.insert(TABLE, null, values);
 	}
 	
-	public int updateWallpaper(Wallpaper wpp) {
+	public int updateWallpaper(Wallpaper wallpaper) {
 		ContentValues values = new ContentValues();
-		values.put(FOLDER, wpp.getFolderId());
-		values.put(ADDRESS, wpp.getAddress());
-		return myDataBase.update(TABLE, values, ID+" = "+wpp.getId(), null);
+		values.put(FOLDER_ID, wallpaper.getFolderId());
+		values.put(ADDRESS, wallpaper.getAddress());
+		return mDataBase.update(TABLE, values, ID+" = "+wallpaper.getId(), null);
 	}
 	
 	public int updateWallpaper(ContentValues values, String where, String[] whereArgs) {
-		return myDataBase.update(TABLE, values, where, whereArgs);
+		return mDataBase.update(TABLE, values, where, whereArgs);
 	}
 	
 	public int removeWallpaper(String address) {
-		return myDataBase.delete(TABLE, ADDRESS+" = "+ address, null);
+		return mDataBase.delete(TABLE, ADDRESS+" = "+ address, null);
 	}
 	
 	public int removeWallpaper(int id) {
-		RotateListWallpapersDBAdapter rtlWppDBA = new RotateListWallpapersDBAdapter(mContext);
-		rtlWppDBA.open();
-		rtlWppDBA.removeFromWallpaperId(id);
-		rtlWppDBA.close();
-		return myDataBase.delete(TABLE, ID+" = "+ id, null);
+		RotateListWallpapersDBAdapter rotateListWallpapersDBAdapter = new RotateListWallpapersDBAdapter(mContext);
+		rotateListWallpapersDBAdapter.open();
+		rotateListWallpapersDBAdapter.removeFromWallpaperId(id);
+		rotateListWallpapersDBAdapter.close();
+		return mDataBase.delete(TABLE, ID+" = "+ id, null);
 	}
 	
-	public int removeWallpaperFromFolder(Folder fd) {
-		ArrayList<Wallpaper> wpps = getWallpapersFromFolder(fd);
+	public int removeWallpaperFromFolder(Folder folder) {
+		ArrayList<Wallpaper> wallpapersList = getWallpapersFromFolder(folder);
 		int result = 0;
-		for(Wallpaper wpp : wpps) {
-			result += removeWallpaper(wpp.getId());
+		for(Wallpaper wallpaper : wallpapersList) {
+			result += removeWallpaper(wallpaper.getId());
 		}
-		return myDataBase.delete(TABLE, FOLDER+" = "+ fd.getId(), null);
+		return mDataBase.delete(TABLE, FOLDER_ID+" = "+ folder.getId(), null);
 	}
 	
 	private Wallpaper cursorToWallpaper(Cursor c) {
 		if(c.getCount() == 0) return null;
 		c.moveToFirst();
-		Wallpaper w = new Wallpaper(c.getInt(0), c.getInt(1), c.getString(2));
+		Wallpaper w = new Wallpaper(c.getInt(ID_IC), c.getInt(FOLDER_ID_IC), c.getString(ADDRESS_IC));
 		c.close();
 		return w;
 	}
 	private ArrayList<Wallpaper> cursorToWallpapers(Cursor c) {
 		if(c.getCount() == 0) return new ArrayList<Wallpaper>(0);
 		
-		ArrayList<Wallpaper> ws = new ArrayList<Wallpaper>(c.getCount());
+		ArrayList<Wallpaper> wallpapersList = new ArrayList<Wallpaper>(c.getCount());
 		c.moveToFirst();
 		do{
-			ws.add(new Wallpaper(c.getInt(0), c.getInt(1), c.getString(2)));
+			wallpapersList.add(new Wallpaper(c.getInt(ID_IC), c.getInt(FOLDER_ID_IC), c.getString(ADDRESS_IC)));
 		}while(c.moveToNext());
 		c.close();
-		return ws;
+		return wallpapersList;
 	}
 }

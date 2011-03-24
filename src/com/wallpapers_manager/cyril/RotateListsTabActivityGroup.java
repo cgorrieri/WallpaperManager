@@ -8,21 +8,18 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public class RotateListsTabActivityGroup extends TabActivityGroup {
-	/* Keep this in a static variable to make it accessible for all the nested
-	   activities, lets them manipulate the view */
-	public static RotateListsTabActivityGroup group;
+	
+	public static RotateListsTabActivityGroup 	_group;
 
-	public ArrayList<String> mIdList;
+	public ArrayList<String> 	mIdList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		group = this;
-		// Toast.makeText(this, "onCreate", 2).show();
+		_group = this;
 
-			this.startChildActivity("RotateListsActivity", new Intent(this,
-					RotateListsActivity.class)
-					.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		this.startChildActivity("RotateListsActivity", 
+			new Intent(this,RotateListsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 
 	}
 }

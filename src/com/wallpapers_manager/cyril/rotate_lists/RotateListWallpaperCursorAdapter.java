@@ -21,8 +21,8 @@ import com.wallpapers_manager.cyril.wallpapers.Wallpaper;
 import com.wallpapers_manager.cyril.wallpapers.WallpapersDBAdapter;
 
 public class RotateListWallpaperCursorAdapter extends CursorAdapter {
-	protected final LayoutInflater mInflater;
-	protected final Context mContext;
+	protected final LayoutInflater 	mInflater;
+	protected final Context 		mContext;
 	
 	public RotateListWallpaperCursorAdapter(Context context, Cursor cursor) {
 		super(context, cursor);
@@ -32,43 +32,44 @@ public class RotateListWallpaperCursorAdapter extends CursorAdapter {
 	
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final RotateListWallpaper rtlWpp = new RotateListWallpaper(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2));
-		WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(mContext);
-        wppDBA.open();
-        	final Wallpaper wpp = wppDBA.getWallpaper(rtlWpp.getWpp_id());
-        wppDBA.close();
+		final RotateListWallpaper rotateListWallpaper = new RotateListWallpaper(cursor.getInt(RotateListWallpapersDBAdapter.ID_IC),
+				cursor.getInt(RotateListWallpapersDBAdapter.WALLPAPER_ID_IC), cursor.getInt(RotateListWallpapersDBAdapter.ROTATELIST_ID_IC));
+		WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
+        wallpapersDBAdapter.open();
+        	final Wallpaper wallpaper = wallpapersDBAdapter.getWallpaper(rotateListWallpaper.getWallpaperId());
+        wallpapersDBAdapter.close();
 
-		File wallpaperFile = new File(WallpaperManagerConstants.registrationFilesDir, wpp.getAddress());
-		Bitmap wallpaperBitmap = Helper.decodeFile(wallpaperFile);
+		File wallpaperFile = new File(WallpaperManagerConstants._registrationFilesDir, wallpaper.getAddress());
+		Bitmap wallpaperBitmap = Helper._decodeFile(wallpaperFile);
 		
-		final ImageView wallpaper = (ImageView) view.findViewById(R.id.wallpaper);
-		wallpaper.setImageBitmap(wallpaperBitmap);
+		final ImageView wallpaperImageView = (ImageView) view.findViewById(R.id.wallpaper);
+		wallpaperImageView.setImageBitmap(wallpaperBitmap);
 		
-		final CursorAdapter cursor_adp = this;
+		final CursorAdapter cursorAdapter = this;
 
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				final CharSequence[] items = {"Delete"};
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-				builder.setTitle("Actions");
-				builder.setItems(items, new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog, int item) {
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+				alertDialogBuilder.setTitle("Actions");
+				alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialogInterface, int item) {
 				    	switch(item){
 				    	case 0:
-				    		RotateListWallpapersDBAdapter rtlWppDBA = new RotateListWallpapersDBAdapter(mContext);
-				            rtlWppDBA.open();
-					        	rtlWppDBA.remove(rtlWpp);
-					            Cursor curs = rtlWppDBA.getCursor(rtlWpp.getRtl_id());
-					            cursor_adp.changeCursor(curs);
-				            rtlWppDBA.close();
+				    		RotateListWallpapersDBAdapter rotateListWallpapersDBAdapter = new RotateListWallpapersDBAdapter(mContext);
+				            rotateListWallpapersDBAdapter.open();
+					        	rotateListWallpapersDBAdapter.remove(rotateListWallpaper);
+					            Cursor curs = rotateListWallpapersDBAdapter.getCursor(rotateListWallpaper.getRotateListId());
+					            cursorAdapter.changeCursor(curs);
+				            rotateListWallpapersDBAdapter.close();
 				    		break;
 				    	}
 				    	
 				    }
 				});
 				
-				builder.show();
+				alertDialogBuilder.show();
 			}
 		});
 	}

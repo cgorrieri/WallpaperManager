@@ -14,7 +14,7 @@ import android.view.Window;
 
 public class TabActivityGroup extends ActivityGroup {
 
-	public ArrayList<String> mIdList;
+	public ArrayList<String> 	mIdList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class TabActivityGroup extends ActivityGroup {
 	@Override
 	public void finishFromChild(Activity child) {
     	// Toast.makeText(this, "finishFromChild", 2).show();
-		LocalActivityManager manager = getLocalActivityManager();
+		LocalActivityManager localActivityManager = getLocalActivityManager();
 		int index = mIdList.size() - 1;
 
 		if (index < 1) {
@@ -42,12 +42,12 @@ public class TabActivityGroup extends ActivityGroup {
 			return;
 		}
 
-		manager.destroyActivity(mIdList.get(index), true);
+		localActivityManager.destroyActivity(mIdList.get(index), true);
 		mIdList.remove(index);
 		index--;
 		String lastId = mIdList.get(index);
-		Intent lastIntent = manager.getActivity(lastId).getIntent();
-		Window newWindow = manager.startActivity(lastId, lastIntent);
+		Intent lastIntent = localActivityManager.getActivity(lastId).getIntent();
+		Window newWindow = localActivityManager.startActivity(lastId, lastIntent);
 		setContentView(newWindow.getDecorView());
 	}
 

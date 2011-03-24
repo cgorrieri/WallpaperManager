@@ -16,12 +16,12 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 
 public class RotateListsActivity extends ListActivity {
-	private Context mContext;
-	private AlertDialog.Builder add_rotate_list_dl;
-	
 	/* Menu */
-	private static final int MENU_NEW = 0;
-	private static final int MENU_SETTINGS = 1;
+	private static final int 	MENU_NEW = 0;
+	private static final int 	MENU_SETTINGS = 1;
+	
+	private Context 			mContext;
+	private AlertDialog.Builder mAddRotateListDialog;
 	
     /** Called when the activity is first created. */
     @Override
@@ -29,33 +29,33 @@ public class RotateListsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rotate_lists_list);
         
-        mContext = RotateListsTabActivityGroup.group;
+        mContext = RotateListsTabActivityGroup._group;
         
-        final RotateListsDBAdapter rtlDBA = new RotateListsDBAdapter(mContext);
-        rtlDBA.open();
-        Cursor curs = rtlDBA.getCursor();
-        final CursorAdapter adapter = new RotateListsCursorAdapter(mContext,curs);
-        setListAdapter(adapter);
-        rtlDBA.close();
+        final RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
+        rotateListsDBAdapter.open();
+        Cursor cursor = rotateListsDBAdapter.getCursor();
+        final CursorAdapter cursorAdapter = new RotateListsCursorAdapter(mContext,cursor);
+        setListAdapter(cursorAdapter);
+        rotateListsDBAdapter.close();
         
-        add_rotate_list_dl = new AlertDialog.Builder(mContext);
-        add_rotate_list_dl.setTitle("New Rotate List");
+        mAddRotateListDialog = new AlertDialog.Builder(mContext);
+        mAddRotateListDialog.setTitle("New Rotate List");
 
-        final EditText rotate_list_name_box = new EditText(mContext);
-        rotate_list_name_box.setText("");
-        rotate_list_name_box.setPadding(10, 5, 10, 5);
+        final EditText rotateListNameEditText = new EditText(mContext);
+        rotateListNameEditText.setText("");
+        rotateListNameEditText.setPadding(10, 5, 10, 5);
 
-        add_rotate_list_dl.setView(rotate_list_name_box).setIcon(R.drawable.ic_new_rotate_list);
+        mAddRotateListDialog.setView(rotateListNameEditText).setIcon(R.drawable.ic_new_rotate_list);
         
         
-        add_rotate_list_dl.setPositiveButton("OK", new DialogInterface.OnClickListener()	{
+        mAddRotateListDialog.setPositiveButton("OK", new DialogInterface.OnClickListener()	{
     		public void onClick(DialogInterface d, int which)
     		{
-    			rtlDBA.open();
-    			rtlDBA.insertRotateList(new RotateList(rotate_list_name_box.getText().toString()));
-    	        Cursor curs = rtlDBA.getCursor();
-    	        adapter.changeCursor(curs);
-    	        rtlDBA.close();
+    			rotateListsDBAdapter.open();
+    			rotateListsDBAdapter.insertRotateList(new RotateList(rotateListNameEditText.getText().toString()));
+    	        Cursor cursor = rotateListsDBAdapter.getCursor();
+    	        cursorAdapter.changeCursor(cursor);
+    	        rotateListsDBAdapter.close();
     		}
     	});
     }
@@ -70,7 +70,7 @@ public class RotateListsActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 	        case MENU_NEW:
-	        	add_rotate_list_dl.show();
+	        	mAddRotateListDialog.show();
 	            return true;
 	        case MENU_SETTINGS:
 	        	Intent settings = new Intent(mContext, RotateListSettingActivity.class);

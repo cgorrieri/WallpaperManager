@@ -1,41 +1,33 @@
 package com.wallpapers_manager.cyril.rotate_lists;
 
 public class RotateListWallpaper {	
-	private int id;
-	private int wpp_id;
-	private int rtl_id;
+	private int 	mId;
+	private int 	mWallpaperId;
+	private int 	mRotateListId;
 	
-	public RotateListWallpaper(int e_wpp_id, int e_rtl_id) {
-		this(-1, e_wpp_id, e_rtl_id);
-	}
-	
-	public RotateListWallpaper(int e_id, int e_wpp_id, int e_rtl_id) {
-		this.setId(e_id);
-		this.setWpp_id(e_wpp_id);
-		this.setRtl_id(e_rtl_id);
+	public RotateListWallpaper(int wppId, int rtlId) {
+		this(-1, wppId, rtlId);
 	}
 	
-	public void setWpp_id(int wpp_id) {
-		this.wpp_id = wpp_id;
+	public RotateListWallpaper(int id, int wallpaperId, int rotateListId) {
+		mId = id;
+		mWallpaperId = wallpaperId;
+		mRotateListId = rotateListId;
 	}
 
-	public int getWpp_id() {
-		return wpp_id;
+	public void setId(int mId) { this.mId = mId; }
+
+	public int getId() { return mId; }
+
+	public void setWallpaperId(int wallpaperId) {
+		this.mWallpaperId = wallpaperId;
 	}
 
-	public void setRtl_id(int rtl_id) {
-		this.rtl_id = rtl_id;
+	public int getWallpaperId() { return mWallpaperId; }
+
+	public void setRotateListId(int rotateListId) {
+		this.mRotateListId = rotateListId;
 	}
 
-	public int getRtl_id() {
-		return rtl_id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getId() {
-		return id;
-	}
+	public int getRotateListId() { return mRotateListId; }
 }

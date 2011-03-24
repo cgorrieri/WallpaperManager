@@ -9,7 +9,6 @@ public class WMSQLiteOpenHelper extends SQLiteOpenHelper {
 
 	public WMSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

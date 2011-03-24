@@ -13,109 +13,112 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class RotateListsDBAdapter {
 
-	private static final int VERSION = 1;
+	private static final int 		VERSION = 1;
 	
-	private static final String TABLE = "rotate_list";
-	private static final String ID = "_id";
-	private static final String NAME = "name";
-	private static final String SELECTED = "selected";
+	private static final String 	TABLE = "rotate_list";
+	private static final String 	ID = "_id";
+	public static final int 		ID_IC = 0;
+	private static final String 	NAME = "name";
+	public static final int 		NAME_IC = 0;
+	private static final String 	SELECTED = "selected";
+	public static final int 		SELECTED_IC = 0;
 	
-	private SQLiteDatabase myDataBase;
-	private WMSQLiteOpenHelper baseHelper;
-	private RotateListWallpapersDBAdapter rtlWppDBA;
+	private SQLiteDatabase 					mDataBase;
+	private WMSQLiteOpenHelper 				mBaseHelper;
+	private RotateListWallpapersDBAdapter 	mRotateListWallpaperDBAdapter;
 	
 	public RotateListsDBAdapter(Context context) {
-		baseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
-		rtlWppDBA = new RotateListWallpapersDBAdapter(context);
+		mBaseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
+		mRotateListWallpaperDBAdapter = new RotateListWallpapersDBAdapter(context);
 	}
 	
 	public void open() {
-		myDataBase = baseHelper.getWritableDatabase();
-		rtlWppDBA.open();
+		mDataBase = mBaseHelper.getWritableDatabase();
+		mRotateListWallpaperDBAdapter.open();
 	}
 	
 	public void close() {
-		rtlWppDBA.close();
-		myDataBase.close();
+		mRotateListWallpaperDBAdapter.close();
+		mDataBase.close();
 	}
 	
 	public SQLiteDatabase getDataBase() {
-		return myDataBase;
+		return mDataBase;
 	}
 	
 	public Cursor getCursor(){
-		return myDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, null, null, null, null, null);
+		return mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, null, null, null, null, null);
 	}
 	
-	public RotateList getRotateList(String e_name){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, NAME+" = '"+e_name+"'",null, null, null,  null);
+	public RotateList getRotateList(String name){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, NAME+" = '"+name+"'",null, null, null,  null);
 		return cursorToRotateList(c);
 	}
 	
 	public RotateList getSelectedRotateList(){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, SELECTED+" = 1", null, null, null, null);
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, SELECTED+" = 1", null, null, null, null);
 		return cursorToRotateList(c);
 	}
 
-	public RotateList getRotateList(int e_id){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, ID+" = "+e_id+"", null, null, null, null);
+	public RotateList getRotateList(int id){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, ID+" = "+id+"", null, null, null, null);
 		return cursorToRotateList(c);
 	}
 
-	public ArrayList<RotateList> getRotateLists(int e_folder_id){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, ID+" = "+e_folder_id+"", null, null, null, null);
+	public ArrayList<RotateList> getRotateLists(int folderId){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, ID+" = "+folderId+"", null, null, null, null);
 		return cursorToRotateLists(c);
 	}
 	
-	public long insertRotateList(RotateList rtl) {
+	public long insertRotateList(RotateList rotateList) {
 		ContentValues values = new ContentValues();
-		values.put(NAME, rtl.getName());
-		return myDataBase.insert(TABLE, null, values);
+		values.put(NAME, rotateList.getName());
+		return mDataBase.insert(TABLE, null, values);
 	}
 	
-	public int updateRotateList(RotateList rtl) {
+	public int updateRotateList(RotateList rotateList) {
 		ContentValues values = new ContentValues();
-		values.put(ID, rtl.getId());
-		values.put(NAME, rtl.getName());
-		values.put(SELECTED, rtl.getSelected());
-		return myDataBase.update(TABLE, values, ID+" = "+rtl.getId(), null);
+		values.put(ID, rotateList.getId());
+		values.put(NAME, rotateList.getName());
+		values.put(SELECTED, rotateList.getSelected());
+		return mDataBase.update(TABLE, values, ID+" = "+rotateList.getId(), null);
 	}
 	
 	public int updateRotateList(ContentValues values, String where, String[] whereArgs) {
-		return myDataBase.update(TABLE, values, where, whereArgs);
+		return mDataBase.update(TABLE, values, where, whereArgs);
 	}
 	
 	public void removeRotateList(int id) {
-		myDataBase.delete(TABLE, ID+" = "+ id, null);
-		rtlWppDBA.removeFromRotateListId(id);
+		mDataBase.delete(TABLE, ID+" = "+ id, null);
+		mRotateListWallpaperDBAdapter.removeFromRotateListId(id);
 	}
 	
-	public void removeRotateList(RotateList rtl) {
-		this.removeRotateList(rtl.getId());
+	public void removeRotateList(RotateList rotateList) {
+		this.removeRotateList(rotateList.getId());
 	}
 	
-	private RotateList cursorToRotateList(Cursor c) {
-		if(c.getCount() == 0) {
-			c.close();
+	private RotateList cursorToRotateList(Cursor cursor) {
+		if(cursor.getCount() == 0) {
+			cursor.close();
 			return null;
 		}
-		c.moveToFirst();
-		RotateList rtl = new RotateList(c.getInt(0), c.getString(1), c.getInt(2));
-		c.close();
-		return rtl;
+		cursor.moveToFirst();
+		RotateList rotateList = new RotateList(cursor.getInt(ID_IC), cursor.getString(NAME_IC), cursor.getInt(SELECTED_IC));
+		cursor.close();
+		return rotateList;
 	}
-	private ArrayList<RotateList> cursorToRotateLists(Cursor c) {
-		if(c.getCount() == 0){
-			c.close();
+	private ArrayList<RotateList> cursorToRotateLists(Cursor cursor) {
+		if(cursor.getCount() == 0){
+			cursor.close();
 			return new ArrayList<RotateList>(0);
 		}
 		
-		ArrayList<RotateList> rotate_lists = new ArrayList<RotateList>(c.getCount());
-		c.moveToFirst();
+		ArrayList<RotateList> rotateLists = new ArrayList<RotateList>(cursor.getCount());
+		cursor.moveToFirst();
 		do{
-			rotate_lists.add(new RotateList(c.getInt(0), c.getString(1)));
-		}while(c.moveToNext());
-		c.close();
-		return rotate_lists;
+			rotateLists.add(new RotateList(cursor.getInt(ID_IC), cursor.getString(NAME_IC), cursor.getInt(SELECTED_IC)));
+		}while(cursor.moveToNext());
+		cursor.close();
+		return rotateLists;
 	}
 }

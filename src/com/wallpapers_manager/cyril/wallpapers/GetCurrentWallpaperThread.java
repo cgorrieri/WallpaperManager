@@ -16,31 +16,31 @@ import android.os.Handler;
 import android.view.Display;
 
 public class GetCurrentWallpaperThread extends Thread {
-	private Display display;
-	private Handler handler;
-	private Context context;
-	private int folder_id;
+	private Display mDisplay;
+	private Handler mHandler;
+	private Context mContext;
+	private int mFolderId;
 	
-	public GetCurrentWallpaperThread(Display display, Handler handler, Context ctxt, int folder_id)
+	public GetCurrentWallpaperThread(Display mDisplay, Handler mHandler, Context ctxt, int mFolderId)
 	{
 		super();
-		this.setDisplay(display);
-		this.setHandler(handler);
+		this.setDisplay(mDisplay);
+		this.setHandler(mHandler);
 		this.setContext(ctxt);
-		this.folder_id = folder_id;
+		this.mFolderId = mFolderId;
 	}
 
-	public void setHandler(Handler handler) {
-		this.handler = handler;
+	public void setHandler(Handler mHandler) {
+		this.mHandler = mHandler;
 	}
 
 	public Handler getHandler() {
-		return handler;
+		return mHandler;
 	}
 
 	public void run() {
 		try {	
-			WallpaperManager wallpaperManager = WallpaperManager.getInstance(this.context);
+			WallpaperManager wallpaperManager = WallpaperManager.getInstance(this.mContext);
 			
             Drawable wallpaperDrawable = wallpaperManager.getDrawable();
         	
@@ -49,7 +49,7 @@ public class GetCurrentWallpaperThread extends Thread {
             String filename = "wpp_"+date+".png";
             
 			OutputStream fOut = null;
-			File file = new File(WallpaperManagerConstants.registrationFilesDir, filename);
+			File file = new File(WallpaperManagerConstants._registrationFilesDir, filename);
             fOut = new FileOutputStream(file);
             
             Bitmap wallpaperBitmap = Bitmap.createBitmap(wallpaperDrawable.getMinimumWidth(), wallpaperDrawable.getMinimumHeight(), Bitmap.Config.ARGB_8888);
@@ -61,29 +61,29 @@ public class GetCurrentWallpaperThread extends Thread {
             fOut.flush();
             fOut.close();
       
-            WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(this.context);
+            WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(this.mContext);
 	        wppDBA.open();
-			wppDBA.insertWallpaper(new Wallpaper(this.folder_id, filename));
+			wppDBA.insertWallpaper(new Wallpaper(this.mFolderId, filename));
 			wppDBA.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        handler.sendEmptyMessage(0);
+        mHandler.sendEmptyMessage(0);
 	}
 
-	public void setContext(Context context) {
-		this.context = context;
+	public void setContext(Context mContext) {
+		this.mContext = mContext;
 	}
 
 	public Context getContext() {
-		return context;
+		return mContext;
 	}
 
-	public void setDisplay(Display display) {
-		this.display = display;
+	public void setDisplay(Display mDisplay) {
+		this.mDisplay = mDisplay;
 	}
 
 	public Display getDisplay() {
-		return display;
+		return mDisplay;
 	}
 }

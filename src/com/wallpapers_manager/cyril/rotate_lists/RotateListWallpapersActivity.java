@@ -12,9 +12,9 @@ import com.wallpapers_manager.cyril.RotateListsTabActivityGroup;
 public class RotateListWallpapersActivity extends Activity {
 	private Context mContext;
 	
-	private int rotate_list_id;
+	private int mRtlId;
 	
-	private GridView gridview;
+	private GridView mGridView;
 	
     /** Called when the activity is first created. */
     @Override
@@ -22,15 +22,15 @@ public class RotateListWallpapersActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallpapers_grid);
         
-        mContext = RotateListsTabActivityGroup.group;
+        mContext = RotateListsTabActivityGroup._group;
         
-        rotate_list_id = this.getIntent().getIntExtra("rotate_list_id", 0);
+        mRtlId = this.getIntent().getIntExtra("rotate_list_id", 0);
 
         final RotateListWallpapersDBAdapter rtlWppDBA = new RotateListWallpapersDBAdapter(this);
         rtlWppDBA.open();
-        Cursor curs = rtlWppDBA.getCursor(rotate_list_id);
+        Cursor curs = rtlWppDBA.getCursor(mRtlId);
   
-        this.gridview = (GridView) findViewById(R.id.gridview);
-        this.gridview.setAdapter(new RotateListWallpaperCursorAdapter(mContext, curs));
+        this.mGridView = (GridView) findViewById(R.id.gridview);
+        this.mGridView.setAdapter(new RotateListWallpaperCursorAdapter(mContext, curs));
     }
 }

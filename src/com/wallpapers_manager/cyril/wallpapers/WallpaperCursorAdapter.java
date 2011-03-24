@@ -28,8 +28,9 @@ import com.wallpapers_manager.cyril.WallpaperManagerConstants;
 import com.wallpapers_manager.cyril.rotate_lists.RotateListsDBAdapter;
 
 public class WallpaperCursorAdapter extends CursorAdapter {
-	protected final LayoutInflater mInflater;
-	protected final Context mContext;
+	protected final LayoutInflater 	mInflater;
+	protected final Context 		mContext;
+	private CursorAdapter			mCursorAdapter;
 
 	public WallpaperCursorAdapter(Context context, Cursor cursor) {
 		super(context, cursor);
@@ -39,29 +40,29 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final Wallpaper wpp = this.getWallpaperFromCursor(cursor);
-		// Toast.makeText(mContext, wpp.toString(), 1).show();
-		File wallpaperFile = new File(WallpaperManagerConstants.registrationFilesDir, wpp.getAddress());
-		Bitmap wallpaperBitmap = Helper.decodeFile(wallpaperFile);
+		final Wallpaper wallpaper = this.getWallpaperFromCursor(cursor);
+		// Toast.makeText(mContext, wallpaper.toString(), 1).show();
+		File wallpaperFile = new File(WallpaperManagerConstants._registrationFilesDir, wallpaper.getAddress());
+		Bitmap wallpaperBitmap = Helper._decodeFile(wallpaperFile);
 		
-		final ImageView wallpaper = (ImageView) view.findViewById(R.id.wallpaper);
-		wallpaper.setImageBitmap(wallpaperBitmap);
+		final ImageView wallpaperImageView = (ImageView) view.findViewById(R.id.wallpaper);
+		wallpaperImageView.setImageBitmap(wallpaperBitmap);
 
-		final ProgressDialog p_dialog = ProgressDialog.show(mContext, "", "Mise en place du fond d'ecran", true);
-		p_dialog.cancel();
+		final ProgressDialog progressDialog = ProgressDialog.show(mContext, "", "Setting up wallpaper", true);
+		progressDialog.cancel();
 		final Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
-				p_dialog.dismiss();
+				progressDialog.dismiss();
 			}
 		};
 		
 		final Thread updatePhoneWallpaper = new Thread() {
 			public void run() {
 				try {
-					File wallpaperFile = new File(WallpaperManagerConstants.registrationFilesDir, wpp.getAddress());
+					File wallpaperFile = new File(WallpaperManagerConstants._registrationFilesDir, wallpaper.getAddress());
 					Bitmap wallpaperBitmap = BitmapFactory.decodeFile(wallpaperFile.getAbsolutePath());
 					
-					WallpaperManager wallpaperManager = WallpaperManager.getInstance(wallpaper.getContext());
+					WallpaperManager wallpaperManager = WallpaperManager.getInstance(mContext);
 					wallpaperManager.setBitmap(wallpaperBitmap);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -70,21 +71,24 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 			}
 		};
 		
-		final CursorAdapter cursor_adp = this;
+		mCursorAdapter = this;
 
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				final CharSequence[] items = {"Apply", "Add to playlist", "Move to", "Copy in", "Delete"};
+				final CharSequence[] items = {"Put it", "Add to playlist", "Move to", "Copy in", "Delete"};
 				
-				final Wallpaper wp = wpp; 
+				final Wallpaper wp = wallpaper; 
 
-				final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-				builder.setTitle("Actions");
-				builder.setItems(items, new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog, int item) {
+				final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+				alertDialogBuilder.setTitle("Actions");
+				alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialogInterface, int item) {
+				    	Dialog dialog = new Dialog(mContext);
+				    	Cursor cursor = null;
+				    	CursorAdapter cursorAdapter = null;
 				    	switch(item){
 				    	case 0:
-				    		p_dialog.show();
+				    		progressDialog.show();
 				    		try {
 				    			updatePhoneWallpaper.start();
 				    		}
@@ -92,53 +96,47 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 			                	updatePhoneWallpaper.run();
 			                }
 				    		break;
-				    	case 1:
-				    		final Dialog dg = new Dialog(mContext);
-				    		
-				    		final RotateListsDBAdapter rtlDBA = new RotateListsDBAdapter(mContext);
-				            rtlDBA.open();
-				            Cursor cur = rtlDBA.getCursor();
+				    	case 1:				    		
+				    		final RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
+				            rotateListsDBAdapter.open();
+				            cursor = rotateListsDBAdapter.getCursor();
 				    		ListView lstA = new ListView(mContext);
-				    		CursorAdapter ca = new AddRotateListWallpaperCursorAdapter(mContext, cur, wp, dg);
-				    		lstA.setAdapter(ca);
-				    		dg.setContentView(lstA);
-				    		dg.setTitle("Add To");
-				    		dg.show();
+				    		cursorAdapter = new AddRotateListWallpaperCursorAdapter(mContext, cursor, wp, dialog);
+				    		lstA.setAdapter(cursorAdapter);
+				    		dialog.setContentView(lstA);
+				    		dialog.setTitle("Add To");
+				    		dialog.show();
 				    		break;
 				    	case 2:
-				    		final Dialog dg2 = new Dialog(mContext);
-				    		
-				    		final FoldersDBAdapter fdDBA = new FoldersDBAdapter(mContext);
-				    		fdDBA.open();
-				            Cursor cur2 = fdDBA.getCursor();
-				    		ListView lstA2 = new ListView(mContext);
-				    		CursorAdapter ca2 = new AddWallpaperCursorAdapter(mContext, cur2, wp, dg2);
-				    		lstA2.setAdapter(ca2);
-				    		dg2.setContentView(lstA2);
-				    		dg2.setTitle("Move To");
-				    		dg2.show();
-				    		fdDBA.close();
+				    		final FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
+				    		foldersDBAdapter.open();
+				    		cursor = foldersDBAdapter.getCursor();
+				    		ListView listView2 = new ListView(mContext);
+				    		cursorAdapter = new AddWallpaperCursorAdapter(mContext, cursor, wp, dialog);
+				    		listView2.setAdapter(cursorAdapter);
+				    		dialog.setContentView(listView2);
+				    		dialog.setTitle("Move To");
+				    		dialog.show();
+				    		foldersDBAdapter.close();
 				    		break;
 				    	case 3:
-				    		final Dialog dg3 = new Dialog(mContext);
-				    		
-				    		final FoldersDBAdapter fdDBA2 = new FoldersDBAdapter(mContext);
-				    		fdDBA2.open();
-				            Cursor cur3 = fdDBA2.getCursor();
-				    		ListView lstA3 = new ListView(mContext);
-				    		CursorAdapter ca3 = new AddWallpaperCursorAdapter(mContext, cur3, wp, dg3, true);
-				    		lstA3.setAdapter(ca3);
-				    		fdDBA2.close();
-				    		dg3.setContentView(lstA3);
-				    		dg3.setTitle("Copy in");
-				    		dg3.show();
+				    		final FoldersDBAdapter foldersDBAdapter2 = new FoldersDBAdapter(mContext);
+				    		foldersDBAdapter2.open();
+				    		cursor = foldersDBAdapter2.getCursor();
+				    		ListView listView3 = new ListView(mContext);
+				    		cursorAdapter = new AddWallpaperCursorAdapter(mContext, cursor, wp, dialog, true);
+				    		listView3.setAdapter(cursorAdapter);
+				    		foldersDBAdapter2.close();
+				    		dialog.setContentView(listView3);
+				    		dialog.setTitle("Copy in");
+				    		dialog.show();
 				    		break;
 				    	case 4:
 				    		WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(mContext);
 				            wppDBA.open();
-					        	wpp.delete(wppDBA);
-					            Cursor curs = wppDBA.getCursor(wpp.getFolderId());
-					            cursor_adp.changeCursor(curs);
+				        	wallpaper.delete(wppDBA);
+				        	cursor = wppDBA.getCursor(wallpaper.getFolderId());
+				        	mCursorAdapter.changeCursor(cursor);
 				            wppDBA.close();
 				    		break;
 				    	}
@@ -146,13 +144,15 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				    }
 				});
 				
-				builder.show();
+				alertDialogBuilder.show();
 			}
 		});
 	}
 	
 	private Wallpaper getWallpaperFromCursor(Cursor cursor) {
-		return new Wallpaper(cursor.getInt(0), cursor.getInt(1), cursor.getString(2));
+		return new Wallpaper(cursor.getInt(WallpapersDBAdapter.ID_IC),
+				cursor.getInt(WallpapersDBAdapter.FOLDER_ID_IC),
+				cursor.getString(WallpapersDBAdapter.ADDRESS_IC));
 	}
 
 	@Override

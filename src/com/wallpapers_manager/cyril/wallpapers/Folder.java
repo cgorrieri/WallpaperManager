@@ -1,21 +1,21 @@
 package com.wallpapers_manager.cyril.wallpapers;
 
 public class Folder {	
-	private int id;
-	private String name;
+	private int 	mId;
+	private String 	mName;
 	
-	public Folder(String e_name) {
-		this.name = e_name;
+	public Folder(String name) {
+		mName = name;
 	}
 	
-	public Folder(int e_id, String e_name) {
-		this.id = e_id;
-		this.name = e_name;
+	public Folder(int id, String name) {
+		mId = id;
+		mName = name;
 	}
 	
-	public int getId() { return this.id; }
-	public void setId(int e_id) { this.id = e_id; }
+	public int getId() { return mId; }
+	public void setId(int id) { mId = id; }
 	
-	public String getName() { return this.name; }
-	public void setAddress(String e_name) { this.name = e_name; }
+	public String getName() { return mName; }
+	public void setAddress(String name) { this.mName = name; }
 }

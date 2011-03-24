@@ -7,14 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public class WallpapersTabActivityGroup extends TabActivityGroup {
-	/* Keep this in a static variable to make it accessible for all the nested
-	   activities, lets them manipulate the view */
-	public static WallpapersTabActivityGroup group;
+	
+	public static WallpapersTabActivityGroup 	_group;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		group = this;
+		_group = this;
 		// Toast.makeText(this, "onCreate", 2).show();
 
 		this.startChildActivity("FoldersActivity", new Intent(this,
@@ -26,8 +25,8 @@ public class WallpapersTabActivityGroup extends TabActivityGroup {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == RESULT_OK) {
 			// Toast.makeText(this, "group onActivityResult result OK", 1).show();
-			WallpapersActivity wppA = (WallpapersActivity) getCurrentActivity();
-			wppA.externOnActivityResult(requestCode, resultCode, data);
+			WallpapersActivity wppsAct = (WallpapersActivity) getCurrentActivity();
+			wppsAct.externOnActivityResult(requestCode, resultCode, data);
 		} else {
 			// Toast.makeText(this, "group onActivityResult error "+resultCode, 1).show();
 		}

@@ -20,8 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RotateListsCursorAdapter extends CursorAdapter {
-	private final LayoutInflater mInflater;
-	private final Context mContext;
+	private final LayoutInflater 	mInflater;
+	private final Context			mContext;
 
 	public RotateListsCursorAdapter(Context context, Cursor cursor) {
 		super(context, cursor);
@@ -31,88 +31,89 @@ public class RotateListsCursorAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final RotateList rtl = new RotateList(cursor.getInt(0),
-				cursor.getString(1), cursor.getInt(2));
+		final RotateList rotateList = new RotateList(cursor.getInt(RotateListsDBAdapter.ID_IC),
+				cursor.getString(RotateListsDBAdapter.NAME_IC), cursor.getInt(RotateListsDBAdapter.SELECTED_IC));
 
-		ImageView image_view = (ImageView) view.findViewById(R.id.image);
-		if(rtl.isSelected())
-			image_view.setImageResource(R.drawable.selected_rotate_list);
+		ImageView imageView = (ImageView) view.findViewById(R.id.image);
+		if(rotateList.isSelected())
+			imageView.setImageResource(R.drawable.selected_rotate_list);
 		else
-			image_view.setImageResource(R.drawable.rotate_list);
+			imageView.setImageResource(R.drawable.rotate_list);
 
-		TextView name_view = (TextView) view.findViewById(R.id.name);
-		name_view.setText(cursor.getString(1));
+		TextView nameView = (TextView) view.findViewById(R.id.name);
+		nameView.setText(cursor.getString(1));
 
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				openRotateList(rtl);
+				openRotateList(rotateList);
 			}
 		});
 
-		final CursorAdapter cursor_adp = this;
+		final CursorAdapter cursorAdapter = this;
 
 		view.setOnLongClickListener(new OnLongClickListener() {
 			public boolean onLongClick(final View v) {
 				final CharSequence[] items = { "Open", "", "Rename", "Delete" };
-				items[1] = rtl.isSelected() ? "UnSelect" : "Select";
-				final RotateListsDBAdapter rtlsDBA = new RotateListsDBAdapter(mContext);
+				items[1] = rotateList.isSelected() ? "UnSelect" : "Select";
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(RotateListsTabActivityGroup.group);
-				builder.setTitle("Actions");
-				builder.setItems(items, new DialogInterface.OnClickListener() {
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+				alertDialogBuilder.setTitle("Actions");
+				alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
+						final RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
+						Cursor cursor = null;
 						switch (item) {
 						case 0:
-							openRotateList(rtl);
+							openRotateList(rotateList);
 							break;
 						case 1:
-							rtlsDBA.open();
-							rtl.setSelected(rtl.isSelected() ? 0 : 1);
-							rtlsDBA.updateRotateList(rtl);
-							Cursor curs1 = rtlsDBA.getCursor();
-							cursor_adp.changeCursor(curs1);
-							rtlsDBA.close();
+							rotateListsDBAdapter.open();
+							rotateList.setSelected(rotateList.isSelected() ? 0 : 1);
+							rotateListsDBAdapter.updateRotateList(rotateList);
+							cursor = rotateListsDBAdapter.getCursor();
+							cursorAdapter.changeCursor(cursor);
+							rotateListsDBAdapter.close();
 							break;
 						case 2:
-							AlertDialog.Builder rename_rotate_list_dl = new AlertDialog.Builder(RotateListsTabActivityGroup.group);
-							rename_rotate_list_dl.setTitle("Rename Rotate List");
+							AlertDialog.Builder renameRotateListDialog = new AlertDialog.Builder(mContext);
+							renameRotateListDialog.setTitle("Rename Rotate List");
 
-							final EditText rotate_list_name_box = new EditText(mContext);
-							rotate_list_name_box.setText(rtl.getName());
-							rotate_list_name_box.setMaxLines(1);
-							rotate_list_name_box.setInputType(InputType.TYPE_CLASS_TEXT);
-							rotate_list_name_box.setSelection(0, rtl.getName().length());
+							final EditText rotateListNameEditText = new EditText(mContext);
+							rotateListNameEditText.setText(rotateList.getName());
+							rotateListNameEditText.setMaxLines(1);
+							rotateListNameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+							rotateListNameEditText.setSelection(0, rotateList.getName().length());
 
-							rename_rotate_list_dl.setView(rotate_list_name_box);
+							renameRotateListDialog.setView(rotateListNameEditText);
 
-							rename_rotate_list_dl.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+							renameRotateListDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface d, int which) {
-										rtlsDBA.open();
-										rtlsDBA.updateRotateList(new RotateList(
-												rtl.getId(),
-												rotate_list_name_box
+										rotateListsDBAdapter.open();
+										rotateListsDBAdapter.updateRotateList(new RotateList(
+												rotateList.getId(),
+												rotateListNameEditText
 														.getText()
 														.toString()));
-										Cursor curs2 = rtlsDBA.getCursor();
-										cursor_adp.changeCursor(curs2);
-										rtlsDBA.close();
+										Cursor cursor2 = rotateListsDBAdapter.getCursor();
+										cursorAdapter.changeCursor(cursor2);
+										rotateListsDBAdapter.close();
 									}
 								}
 							);
-							rename_rotate_list_dl.show();
+							renameRotateListDialog.show();
 							break;
 						case 3:
-							rtlsDBA.open();
-							rtlsDBA.removeRotateList(rtl);
-							Cursor curs3 = rtlsDBA.getCursor();
-							cursor_adp.changeCursor(curs3);
-							rtlsDBA.close();
+							rotateListsDBAdapter.open();
+							rotateListsDBAdapter.removeRotateList(rotateList);
+							cursor = rotateListsDBAdapter.getCursor();
+							cursorAdapter.changeCursor(cursor);
+							rotateListsDBAdapter.close();
 							break;
 						}
 					}
 				});
 
-				builder.show();
+				alertDialogBuilder.show();
 				return false;
 			}
 		});
@@ -123,12 +124,12 @@ public class RotateListsCursorAdapter extends CursorAdapter {
 		return mInflater.inflate(R.layout.rotate_list, parent, false);
 	}
 
-	private void openRotateList(RotateList rtl) {
-		Intent wallpapers = new Intent(mContext, RotateListWallpapersActivity.class);
-		wallpapers.putExtra("rotate_list_id", rtl.getId());
+	private void openRotateList(RotateList rotateList) {
+		Intent wallpapersIntent = new Intent(mContext, RotateListWallpapersActivity.class);
+		wallpapersIntent.putExtra("rotate_list_id", rotateList.getId());
 
-		RotateListsTabActivityGroup.group.startChildActivity(
+		RotateListsTabActivityGroup._group.startChildActivity(
 				"RotateListWallpapersActivity",
-				wallpapers.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+				wallpapersIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 }

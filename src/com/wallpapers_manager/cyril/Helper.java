@@ -9,32 +9,35 @@ import android.graphics.BitmapFactory;
 
 public class Helper {
 	
-	public static Bitmap decodeFile(File f){
+	public static Bitmap _decodeFile(File file){
 	    try {
 	        //Decode image size
-	        BitmapFactory.Options o = new BitmapFactory.Options();
-	        o.inJustDecodeBounds = true;
-	        BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+	        BitmapFactory.Options bitmapFactoryOptions = new BitmapFactory.Options();
+	        bitmapFactoryOptions.inJustDecodeBounds = true;
+	        BitmapFactory.decodeStream(new FileInputStream(file),null,bitmapFactoryOptions);
 
 	        //The new size we want to scale to
-	        final int REQUIRED_SIZE=70;
+	        final int REQUIRED_SIZE = 70;
 
 	        //Find the correct scale value. It should be the power of 2.
-	        int width_tmp=o.outWidth, height_tmp=o.outHeight;
+	        int widthTemp = bitmapFactoryOptions.outWidth;
+	        int heightTemp = bitmapFactoryOptions.outHeight;
 	        int scale=1;
 	        while(true){
-	            if(width_tmp/2<REQUIRED_SIZE || height_tmp/2<REQUIRED_SIZE)
+	            if((widthTemp / 2) <REQUIRED_SIZE || (heightTemp / 2) < REQUIRED_SIZE)
 	                break;
-	            width_tmp/=2;
-	            height_tmp/=2;
-	            scale*=2;
+	            widthTemp /= 2;
+	            heightTemp /= 2;
+	            scale *= 2;
 	        }
 
 	        //Decode with inSampleSize
-	        BitmapFactory.Options o2 = new BitmapFactory.Options();
-	        o2.inSampleSize=scale;
-	        return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-	    } catch (FileNotFoundException e) {}
+	        bitmapFactoryOptions = new BitmapFactory.Options();
+	        bitmapFactoryOptions.inSampleSize=scale;
+	        return BitmapFactory.decodeStream(new FileInputStream(file), null, bitmapFactoryOptions);
+	    } catch (FileNotFoundException e) {
+	    	e.printStackTrace();
+	    }
 	    return null;
 	}
 

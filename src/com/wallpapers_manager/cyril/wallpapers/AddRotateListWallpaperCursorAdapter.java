@@ -17,50 +17,51 @@ import com.wallpapers_manager.cyril.rotate_lists.RotateListWallpaper;
 import com.wallpapers_manager.cyril.rotate_lists.RotateListWallpapersDBAdapter;
 
 public class AddRotateListWallpaperCursorAdapter extends CursorAdapter {
-	private Wallpaper wpp;
-	private Folder fd;
-	private Dialog dg;
-	protected final LayoutInflater mInflater;
-	protected final Context mContext;
+	protected final LayoutInflater 	mInflater;
+	protected final Context 		mContext;
+	
+	private Wallpaper 	mWallpaper;
+	private Folder 		mFolder;
+	private Dialog 		mDialog;
 	
 	public AddRotateListWallpaperCursorAdapter(Context context, Cursor cursor, Wallpaper wpp, Dialog dg) {
 		super(context, cursor);
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
-		this.wpp = wpp;
-		this.dg = dg;
+		mWallpaper = wpp;
+		mDialog = dg;
 	}
 	
 	public AddRotateListWallpaperCursorAdapter(Context context, Cursor cursor, Folder fd, Dialog dg) {
 		super(context, cursor);
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
-		this.fd = fd;
-		this.dg = dg;
+		mFolder = fd;
+		mDialog = dg;
 	}
 	
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final RotateList rtl = new RotateList(cursor.getInt(0),	cursor.getString(1), cursor.getInt(2));
+		final RotateList rotateList = new RotateList(cursor.getInt(0),	cursor.getString(1), cursor.getInt(2));
 
-		ImageView image_view = (ImageView) view.findViewById(R.id.image);
-		image_view.setImageResource(rtl.isSelected() ? R.drawable.selected_rotate_list : R.drawable.rotate_list);
+		ImageView imageView = (ImageView) view.findViewById(R.id.image);
+		imageView.setImageResource(rotateList.isSelected() ? R.drawable.selected_rotate_list : R.drawable.rotate_list);
 
-		TextView name_view = (TextView) view.findViewById(R.id.name);
-		name_view.setText(cursor.getString(1));
+		TextView nameTextView = (TextView) view.findViewById(R.id.name);
+		nameTextView.setText(cursor.getString(1));
 
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				RotateListWallpapersDBAdapter rtlWppDBA = new RotateListWallpapersDBAdapter(mContext);
-				rtlWppDBA.open();
-				if(wpp != null) {
-					RotateListWallpaper rtlWpp = new RotateListWallpaper(wpp.getId(), rtl.getId());
-					rtlWppDBA.insertRotateListWallpaper(rtlWpp);
+				RotateListWallpapersDBAdapter rotateListWallpapersDBAdapter = new RotateListWallpapersDBAdapter(mContext);
+				rotateListWallpapersDBAdapter.open();
+				if(mWallpaper != null) {
+					RotateListWallpaper rotateListWallpaper = new RotateListWallpaper(mWallpaper.getId(), rotateList.getId());
+					rotateListWallpapersDBAdapter.insertRotateListWallpaper(rotateListWallpaper);
 				} else {
-					rtlWppDBA.insertRotateListWallpaperForFolder(fd, rtl);
+					rotateListWallpapersDBAdapter.insertRotateListWallpaperForFolder(mFolder, rotateList);
 				}
-				rtlWppDBA.close();
-				dg.dismiss();
+				rotateListWallpapersDBAdapter.close();
+				mDialog.dismiss();
 			}
 		});
 	}

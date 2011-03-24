@@ -11,59 +11,62 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.RotateWallpaperService;
 
 public class RotateListSettingActivity extends PreferenceActivity {
 	
-	/** Called when the activity is first created. */
+	public static final String 	HOUR = "hour";
+	public static final String 	MINUTE = "minute";
+	public static final String 	DAY = "day";
+	
+	private Context mContext;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.rotate_list_preferences);
 		
-		final Context ctxt = this;
-		final RotateListsDBAdapter rtlDBA = new RotateListsDBAdapter(this);
-		rtlDBA.open();
-		final RotateList rtl = rtlDBA.getSelectedRotateList();
-		rtlDBA.close();
-		Preference disable_rotate_list = (Preference) findPreference("disable_rotate_list");
-		if(rtl != null) {
-			disable_rotate_list.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		mContext = this;
+		final RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
+		rotateListsDBAdapter.open();
+		final RotateList rotateList = rotateListsDBAdapter.getSelectedRotateList();
+		rotateListsDBAdapter.close();
+		Preference disableRotateListPreference = (Preference) findPreference("disableRotateListPreference");
+		if(rotateList != null) {
+			disableRotateListPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				public boolean onPreferenceClick(Preference preference) {
-					rtlDBA.open();
-					rtl.setSelected(0);
-					rtlDBA.updateRotateList(rtl);
-					rtlDBA.close();
+					rotateListsDBAdapter.open();
+					rotateList.setSelected(false);
+					rotateListsDBAdapter.updateRotateList(rotateList);
+					rotateListsDBAdapter.close();
 					return true;
 				}
-
 			});
 		} else {
-			disable_rotate_list.setEnabled(false);
+			disableRotateListPreference.setEnabled(false);
 		}
 		
-		final CheckBoxPreference chBxPref = (CheckBoxPreference) findPreference("start_stop_rotate_list");
+		final CheckBoxPreference StartStopRotateListCheckBoxPreference = (CheckBoxPreference) findPreference("start_stop_rotate_list");
 		
 		if(isServiceRunning()) {
-			chBxPref.setChecked(true);
+			StartStopRotateListCheckBoxPreference.setChecked(true);
 		} else {
-			chBxPref.setChecked(false);
+			StartStopRotateListCheckBoxPreference.setChecked(false);
 		}
 		
-		final Intent service = new Intent(ctxt, RotateWallpaperService.class);
+		final Intent serviceIntent = new Intent(mContext, RotateWallpaperService.class);
 		
-		chBxPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		StartStopRotateListCheckBoxPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				boolean newBool = (Boolean) newValue;
-				chBxPref.setChecked(newBool);
+				StartStopRotateListCheckBoxPreference.setChecked(newBool);
 				if(newBool) {
-					ctxt.startService(service);
+					mContext.startService(serviceIntent);
 				} else {
-					ctxt.stopService(service);
+					mContext.stopService(serviceIntent);
 				}
 				return false;
 			}
@@ -72,27 +75,13 @@ public class RotateListSettingActivity extends PreferenceActivity {
 	
 	public boolean isServiceRunning() {
 		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+		final List<ActivityManager.RunningServiceInfo> servicesList = activityManager.getRunningServices(Integer.MAX_VALUE);
 
 		boolean isServiceFound = false;
 
-		for (int i = 0; i < services.size(); i++) {
-			// Log.d(Global.TAG, "Service Nr. " + i + " :" +
-			// services.get(i).service);
-			// Log.d(Global.TAG, "Service Nr. " + i + " package name : " +
-			// services.get(i).service.getPackageName());
-			Log.i("service",
-					"Service Nr. " + i + " class name : "
-							+ services.get(i).service.getClassName()+ ", package name : " +services.get(i).service.getPackageName());
-
-			if ("com.wallpapers_manager.cyril".equals(services.get(i).service.getPackageName())) {
-//				Log.d(Global.TAG, "packagename stimmt überein !!!");
-				// Log.d(LOG_TAG, "SpotService" + " : " +
-				// services.get(i).service.getClassName());
-
-				if ("com.wallpapers_manager.cyril.RotateWallpaperService"
-						.equals(services.get(i).service.getClassName())) {
-//					Log.d(Global.TAG, "getClassName stimmt überein !!!");
+		for (int i = 0; i < servicesList.size(); i++) {
+			if ("com.wallpapers_manager.cyril".equals(servicesList.get(i).service.getPackageName())) {
+				if ("com.wallpapers_manager.cyril.RotateWallpaperService".equals(servicesList.get(i).service.getClassName())) {
 					isServiceFound = true;
 				}
 			}

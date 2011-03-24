@@ -16,9 +16,11 @@ import com.wallpapers_manager.cyril.WallpaperManagerConstants;
 import com.wallpapers_manager.cyril.WallpapersTabActivityGroup;
 
 public class FoldersActivity extends ListActivity {
-	private static final int MENU_ADD_FOLDER = 0;
-	private static final int MENU_QUIT = 1;
-	private AlertDialog.Builder add_folder_dl;
+	private static final int 	MENU_ADD_FOLDER = 0;
+	private static final int 	MENU_QUIT = 1;
+	
+	private AlertDialog.Builder 	mAddFolderAlertDialogBuilder;
+	private Context 				mContext;
 	
     /** Called when the activity is first created. */
     @Override
@@ -29,36 +31,33 @@ public class FoldersActivity extends ListActivity {
         // Create the wallpaper directory if not already exist
         WallpaperManagerConstants.makeRegistrationFilesDir();
         
-//        stopService(new Intent(this, RotateWallpaperService.class));
-//        startService(new Intent(this, RotateWallpaperService.class));   
+        mContext = WallpapersTabActivityGroup._group;
         
-        final Context ctxt = WallpapersTabActivityGroup.group;
+        final FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(this);
+        foldersDBAdapter.open();
+        Cursor foldersCursor = foldersDBAdapter.getCursor();
+        final CursorAdapter foldersCursorAdapter = new FoldersCursorAdapter(mContext,foldersCursor);
+        setListAdapter(foldersCursorAdapter);
+        foldersDBAdapter.close();
         
-        final FoldersDBAdapter fdsDBA = new FoldersDBAdapter(this);
-        fdsDBA.open();
-        Cursor curs = fdsDBA.getCursor();
-        final CursorAdapter adapter = new FoldersCursorAdapter(ctxt,curs);
-        setListAdapter(adapter);
-        fdsDBA.close();
-        
-        add_folder_dl = new AlertDialog.Builder(ctxt);
-        add_folder_dl.setTitle("New Folder").setIcon(R.drawable.new_folder);
+        mAddFolderAlertDialogBuilder = new AlertDialog.Builder(mContext);
+        mAddFolderAlertDialogBuilder.setTitle("New Folder").setIcon(R.drawable.new_folder);
 
-        final EditText folder_name_box = new EditText(ctxt);
-        folder_name_box.setText("");
-        folder_name_box.setPadding(10, 5, 10, 5);
+        final EditText folderNameEditText = new EditText(mContext);
+        folderNameEditText.setText("");
+        folderNameEditText.setPadding(10, 5, 10, 5);
 
-        add_folder_dl.setView(folder_name_box);
+        mAddFolderAlertDialogBuilder.setView(folderNameEditText);
         
         
-        add_folder_dl.setPositiveButton("OK", new DialogInterface.OnClickListener()	{
+        mAddFolderAlertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener()	{
     		public void onClick(DialogInterface d, int which)
     		{
-    			fdsDBA.open();
-    			fdsDBA.insertFolder(new Folder(folder_name_box.getText().toString()));
-    	        Cursor curs = fdsDBA.getCursor();
-    	        adapter.changeCursor(curs);
-    	        fdsDBA.close();
+    			foldersDBAdapter.open();
+    			foldersDBAdapter.insertFolder(new Folder(folderNameEditText.getText().toString()));
+    	        Cursor foldersCursor = foldersDBAdapter.getCursor();
+    	        foldersCursorAdapter.changeCursor(foldersCursor);
+    	        foldersDBAdapter.close();
     		}
     	});
     }
@@ -73,7 +72,7 @@ public class FoldersActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 	        case MENU_ADD_FOLDER:
-	        	add_folder_dl.show();
+	        	mAddFolderAlertDialogBuilder.show();
 	            return true;
 	        case MENU_QUIT:
 	            finish();

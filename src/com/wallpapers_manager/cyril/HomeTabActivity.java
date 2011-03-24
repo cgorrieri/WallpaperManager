@@ -1,7 +1,5 @@
 package com.wallpapers_manager.cyril;
 
-import com.wallpapers_manager.cyril.R;
-
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -12,17 +10,18 @@ import android.widget.TabHost;
 
 public class HomeTabActivity extends TabActivity{
 
-	private TabHost mTabHost;
+	private TabHost 	mTabHost;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTabHost = getTabHost();
-        Resources res = getResources(); // Resource object to get Drawables
+        Resources resource = getResources();
  
-        mTabHost.addTab(mTabHost.newTabSpec("wallpapers").setIndicator("Wallpapers", res.getDrawable(R.drawable.ic_wallpapers_tab)).
+        mTabHost.addTab(mTabHost.newTabSpec("wallpapers").setIndicator("Wallpapers", resource.getDrawable(R.drawable.ic_wallpapers_tab)).
         		setContent(new Intent(this, WallpapersTabActivityGroup.class)));
         
-        mTabHost.addTab(mTabHost.newTabSpec("rotate_list").setIndicator("Rotate List", res.getDrawable(R.drawable.ic_rotate_lists_tab))
+        mTabHost.addTab(mTabHost.newTabSpec("rotate_list").setIndicator("Rotate List", resource.getDrawable(R.drawable.ic_rotate_lists_tab))
         		.setContent(new Intent(this, RotateListsTabActivityGroup.class)));
  
         mTabHost.setCurrentTab(0);
