@@ -5,38 +5,28 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Date;
 
-import com.wallpapers_manager.cyril.WallpaperManagerConstants;
-
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.view.Display;
+
+import com.wallpapers_manager.cyril.WallpaperManagerConstants;
 
 public class GetCurrentWallpaperThread extends Thread {
-	private Display mDisplay;
 	private Handler mHandler;
 	private Context mContext;
 	private int mFolderId;
 	
-	public GetCurrentWallpaperThread(Display mDisplay, Handler mHandler, Context ctxt, int mFolderId)
+	public GetCurrentWallpaperThread(Handler handler, Context context, int folderId)
 	{
 		super();
-		this.setDisplay(mDisplay);
-		this.setHandler(mHandler);
-		this.setContext(ctxt);
-		this.mFolderId = mFolderId;
+		mHandler = handler;
+		mContext = context;
+		mFolderId = folderId;
 	}
 
-	public void setHandler(Handler mHandler) {
-		this.mHandler = mHandler;
-	}
-
-	public Handler getHandler() {
-		return mHandler;
-	}
 
 	public void run() {
 		try {	
@@ -61,29 +51,13 @@ public class GetCurrentWallpaperThread extends Thread {
             fOut.flush();
             fOut.close();
       
-            WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(this.mContext);
-	        wppDBA.open();
-			wppDBA.insertWallpaper(new Wallpaper(this.mFolderId, filename));
-			wppDBA.close();
+            WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
+	        wallpapersDBAdapter.open();
+				wallpapersDBAdapter.insertWallpaper(new Wallpaper(mFolderId, filename));
+			wallpapersDBAdapter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         mHandler.sendEmptyMessage(0);
-	}
-
-	public void setContext(Context mContext) {
-		this.mContext = mContext;
-	}
-
-	public Context getContext() {
-		return mContext;
-	}
-
-	public void setDisplay(Display mDisplay) {
-		this.mDisplay = mDisplay;
-	}
-
-	public Display getDisplay() {
-		return mDisplay;
 	}
 }

@@ -8,4 +8,6 @@
 		<item>Supprimer</item>		
 	</array>
 	<string name="new_folder">Nouveau dossier</string>
+	
+	<string name="folder_name_for_first">Mon dossier</string>
 </resources>

@@ -3,7 +3,7 @@ package com.wallpapers_manager.cyril.wallpapers;
 import java.util.ArrayList;
 
 import com.wallpapers_manager.cyril.WMSQLiteOpenHelper;
-import com.wallpapers_manager.cyril.rotate_lists.RotateListWallpapersDBAdapter;
+import com.wallpapers_manager.cyril.playlists.WallpapersPlaylistDBAdapter;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -93,10 +93,10 @@ public class WallpapersDBAdapter {
 	}
 	
 	public int removeWallpaper(int id) {
-		RotateListWallpapersDBAdapter rotateListWallpapersDBAdapter = new RotateListWallpapersDBAdapter(mContext);
-		rotateListWallpapersDBAdapter.open();
-		rotateListWallpapersDBAdapter.removeFromWallpaperId(id);
-		rotateListWallpapersDBAdapter.close();
+		WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
+		wallpapersPlaylistDBAdapter.open();
+			wallpapersPlaylistDBAdapter.removeFromWallpaperId(id);
+		wallpapersPlaylistDBAdapter.close();
 		return mDataBase.delete(TABLE, ID+" = "+ id, null);
 	}
 	

@@ -12,13 +12,13 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".RotateListsTabActivityGroup" />
-		<activity android:name=".rotate_lists.RotateListsActivity" />
-		<activity android:name=".rotate_lists.RotateListWallpapersActivity" />
-		<activity android:name=".rotate_lists.RotateListSettingActivity" />
+		<activity android:name=".PlaylistsTabActivityGroup" />
+		<activity android:name=".playlists.PlaylistsActivity" />
+		<activity android:name=".playlists.WallpapersPlaylistActivity" />
+		<activity android:name=".playlists.PlaylistsSettingActivity" />
 		<activity android:name=".WallpapersTabActivityGroup" />
 		<activity android:name=".wallpapers.FoldersActivity" />
 		<activity android:name=".wallpapers.WallpapersActivity" />
-		<service android:name=".RotateWallpaperService" />
+		<service android:name="RunPlaylistService" />
 	</application>
 </manifest> 

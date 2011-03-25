@@ -23,9 +23,9 @@ import android.widget.TextView;
 
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.WallpapersTabActivityGroup;
-import com.wallpapers_manager.cyril.rotate_lists.RotateList;
-import com.wallpapers_manager.cyril.rotate_lists.RotateListWallpapersDBAdapter;
-import com.wallpapers_manager.cyril.rotate_lists.RotateListsDBAdapter;
+import com.wallpapers_manager.cyril.playlists.Playlist;
+import com.wallpapers_manager.cyril.playlists.WallpapersPlaylistDBAdapter;
+import com.wallpapers_manager.cyril.playlists.PlaylistsDBAdapter;
 
 public class FoldersCursorAdapter extends CursorAdapter {
 	private final LayoutInflater 	mInflater;
@@ -71,24 +71,24 @@ public class FoldersCursorAdapter extends CursorAdapter {
 							openFolder(folder);
 							break;
 						case 1: // Create rotate list from it
-							RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
-							rotateListsDBAdapter.open();
-							RotateList rotateList = new RotateList(folder.getName());
-							rotateList.setId((int) rotateListsDBAdapter.insertRotateList(rotateList));
-							rotateListsDBAdapter.close();
-							RotateListWallpapersDBAdapter rotateListWallpapersDBAdapter = new RotateListWallpapersDBAdapter(mContext);
-							rotateListWallpapersDBAdapter.open();							
-							rotateListWallpapersDBAdapter.insertRotateListWallpaperForFolder(folder, rotateList);
-							rotateListWallpapersDBAdapter.close();
+							PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
+							playlistsDBAdapter.open();
+							Playlist playlist = new Playlist(folder.getName());
+							playlist.setId((int) playlistsDBAdapter.insertPlaylist(playlist));
+							playlistsDBAdapter.close();
+							WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
+							wallpapersPlaylistDBAdapter.open();							
+							wallpapersPlaylistDBAdapter.insertPlaylistWallpaperForFolder(folder, playlist);
+							wallpapersPlaylistDBAdapter.close();
 							break;
 						case 2: // Add to rotate list
 							final Dialog dialog = new Dialog(mContext);
 
-							RotateListsDBAdapter rotateListsDBAdapter2 = new RotateListsDBAdapter(mContext);
-							rotateListsDBAdapter2.open();
-							Cursor cur = rotateListsDBAdapter2.getCursor();
+							PlaylistsDBAdapter playlistsDBAdapter2 = new PlaylistsDBAdapter(mContext);
+							playlistsDBAdapter2.open();
+							Cursor cur = playlistsDBAdapter2.getCursor();
 							ListView lstA = new ListView(mContext);
-							CursorAdapter ca = new AddRotateListWallpaperCursorAdapter(
+							CursorAdapter ca = new AddWallpaperInPlaylistCursorAdapter(
 									mContext, cur, folder, dialog);
 							lstA.setAdapter(ca);
 							dialog.setContentView(lstA);
@@ -156,7 +156,7 @@ public class FoldersCursorAdapter extends CursorAdapter {
 
 	private void openFolder(Folder folder) {
 		Intent wallpapers = new Intent(mContext, WallpapersActivity.class);
-		wallpapers.putExtra("folder_id", folder.getId());
+		wallpapers.putExtra("folderId", folder.getId());
 
 		WallpapersTabActivityGroup._group.startChildActivity(
 				"WallpapersActivity",

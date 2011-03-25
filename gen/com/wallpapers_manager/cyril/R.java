@@ -10,10 +10,10 @@ package com.wallpapers_manager.cyril;
 public final class R {
     public static final class array {
         public static final int folder_menu=0x7f040000;
-        public static final int rotate_list_menu=0x7f040002;
-        public static final int rotate_list_wallpaper_menu=0x7f040001;
-        public static final int rotate_time_entries=0x7f040003;
-        public static final int rotate_time_values=0x7f040004;
+        public static final int playlist_menu=0x7f040001;
+        public static final int playlist_wallpaper_menu=0x7f040004;
+        public static final int rotate_time_entries=0x7f040002;
+        public static final int rotate_time_values=0x7f040003;
         public static final int wallpaper_menu=0x7f040005;
     }
     public static final class attr {
@@ -21,15 +21,15 @@ public final class R {
     public static final class drawable {
         public static final int folder=0x7f020000;
         public static final int ic_new_folder=0x7f020001;
-        public static final int ic_new_rotate_list=0x7f020002;
-        public static final int ic_quit=0x7f020003;
-        public static final int ic_rotate_list_tab=0x7f020004;
-        public static final int ic_rotate_lists_tab=0x7f020005;
+        public static final int ic_new_playlist=0x7f020002;
+        public static final int ic_playlist_tab=0x7f020003;
+        public static final int ic_playlists_tab=0x7f020004;
+        public static final int ic_quit=0x7f020005;
         public static final int ic_settings=0x7f020006;
         public static final int ic_wallpapers_tab=0x7f020007;
         public static final int icon=0x7f020008;
-        public static final int rotate_list=0x7f020009;
-        public static final int selected_rotate_list=0x7f02000a;
+        public static final int playlist=0x7f020009;
+        public static final int selected_playlist=0x7f02000a;
     }
     public static final class id {
         public static final int TextView1=0x7f060003;
@@ -39,7 +39,7 @@ public final class R {
         public static final int gridview=0x7f06000a;
         public static final int image=0x7f060005;
         public static final int name=0x7f060002;
-        public static final int rotate_list_view=0x7f060008;
+        public static final int playlist_view=0x7f060008;
         public static final int savewallpaper=0x7f060006;
         public static final int text=0x7f060001;
         public static final int wallpaper=0x7f060009;
@@ -50,25 +50,27 @@ public final class R {
         public static final int folder=0x7f030002;
         public static final int folders_list=0x7f030003;
         public static final int main=0x7f030004;
-        public static final int rotate_list=0x7f030005;
-        public static final int rotate_list_preferences=0x7f030006;
-        public static final int rotate_lists_list=0x7f030007;
+        public static final int playlist=0x7f030005;
+        public static final int playlists_list=0x7f030006;
+        public static final int playlists_preferences=0x7f030007;
         public static final int wallpaper=0x7f030008;
         public static final int wallpapers_grid=0x7f030009;
     }
     public static final class string {
-        public static final int actions=0x7f050007;
-        public static final int app_name=0x7f050006;
-        public static final int getting_current_wallpaper=0x7f05000c;
-        public static final int menu_settings=0x7f050003;
+        public static final int actions=0x7f050009;
+        public static final int app_name=0x7f050008;
+        public static final int folder_name_for_first=0x7f050001;
+        public static final int getting_current_wallpaper=0x7f05000e;
+        public static final int menu_settings=0x7f050004;
         public static final int new_folder=0x7f050000;
-        public static final int new_rotate_list=0x7f050002;
-        public static final int rotate_list_menu_select=0x7f050004;
-        public static final int rotate_list_menu_unselect=0x7f050005;
-        public static final int rotate_lists_tab_name=0x7f050001;
-        public static final int setting_up_wallpaper=0x7f05000b;
-        public static final int wallpaper_context_menu_add_current=0x7f050009;
-        public static final int wallpaper_context_menu_set_and_add=0x7f05000a;
-        public static final int wallpapers_tab_name=0x7f050008;
+        public static final int new_playlist=0x7f050003;
+        public static final int playlist_menu_select=0x7f050005;
+        public static final int playlist_menu_unselect=0x7f050006;
+        public static final int playlist_name_for_first=0x7f050007;
+        public static final int playlists_tab_name=0x7f050002;
+        public static final int setting_up_wallpaper=0x7f05000d;
+        public static final int wallpaper_context_menu_add_current=0x7f05000b;
+        public static final int wallpaper_context_menu_set_and_add=0x7f05000c;
+        public static final int wallpapers_tab_name=0x7f05000a;
     }
 }

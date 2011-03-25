@@ -46,32 +46,32 @@ public class WallpapersActivity extends Activity {
         int folderId = this.getIntent().getIntExtra("folderId", 0);
         FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
         foldersDBAdapter.open();
-        mFolder = foldersDBAdapter.getFolder(folderId);
+        	mFolder = foldersDBAdapter.getFolder(folderId);
         foldersDBAdapter.close();
 
         final WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
         wallpapersDBAdapter.open();
-        Cursor cursor = wallpapersDBAdapter.getCursor(folderId);
+	        Cursor cursor = wallpapersDBAdapter.getCursor(folderId);
+	        this.mGridView = (GridView) findViewById(R.id.gridview);
+	        this.mGridView.setAdapter(new WallpaperCursorAdapter(mContext,cursor));
+        wallpapersDBAdapter.close();
   
         this.mTextView = (TextView) findViewById(R.id.name);
         this.mTextView.setText(mFolder.getName());
-        
-        this.mGridView = (GridView) findViewById(R.id.gridview);
-        this.mGridView.setAdapter(new WallpaperCursorAdapter(mContext,cursor));
         
         mDialog = ProgressDialog.show(mContext, "", mResources.getText(R.string.getting_current_wallpaper), true);
         mDialog.cancel();
 		
 		Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
-				wallpapersDBAdapter.close();
                 wallpapersDBAdapter.open();
-                mGridView.setAdapter(new WallpaperCursorAdapter(mContext,wallpapersDBAdapter.getCursor(mFolder.getId())));
+                	mGridView.setAdapter(new WallpaperCursorAdapter(mContext,wallpapersDBAdapter.getCursor(mFolder.getId())));
+				wallpapersDBAdapter.close();
                 mDialog.dismiss();
 			}
 		};
         
-		mGetCurrentWallpaperThread = new GetCurrentWallpaperThread(getWindowManager().getDefaultDisplay(), handler, mContext, mFolder.getId());
+		mGetCurrentWallpaperThread = new GetCurrentWallpaperThread(handler, mContext, mFolder.getId());
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {

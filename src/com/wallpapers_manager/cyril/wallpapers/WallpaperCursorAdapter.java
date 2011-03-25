@@ -26,7 +26,7 @@ import android.widget.ListView;
 import com.wallpapers_manager.cyril.Helper;
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.WallpaperManagerConstants;
-import com.wallpapers_manager.cyril.rotate_lists.RotateListsDBAdapter;
+import com.wallpapers_manager.cyril.playlists.PlaylistsDBAdapter;
 
 public class WallpaperCursorAdapter extends CursorAdapter {
 	protected final LayoutInflater 	mInflater;
@@ -81,7 +81,7 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				
 				final CharSequence[] items = mResources.getTextArray(R.array.wallpaper_menu);
 				
-				final Wallpaper wp = wallpaper; 
+				final Wallpaper wallpaperBis = wallpaper; 
 
 				final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
 				alertDialogBuilder.setTitle(mResources.getText(R.string.actions));
@@ -101,12 +101,13 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 			                }
 				    		break;
 				    	case 1:	// Add to rotate list	    		
-				    		final RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
-				            rotateListsDBAdapter.open();
-				            cursor = rotateListsDBAdapter.getCursor();
-				    		ListView lstA = new ListView(mContext);
-				    		cursorAdapter = new AddRotateListWallpaperCursorAdapter(mContext, cursor, wp, dialog);
-				    		lstA.setAdapter(cursorAdapter);
+				    		final PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
+				            playlistsDBAdapter.open();
+					            cursor = playlistsDBAdapter.getCursor();
+					    		ListView lstA = new ListView(mContext);
+					    		cursorAdapter = new AddWallpaperInPlaylistCursorAdapter(mContext, cursor, wallpaperBis, dialog);
+					    		lstA.setAdapter(cursorAdapter);
+				    		playlistsDBAdapter.close();
 				    		dialog.setContentView(lstA);
 				    		dialog.setTitle(items[1]);
 				    		dialog.show();
@@ -114,22 +115,22 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				    	case 2: // Move to
 				    		final FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
 				    		foldersDBAdapter.open();
-				    		cursor = foldersDBAdapter.getCursor();
-				    		ListView listView2 = new ListView(mContext);
-				    		cursorAdapter = new AddWallpaperCursorAdapter(mContext, cursor, wp, dialog);
-				    		listView2.setAdapter(cursorAdapter);
+					    		cursor = foldersDBAdapter.getCursor();
+					    		ListView listView2 = new ListView(mContext);
+					    		cursorAdapter = new AddWallpaperCursorAdapter(mContext, cursor, wallpaperBis, dialog);
+					    		listView2.setAdapter(cursorAdapter);
+					    	foldersDBAdapter.close();
 				    		dialog.setContentView(listView2);
 				    		dialog.setTitle(items[2]);
 				    		dialog.show();
-				    		foldersDBAdapter.close();
 				    		break;
 				    	case 3: // Copy in
 				    		final FoldersDBAdapter foldersDBAdapter2 = new FoldersDBAdapter(mContext);
 				    		foldersDBAdapter2.open();
-				    		cursor = foldersDBAdapter2.getCursor();
-				    		ListView listView3 = new ListView(mContext);
-				    		cursorAdapter = new AddWallpaperCursorAdapter(mContext, cursor, wp, dialog, true);
-				    		listView3.setAdapter(cursorAdapter);
+					    		cursor = foldersDBAdapter2.getCursor();
+					    		ListView listView3 = new ListView(mContext);
+					    		cursorAdapter = new AddWallpaperCursorAdapter(mContext, cursor, wallpaperBis, dialog, true);
+					    		listView3.setAdapter(cursorAdapter);
 				    		foldersDBAdapter2.close();
 				    		dialog.setContentView(listView3);
 				    		dialog.setTitle(items[3]);
@@ -138,9 +139,9 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				    	case 4: // Delete
 				    		WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(mContext);
 				            wppDBA.open();
-				        	wallpaper.delete(wppDBA);
-				        	cursor = wppDBA.getCursor(wallpaper.getFolderId());
-				        	mCursorAdapter.changeCursor(cursor);
+					        	wallpaper.delete(wppDBA);
+					        	cursor = wppDBA.getCursor(wallpaper.getFolderId());
+					        	mCursorAdapter.changeCursor(cursor);
 				            wppDBA.close();
 				    		break;
 				    	}

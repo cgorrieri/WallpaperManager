@@ -37,9 +37,9 @@ public class FoldersActivity extends ListActivity {
         
         final FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(this);
         foldersDBAdapter.open();
-        Cursor foldersCursor = foldersDBAdapter.getCursor();
-        final CursorAdapter foldersCursorAdapter = new FoldersCursorAdapter(mContext,foldersCursor);
-        setListAdapter(foldersCursorAdapter);
+	        Cursor foldersCursor = foldersDBAdapter.getCursor();
+	        final CursorAdapter foldersCursorAdapter = new FoldersCursorAdapter(mContext,foldersCursor);
+	        setListAdapter(foldersCursorAdapter);
         foldersDBAdapter.close();
         
         mAddFolderAlertDialogBuilder = new AlertDialog.Builder(mContext);
@@ -56,9 +56,9 @@ public class FoldersActivity extends ListActivity {
     		public void onClick(DialogInterface d, int which)
     		{
     			foldersDBAdapter.open();
-    			foldersDBAdapter.insertFolder(new Folder(folderNameEditText.getText().toString()));
-    	        Cursor foldersCursor = foldersDBAdapter.getCursor();
-    	        foldersCursorAdapter.changeCursor(foldersCursor);
+	    			foldersDBAdapter.insertFolder(new Folder(folderNameEditText.getText().toString()));
+	    	        Cursor foldersCursor = foldersDBAdapter.getCursor();
+	    	        foldersCursorAdapter.changeCursor(foldersCursor);
     	        foldersDBAdapter.close();
     		}
     	});

@@ -61,14 +61,13 @@ public class AddWallpaperCursorAdapter extends CursorAdapter {
 				WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
 				mWallpaper.setFolderId(folder.getId());
 				wallpapersDBAdapter.open();
-				if(mCopy) {
-					String oldName = mWallpaper.getAddress();
-					mWallpaper.setAddress(mWallpaper.getAddress().replace(".", "c."));
-					copy_file(oldName, mWallpaper.getAddress());
-					wallpapersDBAdapter.insertWallpaper(mWallpaper);
-				} else {
-					wallpapersDBAdapter.updateWallpaper(mWallpaper);
-				}
+					if(mCopy) {
+						String oldName = mWallpaper.getAddress();
+						mWallpaper.setAddress(mWallpaper.getAddress().replace(".", "c."));
+						copy_file(oldName, mWallpaper.getAddress());
+						wallpapersDBAdapter.insertWallpaper(mWallpaper);
+					} else
+						wallpapersDBAdapter.updateWallpaper(mWallpaper);
 				wallpapersDBAdapter.close();
 				mDialog.dismiss();
 				

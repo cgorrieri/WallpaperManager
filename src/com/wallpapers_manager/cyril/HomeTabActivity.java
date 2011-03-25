@@ -21,8 +21,8 @@ public class HomeTabActivity extends TabActivity{
         mTabHost.addTab(mTabHost.newTabSpec("wallpapers").setIndicator(resource.getText(R.string.wallpapers_tab_name), resource.getDrawable(R.drawable.ic_wallpapers_tab)).
         		setContent(new Intent(this, WallpapersTabActivityGroup.class)));
         
-        mTabHost.addTab(mTabHost.newTabSpec("rotate_list").setIndicator(resource.getText(R.string.rotate_lists_tab_name), resource.getDrawable(R.drawable.ic_rotate_lists_tab))
-        		.setContent(new Intent(this, RotateListsTabActivityGroup.class)));
+        mTabHost.addTab(mTabHost.newTabSpec("playlist").setIndicator(resource.getText(R.string.playlists_tab_name), resource.getDrawable(R.drawable.ic_playlists_tab))
+        		.setContent(new Intent(this, PlaylistsTabActivityGroup.class)));
  
         mTabHost.setCurrentTab(0);
     }
