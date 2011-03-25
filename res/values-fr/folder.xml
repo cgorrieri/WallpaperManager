@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<array name="folder_menu">
+		<item>Ouvrir</item>
+		<item>Créer une playlist</item>
+		<item>Ajouter à la playlist</item>
+		<item>Renomer</item>
+		<item>Supprimer</item>		
+	</array>
+	<string name="new_folder">Nouveau dossier</string>
+</resources>

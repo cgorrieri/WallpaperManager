@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="wallpapers_tab_name">Fonds d\'écran</string>
+	<string name="wallpaper_context_menu_add_current">Ajouter le fond d\'écran courant</string>
+	<string name="wallpaper_context_menu_set_and_add">Mettre et ajouter un nouveau fond d\'écran</string>
+	<array name="wallpaper_menu">
+		<item>Mettre en fond d\'écran</item>
+		<item>Ajouter à la playlist</item>
+		<item>Déplacer</item>
+		<item>Copier</item>
+		<item>Supprimer</item>
+	</array>
+	<string name="setting_up_wallpaper">Mise en place du fond d\'écran</string>
+	<string name="getting_current_wallpaper">Récupération du fond d\'écran courant</string>
+</resources>
