@@ -2,9 +2,11 @@ package com.wallpapers_manager.cyril.playlists;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,8 +15,8 @@ import android.view.MenuItem;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 
-import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.PlaylistsTabActivityGroup;
+import com.wallpapers_manager.cyril.R;
 
 public class PlaylistsActivity extends ListActivity {
 	/* Menu */
@@ -61,6 +63,20 @@ public class PlaylistsActivity extends ListActivity {
     	        playlistsDBAdapter.close();
     		}
     	});
+        
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if(intent.getAction().compareTo("com.wallpaper_manager.playlists.updatePlaylistCursor") == 0) {
+					playlistsDBAdapter.open();
+				        Cursor cursor = playlistsDBAdapter.getCursor();
+				        cursorAdapter.changeCursor(cursor);
+			        playlistsDBAdapter.close();
+				}
+			}
+		};
+		
+		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.playlists.updatePlaylistCursor"));
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {

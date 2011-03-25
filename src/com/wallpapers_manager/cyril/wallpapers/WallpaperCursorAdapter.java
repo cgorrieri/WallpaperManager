@@ -43,7 +43,7 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final Wallpaper wallpaper = this.getWallpaperFromCursor(cursor);
+		final Wallpaper wallpaper = new Wallpaper(cursor);
 		// Toast.makeText(mContext, wallpaper.toString(), 1).show();
 		File wallpaperFile = new File(WallpaperManagerConstants._registrationFilesDir, wallpaper.getAddress());
 		Bitmap wallpaperBitmap = Helper._decodeFile(wallpaperFile);
@@ -152,12 +152,6 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				alertDialogBuilder.show();
 			}
 		});
-	}
-	
-	private Wallpaper getWallpaperFromCursor(Cursor cursor) {
-		return new Wallpaper(cursor.getInt(WallpapersDBAdapter.ID_IC),
-				cursor.getInt(WallpapersDBAdapter.FOLDER_ID_IC),
-				cursor.getString(WallpapersDBAdapter.ADDRESS_IC));
 	}
 
 	@Override

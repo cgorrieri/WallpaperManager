@@ -1,9 +1,15 @@
 package com.wallpapers_manager.cyril.playlists;
 
+import android.database.Cursor;
+
 public class Playlist {	
 	private int 	mId;
 	private String 	mName;
 	private int 	mSelected;
+	
+	public Playlist(Cursor cursor) {
+		this(cursor.getInt(0), cursor.getString(1), cursor.getInt(2));
+	}
 	
 	public Playlist(String name) {
 		this(-1, name, 0);

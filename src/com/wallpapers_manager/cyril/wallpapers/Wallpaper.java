@@ -2,6 +2,8 @@ package com.wallpapers_manager.cyril.wallpapers;
 
 import java.io.File;
 
+import android.database.Cursor;
+
 import com.wallpapers_manager.cyril.WallpaperManagerConstants;
 
 
@@ -10,6 +12,10 @@ public class Wallpaper {
 	private int 	mId;
 	private int 	mFolderId;
 	private String 	mAddress;
+	
+	public Wallpaper(Cursor c) {
+		this(c.getInt(0), c.getInt(1), c.getString(2));
+	}
 	
 	public Wallpaper(String address) {
 		this(-1, 0, address);

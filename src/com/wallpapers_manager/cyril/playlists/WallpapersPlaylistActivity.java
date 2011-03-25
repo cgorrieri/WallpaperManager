@@ -1,7 +1,10 @@
 package com.wallpapers_manager.cyril.playlists;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,12 +36,26 @@ public class WallpapersPlaylistActivity extends Activity {
         final WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(this);
         wallpapersPlaylistDBAdapter.open();
 	        Cursor curs = wallpapersPlaylistDBAdapter.getCursor(mPlaylist.getId());
-	        this.mGridView = (GridView) findViewById(R.id.gridview);
-	        this.mGridView.setAdapter(new WallpapersPlaylistCursorAdapter(mContext, curs));
+	        mGridView = (GridView) findViewById(R.id.gridview);
+	        mGridView.setAdapter(new WallpapersPlaylistCursorAdapter(mContext, curs));
         wallpapersPlaylistDBAdapter.close();
         
-        this.mTextView = (TextView) findViewById(R.id.name);
-        this.mTextView.setText(mPlaylist.getName());
+        mTextView = (TextView) findViewById(R.id.name);
+        mTextView.setText(mPlaylist.getName());
+        
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if(intent.getAction().compareTo("com.wallpaper_manager.playlists.updateWallpapersPlaylistCursor") == 0) {
+					wallpapersPlaylistDBAdapter.open();
+				        Cursor curs = wallpapersPlaylistDBAdapter.getCursor(mPlaylist.getId());
+				        mGridView.setAdapter(new WallpapersPlaylistCursorAdapter(mContext, curs));
+			        wallpapersPlaylistDBAdapter.close();
+				}
+			}
+		};
+		
+		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.playlists.updateWallpapersPlaylistCursor"));
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {

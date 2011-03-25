@@ -35,7 +35,7 @@ public class WallpapersPlaylistCursorAdapter extends CursorAdapter {
 	
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final WallpaperPlaylist wallpaperPlaylist = getWallpaperPlaylistFromCursor(cursor);
+		final WallpaperPlaylist wallpaperPlaylist = new WallpaperPlaylist(cursor);
 		WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
         wallpapersDBAdapter.open();
         	final Wallpaper wallpaper = wallpapersDBAdapter.getWallpaper(wallpaperPlaylist.getWallpaperId());
@@ -79,12 +79,5 @@ public class WallpapersPlaylistCursorAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		return mInflater.inflate(R.layout.wallpaper, parent, false);
-	}
-	
-	private WallpaperPlaylist getWallpaperPlaylistFromCursor(Cursor cursor) {
-		return new WallpaperPlaylist(
-				cursor.getInt(WallpapersPlaylistDBAdapter.ID_IC),
-				cursor.getInt(WallpapersPlaylistDBAdapter.WALLPAPER_ID_IC),
-				cursor.getInt(WallpapersPlaylistDBAdapter.PLAYLIST_ID_IC));
 	}
 }

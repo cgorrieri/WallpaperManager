@@ -34,8 +34,7 @@ public class PlaylistsCursorAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final Playlist playlist = new Playlist(cursor.getInt(PlaylistsDBAdapter.ID_IC),
-				cursor.getString(PlaylistsDBAdapter.NAME_IC), cursor.getInt(PlaylistsDBAdapter.SELECTED_IC));
+		final Playlist playlist = new Playlist(cursor);
 
 		ImageView imageView = (ImageView) view.findViewById(R.id.image);
 		if(playlist.isSelected())

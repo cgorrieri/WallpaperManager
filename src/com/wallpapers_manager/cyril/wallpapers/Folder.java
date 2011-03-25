@@ -1,8 +1,14 @@
 package com.wallpapers_manager.cyril.wallpapers;
 
+import android.database.Cursor;
+
 public class Folder {	
 	private int 	mId;
 	private String 	mName;
+	
+	public Folder(Cursor cursor) {
+		this(cursor.getInt(0), cursor.getString(1));
+	}
 	
 	public Folder(String name) {
 		mName = name;

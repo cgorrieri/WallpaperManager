@@ -2,6 +2,7 @@ package com.wallpapers_manager.cyril.wallpapers;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ public class AddWallpaperInPlaylistCursorAdapter extends CursorAdapter {
 	
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final Playlist playlist = new Playlist(cursor.getInt(0),	cursor.getString(1), cursor.getInt(2));
+		final Playlist playlist = new Playlist(cursor.getInt(0), cursor.getString(1), cursor.getInt(2));
 
 		ImageView imageView = (ImageView) view.findViewById(R.id.image);
 		imageView.setImageResource(playlist.isSelected() ? R.drawable.selected_playlist : R.drawable.playlist);
@@ -60,6 +61,8 @@ public class AddWallpaperInPlaylistCursorAdapter extends CursorAdapter {
 					} else
 						wallpapersPlaylistDBAdapter.insertPlaylistWallpaperForFolder(mFolder, playlist);
 				wallpapersPlaylistDBAdapter.close();
+				Intent intentBroadcast = new Intent("com.wallpaper_manager.playlists.updateWallpapersPlaylistCursor");
+				mContext.sendBroadcast(intentBroadcast);
 				mDialog.dismiss();
 			}
 		});

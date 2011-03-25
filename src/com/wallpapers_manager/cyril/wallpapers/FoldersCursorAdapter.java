@@ -44,7 +44,7 @@ public class FoldersCursorAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(final View view, Context context, final Cursor cursor) {
-		final Folder folder = new Folder(cursor.getInt(0), cursor.getString(1));
+		final Folder folder = new Folder(cursor);
 
 		ImageView image_view = (ImageView) view.findViewById(R.id.image);
 		image_view.setImageResource(R.drawable.folder);
@@ -73,37 +73,38 @@ public class FoldersCursorAdapter extends CursorAdapter {
 						case 1: // Create rotate list from it
 							PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
 							playlistsDBAdapter.open();
-							Playlist playlist = new Playlist(folder.getName());
-							playlist.setId((int) playlistsDBAdapter.insertPlaylist(playlist));
+								Playlist playlist = new Playlist(folder.getName());
+								playlist.setId((int) playlistsDBAdapter.insertPlaylist(playlist));
 							playlistsDBAdapter.close();
 							WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
 							wallpapersPlaylistDBAdapter.open();							
-							wallpapersPlaylistDBAdapter.insertPlaylistWallpaperForFolder(folder, playlist);
+								wallpapersPlaylistDBAdapter.insertPlaylistWallpaperForFolder(folder, playlist);
 							wallpapersPlaylistDBAdapter.close();
+							Intent intentBroadcast = new Intent("com.wallpaper_manager.playlists.updatePlaylistCursor");
+							mContext.sendBroadcast(intentBroadcast);
 							break;
 						case 2: // Add to rotate list
 							final Dialog dialog = new Dialog(mContext);
 
 							PlaylistsDBAdapter playlistsDBAdapter2 = new PlaylistsDBAdapter(mContext);
 							playlistsDBAdapter2.open();
-							Cursor cur = playlistsDBAdapter2.getCursor();
-							ListView lstA = new ListView(mContext);
-							CursorAdapter ca = new AddWallpaperInPlaylistCursorAdapter(
-									mContext, cur, folder, dialog);
-							lstA.setAdapter(ca);
+								Cursor cur = playlistsDBAdapter2.getCursor();
+								ListView lstA = new ListView(mContext);
+								CursorAdapter ca = new AddWallpaperInPlaylistCursorAdapter(mContext, cur, folder, dialog);
+								lstA.setAdapter(ca);
+							playlistsDBAdapter2.close();
 							dialog.setContentView(lstA);
 							dialog.setTitle(items[2]);
 							dialog.show();
 							break;
-						case 3:
+						case 3: // rename
 							AlertDialog.Builder renameFolderAlertDialogBuilder = new AlertDialog.Builder(mContext);
 							renameFolderAlertDialogBuilder.setTitle(items[3]);
 
 							final EditText folderNameEditText = new EditText(mContext);
 							folderNameEditText.setText(folder.getName());
 							folderNameEditText.setMaxLines(1);
-							folderNameEditText
-									.setInputType(InputType.TYPE_CLASS_TEXT);
+							folderNameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 							folderNameEditText.setSelection(0, folder.getName().length());
 
 							renameFolderAlertDialogBuilder.setView(folderNameEditText);
@@ -114,29 +115,27 @@ public class FoldersCursorAdapter extends CursorAdapter {
 											FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(
 													mContext);
 											foldersDBAdapter.open();
-											foldersDBAdapter.updateFolder(new Folder(folder
-													.getId(), folderNameEditText
-													.getText().toString()));
-											Cursor curs = foldersDBAdapter.getCursor();
-											mCursorAdapter.changeCursor(curs);
+												foldersDBAdapter.updateFolder(new Folder(folder.getId(),
+														folderNameEditText.getText().toString()));
+												Cursor curs = foldersDBAdapter.getCursor();
+												mCursorAdapter.changeCursor(curs);
 											foldersDBAdapter.close();
 										}
 									});
 							renameFolderAlertDialogBuilder.show();
 							break;
-						case 4:
+						case 4: // delete
 							WallpapersDBAdapter wallpapersDBAdapter2 = new WallpapersDBAdapter(mContext);
 							wallpapersDBAdapter2.open();
-							ArrayList<Wallpaper> wallpapersList = wallpapersDBAdapter2
-									.getWallpapersFromFolder(folder);
-							for (int i = 0; i < wallpapersList.size(); i++)
-								wallpapersList.get(i).delete(wallpapersDBAdapter2);
+								ArrayList<Wallpaper> wallpapersList = wallpapersDBAdapter2.getWallpapersFromFolder(folder);
+								for (int i = 0; i < wallpapersList.size(); i++)
+									wallpapersList.get(i).delete(wallpapersDBAdapter2);
 							wallpapersDBAdapter2.close();
 							FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
 							foldersDBAdapter.open();
-							foldersDBAdapter.removeFolder(folder);
-							Cursor curs = foldersDBAdapter.getCursor();
-							mCursorAdapter.changeCursor(curs);
+								foldersDBAdapter.removeFolder(folder);
+								Cursor curs = foldersDBAdapter.getCursor();
+								mCursorAdapter.changeCursor(curs);
 							foldersDBAdapter.close();
 							break;
 						}
