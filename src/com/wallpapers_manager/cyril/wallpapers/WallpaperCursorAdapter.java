@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,12 +31,14 @@ import com.wallpapers_manager.cyril.rotate_lists.RotateListsDBAdapter;
 public class WallpaperCursorAdapter extends CursorAdapter {
 	protected final LayoutInflater 	mInflater;
 	protected final Context 		mContext;
+	private Resources				mResources;
 	private CursorAdapter			mCursorAdapter;
 
 	public WallpaperCursorAdapter(Context context, Cursor cursor) {
 		super(context, cursor);
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
+		mResources = mContext.getResources();
 	}
 
 	@Override
@@ -48,7 +51,7 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 		final ImageView wallpaperImageView = (ImageView) view.findViewById(R.id.wallpaper);
 		wallpaperImageView.setImageBitmap(wallpaperBitmap);
 
-		final ProgressDialog progressDialog = ProgressDialog.show(mContext, "", "Setting up wallpaper", true);
+		final ProgressDialog progressDialog = ProgressDialog.show(mContext, "", mResources.getText(R.string.setting_up_wallpaper), true);
 		progressDialog.cancel();
 		final Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
@@ -75,19 +78,20 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				final CharSequence[] items = {"Put it", "Add to playlist", "Move to", "Copy in", "Delete"};
+				
+				final CharSequence[] items = mResources.getTextArray(R.array.wallpaper_menu);
 				
 				final Wallpaper wp = wallpaper; 
 
 				final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-				alertDialogBuilder.setTitle("Actions");
+				alertDialogBuilder.setTitle(mResources.getText(R.string.actions));
 				alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialogInterface, int item) {
 				    	Dialog dialog = new Dialog(mContext);
 				    	Cursor cursor = null;
 				    	CursorAdapter cursorAdapter = null;
 				    	switch(item){
-				    	case 0:
+				    	case 0: // put it
 				    		progressDialog.show();
 				    		try {
 				    			updatePhoneWallpaper.start();
@@ -96,7 +100,7 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 			                	updatePhoneWallpaper.run();
 			                }
 				    		break;
-				    	case 1:				    		
+				    	case 1:	// Add to rotate list	    		
 				    		final RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
 				            rotateListsDBAdapter.open();
 				            cursor = rotateListsDBAdapter.getCursor();
@@ -104,10 +108,10 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				    		cursorAdapter = new AddRotateListWallpaperCursorAdapter(mContext, cursor, wp, dialog);
 				    		lstA.setAdapter(cursorAdapter);
 				    		dialog.setContentView(lstA);
-				    		dialog.setTitle("Add To");
+				    		dialog.setTitle(items[1]);
 				    		dialog.show();
 				    		break;
-				    	case 2:
+				    	case 2: // Move to
 				    		final FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
 				    		foldersDBAdapter.open();
 				    		cursor = foldersDBAdapter.getCursor();
@@ -115,11 +119,11 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				    		cursorAdapter = new AddWallpaperCursorAdapter(mContext, cursor, wp, dialog);
 				    		listView2.setAdapter(cursorAdapter);
 				    		dialog.setContentView(listView2);
-				    		dialog.setTitle("Move To");
+				    		dialog.setTitle(items[2]);
 				    		dialog.show();
 				    		foldersDBAdapter.close();
 				    		break;
-				    	case 3:
+				    	case 3: // Copy in
 				    		final FoldersDBAdapter foldersDBAdapter2 = new FoldersDBAdapter(mContext);
 				    		foldersDBAdapter2.open();
 				    		cursor = foldersDBAdapter2.getCursor();
@@ -128,10 +132,10 @@ public class WallpaperCursorAdapter extends CursorAdapter {
 				    		listView3.setAdapter(cursorAdapter);
 				    		foldersDBAdapter2.close();
 				    		dialog.setContentView(listView3);
-				    		dialog.setTitle("Copy in");
+				    		dialog.setTitle(items[3]);
 				    		dialog.show();
 				    		break;
-				    	case 4:
+				    	case 4: // Delete
 				    		WallpapersDBAdapter wppDBA = new WallpapersDBAdapter(mContext);
 				            wppDBA.open();
 				        	wallpaper.delete(wppDBA);

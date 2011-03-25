@@ -1,13 +1,11 @@
 package com.wallpapers_manager.cyril.rotate_lists;
 
-import com.wallpapers_manager.cyril.R;
-import com.wallpapers_manager.cyril.RotateListsTabActivityGroup;
-
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,12 +13,16 @@ import android.view.MenuItem;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 
+import com.wallpapers_manager.cyril.R;
+import com.wallpapers_manager.cyril.RotateListsTabActivityGroup;
+
 public class RotateListsActivity extends ListActivity {
 	/* Menu */
 	private static final int 	MENU_NEW = 0;
 	private static final int 	MENU_SETTINGS = 1;
 	
 	private Context 			mContext;
+	private Resources			mResources;
 	private AlertDialog.Builder mAddRotateListDialog;
 	
     /** Called when the activity is first created. */
@@ -30,6 +32,7 @@ public class RotateListsActivity extends ListActivity {
         setContentView(R.layout.rotate_lists_list);
         
         mContext = RotateListsTabActivityGroup._group;
+        mResources = mContext.getResources();
         
         final RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
         rotateListsDBAdapter.open();
@@ -39,7 +42,7 @@ public class RotateListsActivity extends ListActivity {
         rotateListsDBAdapter.close();
         
         mAddRotateListDialog = new AlertDialog.Builder(mContext);
-        mAddRotateListDialog.setTitle("New Rotate List");
+        mAddRotateListDialog.setTitle(mResources.getText(R.string.new_rotate_list));
 
         final EditText rotateListNameEditText = new EditText(mContext);
         rotateListNameEditText.setText("");
@@ -61,8 +64,8 @@ public class RotateListsActivity extends ListActivity {
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
-    	menu.add(0, MENU_NEW, Menu.NONE, "New").setIcon(R.drawable.ic_new_rotate_list);
-    	menu.add(0, MENU_SETTINGS, Menu.NONE, "Settings").setIcon(R.drawable.ic_settings);
+    	menu.add(0, MENU_NEW, Menu.NONE, mResources.getText(R.string.new_rotate_list)).setIcon(R.drawable.ic_new_rotate_list);
+    	menu.add(0, MENU_SETTINGS, Menu.NONE, mResources.getText(R.string.menu_settings)).setIcon(R.drawable.ic_settings);
         return true;
     }
 

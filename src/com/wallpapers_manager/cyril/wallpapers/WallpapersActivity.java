@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ public class WallpapersActivity extends Activity {
 	private static final int REQUEST_CODE = 0;
 	
 	private Context 		mContext;
+	private Resources		mResources;
 	private Folder 			mFolder;
 	private ProgressDialog 	mDialog;
 	private GetCurrentWallpaperThread 	mGetCurrentWallpaperThread;
@@ -39,6 +41,7 @@ public class WallpapersActivity extends Activity {
         setContentView(R.layout.wallpapers_grid);
         
         mContext = WallpapersTabActivityGroup._group;
+        mResources = mContext.getResources();
         
         int folderId = this.getIntent().getIntExtra("folderId", 0);
         FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
@@ -56,7 +59,7 @@ public class WallpapersActivity extends Activity {
         this.mGridView = (GridView) findViewById(R.id.gridview);
         this.mGridView.setAdapter(new WallpaperCursorAdapter(mContext,cursor));
         
-        mDialog = ProgressDialog.show(mContext, "", "geting current wallpaper", true);
+        mDialog = ProgressDialog.show(mContext, "", mResources.getText(R.string.getting_current_wallpaper), true);
         mDialog.cancel();
 		
 		Handler handler = new Handler() {
@@ -72,8 +75,8 @@ public class WallpapersActivity extends Activity {
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
-    	menu.add(0, MENU_ADD_CURRENT_WALLPAPER, 0, "Add curent wallpaper");
-        menu.add(0, MENU_SET_AND_ADD_NEW_WALLPAPER, 0, "Set and add new");
+    	menu.add(0, MENU_ADD_CURRENT_WALLPAPER, 0, mResources.getText(R.string.wallpaper_context_menu_add_current));
+        menu.add(0, MENU_SET_AND_ADD_NEW_WALLPAPER, 0, mResources.getText(R.string.wallpaper_context_menu_set_and_add));
         return true;
     }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<array name="folder_menu">
+		<item>Open</item>
+		<item>Create rotate list from it</item>
+		<item>Add to rotate list</item>
+		<item>Rename</item>
+		<item>Delete</item>		
+	</array>
+	<string name="new_folder">New folder</string>
+</resources>

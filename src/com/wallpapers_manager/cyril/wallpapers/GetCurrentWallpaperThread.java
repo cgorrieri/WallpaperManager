@@ -52,7 +52,7 @@ public class GetCurrentWallpaperThread extends Thread {
 			File file = new File(WallpaperManagerConstants._registrationFilesDir, filename);
             fOut = new FileOutputStream(file);
             
-            Bitmap wallpaperBitmap = Bitmap.createBitmap(wallpaperDrawable.getMinimumWidth(), wallpaperDrawable.getMinimumHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap wallpaperBitmap = Bitmap.createBitmap(wallpaperDrawable.getMinimumWidth(), wallpaperDrawable.getMinimumHeight(), Bitmap.Config.RGB_565);
             Canvas canvas = new Canvas(wallpaperBitmap); 
             wallpaperDrawable.setBounds(0, 0, wallpaperDrawable.getMinimumWidth(), wallpaperDrawable.getMinimumHeight()); 
             wallpaperDrawable.draw(canvas);

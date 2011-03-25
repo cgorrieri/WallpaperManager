@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,10 +18,10 @@ import com.wallpapers_manager.cyril.WallpapersTabActivityGroup;
 
 public class FoldersActivity extends ListActivity {
 	private static final int 	MENU_ADD_FOLDER = 0;
-	private static final int 	MENU_QUIT = 1;
 	
 	private AlertDialog.Builder 	mAddFolderAlertDialogBuilder;
 	private Context 				mContext;
+	private Resources 				mResources;
 	
     /** Called when the activity is first created. */
     @Override
@@ -32,6 +33,7 @@ public class FoldersActivity extends ListActivity {
         WallpaperManagerConstants.makeRegistrationFilesDir();
         
         mContext = WallpapersTabActivityGroup._group;
+        mResources = mContext.getResources();
         
         final FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(this);
         foldersDBAdapter.open();
@@ -41,7 +43,7 @@ public class FoldersActivity extends ListActivity {
         foldersDBAdapter.close();
         
         mAddFolderAlertDialogBuilder = new AlertDialog.Builder(mContext);
-        mAddFolderAlertDialogBuilder.setTitle("New Folder").setIcon(R.drawable.new_folder);
+        mAddFolderAlertDialogBuilder.setTitle(mResources.getText(R.string.new_folder)).setIcon(R.drawable.ic_new_folder);
 
         final EditText folderNameEditText = new EditText(mContext);
         folderNameEditText.setText("");
@@ -63,8 +65,7 @@ public class FoldersActivity extends ListActivity {
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, MENU_ADD_FOLDER, 0, "New Folder").setIcon(R.drawable.new_folder);
-        menu.add(0, MENU_QUIT, 0, "Quit").setIcon(R.drawable.quit);
+        menu.add(0, MENU_ADD_FOLDER, 0, mResources.getText(R.string.new_folder)).setIcon(R.drawable.ic_new_folder);
         return true;
     }
 
@@ -73,9 +74,6 @@ public class FoldersActivity extends ListActivity {
         switch (item.getItemId()) {
 	        case MENU_ADD_FOLDER:
 	        	mAddFolderAlertDialogBuilder.show();
-	            return true;
-	        case MENU_QUIT:
-	            finish();
 	            return true;
         }
         return false;

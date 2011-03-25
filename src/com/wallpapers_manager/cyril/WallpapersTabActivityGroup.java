@@ -24,11 +24,10 @@ public class WallpapersTabActivityGroup extends TabActivityGroup {
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == RESULT_OK) {
-			// Toast.makeText(this, "group onActivityResult result OK", 1).show();
 			WallpapersActivity wppsAct = (WallpapersActivity) getCurrentActivity();
 			wppsAct.externOnActivityResult(requestCode, resultCode, data);
 		} else {
-			// Toast.makeText(this, "group onActivityResult error "+resultCode, 1).show();
+			
 		}
 	}
 }

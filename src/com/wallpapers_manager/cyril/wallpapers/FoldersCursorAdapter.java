@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -29,11 +30,16 @@ import com.wallpapers_manager.cyril.rotate_lists.RotateListsDBAdapter;
 public class FoldersCursorAdapter extends CursorAdapter {
 	private final LayoutInflater 	mInflater;
 	private final Context 			mContext;
+	private Resources				mResource;
+	private CursorAdapter			mCursorAdapter;
+	
 
 	public FoldersCursorAdapter(Context context, Cursor cursor) {
 		super(context, cursor);
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
+		mResource = context.getResources();
+		mCursorAdapter = this;
 	}
 
 	@Override
@@ -52,94 +58,86 @@ public class FoldersCursorAdapter extends CursorAdapter {
 			}
 		});
 
-		final CursorAdapter cursor_adp = this;
-
 		view.setOnLongClickListener(new OnLongClickListener() {
 			public boolean onLongClick(final View v) {
-				final CharSequence[] items = { "Open", "Create RL from it",
-						"Add to playlist", "Rename", "Delete" };
+				final CharSequence[] items = mResource.getTextArray(R.array.folder_menu);
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-				builder.setTitle("Actions");
+				builder.setTitle(mResource.getText(R.string.actions));
 				builder.setItems(items, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
+					public void onClick(DialogInterface dialogInterface, int item) {
 						switch (item) {
-						case 0:
+						case 0: // Open
 							openFolder(folder);
 							break;
-						case 1:
-							RotateListsDBAdapter rtlDBA1 = new RotateListsDBAdapter(mContext);
-							rtlDBA1.open();
-							RotateList rtl = new RotateList(folder.getName());
-							rtl.setId((int) rtlDBA1.insertRotateList(rtl));
-							rtlDBA1.close();
-							RotateListWallpapersDBAdapter rtlWppDBA = new RotateListWallpapersDBAdapter(
-									mContext);
-							rtlWppDBA.open();
-							
-							
-									rtlWppDBA.insertRotateListWallpaperForFolder(folder, rtl);
-								
-							rtlWppDBA.close();
+						case 1: // Create rotate list from it
+							RotateListsDBAdapter rotateListsDBAdapter = new RotateListsDBAdapter(mContext);
+							rotateListsDBAdapter.open();
+							RotateList rotateList = new RotateList(folder.getName());
+							rotateList.setId((int) rotateListsDBAdapter.insertRotateList(rotateList));
+							rotateListsDBAdapter.close();
+							RotateListWallpapersDBAdapter rotateListWallpapersDBAdapter = new RotateListWallpapersDBAdapter(mContext);
+							rotateListWallpapersDBAdapter.open();							
+							rotateListWallpapersDBAdapter.insertRotateListWallpaperForFolder(folder, rotateList);
+							rotateListWallpapersDBAdapter.close();
 							break;
-						case 2:
-							final Dialog dg = new Dialog(mContext);
+						case 2: // Add to rotate list
+							final Dialog dialog = new Dialog(mContext);
 
-							RotateListsDBAdapter rtlDBA = new RotateListsDBAdapter(mContext);
-							rtlDBA.open();
-							Cursor cur = rtlDBA.getCursor();
+							RotateListsDBAdapter rotateListsDBAdapter2 = new RotateListsDBAdapter(mContext);
+							rotateListsDBAdapter2.open();
+							Cursor cur = rotateListsDBAdapter2.getCursor();
 							ListView lstA = new ListView(mContext);
 							CursorAdapter ca = new AddRotateListWallpaperCursorAdapter(
-									mContext, cur, folder, dg);
+									mContext, cur, folder, dialog);
 							lstA.setAdapter(ca);
-							dg.setContentView(lstA);
-							dg.setTitle("Add To");
-							dg.show();
+							dialog.setContentView(lstA);
+							dialog.setTitle(items[2]);
+							dialog.show();
 							break;
 						case 3:
-							AlertDialog.Builder rename_folder_dl = new AlertDialog.Builder(mContext);
-							rename_folder_dl.setTitle("Rename Folder");
+							AlertDialog.Builder renameFolderAlertDialogBuilder = new AlertDialog.Builder(mContext);
+							renameFolderAlertDialogBuilder.setTitle(items[3]);
 
-							final EditText folder_name_box = new EditText(mContext);
-							folder_name_box.setText(folder.getName());
-							folder_name_box.setMaxLines(1);
-							folder_name_box
+							final EditText folderNameEditText = new EditText(mContext);
+							folderNameEditText.setText(folder.getName());
+							folderNameEditText.setMaxLines(1);
+							folderNameEditText
 									.setInputType(InputType.TYPE_CLASS_TEXT);
-							folder_name_box.setSelection(0, folder.getName().length());
+							folderNameEditText.setSelection(0, folder.getName().length());
 
-							rename_folder_dl.setView(folder_name_box);
+							renameFolderAlertDialogBuilder.setView(folderNameEditText);
 
-							rename_folder_dl.setPositiveButton("OK",
+							renameFolderAlertDialogBuilder.setPositiveButton("OK",
 									new DialogInterface.OnClickListener() {
-										public void onClick(DialogInterface d,
-												int which) {
-											FoldersDBAdapter fdsDBA = new FoldersDBAdapter(
+										public void onClick(DialogInterface d, int which) {
+											FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(
 													mContext);
-											fdsDBA.open();
-											fdsDBA.updateFolder(new Folder(folder
-													.getId(), folder_name_box
+											foldersDBAdapter.open();
+											foldersDBAdapter.updateFolder(new Folder(folder
+													.getId(), folderNameEditText
 													.getText().toString()));
-											Cursor curs = fdsDBA.getCursor();
-											cursor_adp.changeCursor(curs);
-											fdsDBA.close();
+											Cursor curs = foldersDBAdapter.getCursor();
+											mCursorAdapter.changeCursor(curs);
+											foldersDBAdapter.close();
 										}
 									});
-							rename_folder_dl.show();
+							renameFolderAlertDialogBuilder.show();
 							break;
 						case 4:
-							WallpapersDBAdapter wppDBA2 = new WallpapersDBAdapter(mContext);
-							wppDBA2.open();
-							ArrayList<Wallpaper> wpp_al = wppDBA2
+							WallpapersDBAdapter wallpapersDBAdapter2 = new WallpapersDBAdapter(mContext);
+							wallpapersDBAdapter2.open();
+							ArrayList<Wallpaper> wallpapersList = wallpapersDBAdapter2
 									.getWallpapersFromFolder(folder);
-							for (int i = 0; i < wpp_al.size(); i++)
-								wpp_al.get(i).delete(wppDBA2);
-							wppDBA2.close();
-							FoldersDBAdapter fdsDBA = new FoldersDBAdapter(mContext);
-							fdsDBA.open();
-							fdsDBA.removeFolder(folder);
-							Cursor curs = fdsDBA.getCursor();
-							cursor_adp.changeCursor(curs);
-							fdsDBA.close();
+							for (int i = 0; i < wallpapersList.size(); i++)
+								wallpapersList.get(i).delete(wallpapersDBAdapter2);
+							wallpapersDBAdapter2.close();
+							FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
+							foldersDBAdapter.open();
+							foldersDBAdapter.removeFolder(folder);
+							Cursor curs = foldersDBAdapter.getCursor();
+							mCursorAdapter.changeCursor(curs);
+							foldersDBAdapter.close();
 							break;
 						}
 					}

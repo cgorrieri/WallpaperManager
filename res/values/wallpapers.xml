@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="wallpapers_tab_name">Wallpapers</string>
+	<string name="wallpaper_context_menu_add_current">Add current wallpaper</string>
+	<string name="wallpaper_context_menu_set_and_add">Set and Add new</string>
+	<array name="wallpaper_menu">
+		<item>Put it</item>
+		<item>Add to rotate list</item>
+		<item>Move to</item>
+		<item>Copy in</item>
+		<item>Delete</item>
+	</array>
+	<string name="setting_up_wallpaper">Setting up wallpaper</string>
+	<string name="getting_current_wallpaper">Getting current wallpaper</string>
+</resources>

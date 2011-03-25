@@ -19,73 +19,73 @@ public class FoldersDBAdapter {
 	public static final String ID = "_id";
 	public static final String NAME = "name";
 	
-	private SQLiteDatabase myDataBase;
-	private WMSQLiteOpenHelper baseHelper;
+	private SQLiteDatabase mDataBase;
+	private WMSQLiteOpenHelper mBaseHelper;
 	
 	public FoldersDBAdapter(Context context) {
-		baseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
+		mBaseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
 	}
 	
 	public void open() {
-		myDataBase = baseHelper.getWritableDatabase();
+		mDataBase = mBaseHelper.getWritableDatabase();
 	}
 	
 	public void close() {
-		myDataBase.close();
+		mDataBase.close();
 	}
 	
 	public SQLiteDatabase getDataBase() {
-		return myDataBase;
+		return mDataBase;
 	}
 	
 	public Cursor getCursor(){
-		return myDataBase.query(TABLE, new String[] {ID,NAME}, null, null, null, null, null);
+		return mDataBase.query(TABLE, new String[] {ID,NAME}, null, null, null, null, null);
 	}
 
-	public Folder getFolder(int e_id){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,NAME}, ID+" = "+e_id+"", null, null, null, null);
+	public Folder getFolder(int id){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME}, ID+" = "+id+"", null, null, null, null);
 		return cursorToFolder(c);
 	}
 
-	public ArrayList<Folder> getFolders(int e_folder_id){
-		Cursor c = myDataBase.query(TABLE, new String[] {ID,NAME}, ID+" = "+e_folder_id+"", null, null, null, null);
+	public ArrayList<Folder> getFolders(int folderId){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME}, ID+" = "+folderId+"", null, null, null, null);
 		return cursorToFolders(c);
 	}
 	
-	public long insertFolder(Folder fd) {
+	public long insertFolder(Folder folder) {
 		ContentValues values = new ContentValues();
-		values.put(NAME, fd.getName());
-		return myDataBase.insert(TABLE, null, values);
+		values.put(NAME, folder.getName());
+		return mDataBase.insert(TABLE, null, values);
 	}
 	
-	public int updateFolder(Folder fd) {
+	public int updateFolder(Folder folder) {
 		ContentValues values = new ContentValues();
-		values.put(NAME, fd.getName());
-		return myDataBase.update(TABLE, values, ID+" = "+fd.getId(), null);
+		values.put(NAME, folder.getName());
+		return mDataBase.update(TABLE, values, ID+" = "+folder.getId(), null);
 	}
 	
 	public int updateFolder(ContentValues values, String where, String[] whereArgs) {
-		return myDataBase.update(TABLE, values, where, whereArgs);
+		return mDataBase.update(TABLE, values, where, whereArgs);
 	}
 	
 	public int removeFolder(String name) {
-		return myDataBase.delete(TABLE, NAME+" = "+ name, null);
+		return mDataBase.delete(TABLE, NAME+" = "+ name, null);
 	}
 	
 	public int removeFolder(int id) {
-		return myDataBase.delete(TABLE, ID+" = "+ id, null);
+		return mDataBase.delete(TABLE, ID+" = "+ id, null);
 	}
 	
-	public int removeFolder(Folder fd) {
-		return myDataBase.delete(TABLE, ID+" = "+ fd.getId(), null);
+	public int removeFolder(Folder folder) {
+		return mDataBase.delete(TABLE, ID+" = "+ folder.getId(), null);
 	}
 	
 	private Folder cursorToFolder(Cursor c) {
 		if(c.getCount() == 0) return null;
 		c.moveToFirst();
-		Folder fb = new Folder(c.getInt(0), c.getString(1));
+		Folder folder = new Folder(c.getInt(0), c.getString(1));
 		c.close();
-		return fb;
+		return folder;
 	}
 	private ArrayList<Folder> cursorToFolders(Cursor c) {
 		if(c.getCount() == 0) return new ArrayList<Folder>(0);
@@ -93,9 +93,7 @@ public class FoldersDBAdapter {
 		ArrayList<Folder> folders = new ArrayList<Folder>(c.getCount());
 		c.moveToFirst();
 		do{
-			Folder fb = new Folder(c.getString(1));
-			fb.setId(c.getInt(0));
-			folders.add(fb);
+			folders.add(new Folder(c.getInt(0), c.getString(1)));
 		}while(c.moveToNext());
 		c.close();
 		return folders;

@@ -19,9 +19,9 @@ public class RotateListsDBAdapter {
 	private static final String 	ID = "_id";
 	public static final int 		ID_IC = 0;
 	private static final String 	NAME = "name";
-	public static final int 		NAME_IC = 0;
+	public static final int 		NAME_IC = 1;
 	private static final String 	SELECTED = "selected";
-	public static final int 		SELECTED_IC = 0;
+	public static final int 		SELECTED_IC = 2;
 	
 	private SQLiteDatabase 					mDataBase;
 	private WMSQLiteOpenHelper 				mBaseHelper;

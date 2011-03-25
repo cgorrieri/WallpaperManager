@@ -33,7 +33,6 @@ public class TabActivityGroup extends ActivityGroup {
 	 */
 	@Override
 	public void finishFromChild(Activity child) {
-    	// Toast.makeText(this, "finishFromChild", 2).show();
 		LocalActivityManager localActivityManager = getLocalActivityManager();
 		int index = mIdList.size() - 1;
 
@@ -61,7 +60,6 @@ public class TabActivityGroup extends ActivityGroup {
 	 * @throws android.content.ActivityNotFoundException.
 	 */
 	public void startChildActivity(String Id, Intent intent) {
-//    	Toast.makeText(this, "startChildActivity", 2).show();
 		Window window = getLocalActivityManager().startActivity(Id,
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		if (window != null) {
@@ -77,10 +75,7 @@ public class TabActivityGroup extends ActivityGroup {
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	// Toast.makeText(this, "onKeyDown", 2).show();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// preventing default implementation previous to
-			// android.os.Build.VERSION_CODES.ECLAIR
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -92,7 +87,6 @@ public class TabActivityGroup extends ActivityGroup {
 	 */
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-    	// Toast.makeText(this, "onKeyUp", 2).show();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			onBackPressed();
 			return true;
@@ -106,7 +100,6 @@ public class TabActivityGroup extends ActivityGroup {
 	 */
 	@Override
 	public void onBackPressed() {
-    	// Toast.makeText(this, "onBackPressed", 2).show();
 		int length = mIdList.size();
 		if (length > 1) {
 			Activity current = getLocalActivityManager().getActivity(

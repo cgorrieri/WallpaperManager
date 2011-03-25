@@ -33,7 +33,7 @@ public class RotateListSettingActivity extends PreferenceActivity {
 		rotateListsDBAdapter.open();
 		final RotateList rotateList = rotateListsDBAdapter.getSelectedRotateList();
 		rotateListsDBAdapter.close();
-		Preference disableRotateListPreference = (Preference) findPreference("disableRotateListPreference");
+		Preference disableRotateListPreference = (Preference) findPreference("disable_rotate_list");
 		if(rotateList != null) {
 			disableRotateListPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				public boolean onPreferenceClick(Preference preference) {
