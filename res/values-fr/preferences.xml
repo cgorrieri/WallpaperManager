@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rotate_time">Separation time</string>
+    <string name="rotate_time_summary">Tous les combien le fond d\'écran va changer</string>
+    
+    <string name="unselect_playlist">Dèsélectionner les playlists</string>
+    <string name="unselect_playlist_summary">Dèsélectionne toutes les playlists sélectionnées</string>
+    <string name="run_playlist">Lancer les playlists</string>
+    <string name="run_playlist_summary">Lance toutes les playlists et change le fond d\'ecran de maniere aléatoire</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rotate_time">Separation time</string>
+    <string name="rotate_time_summary">Time before wallpaper changes</string>
+    <string name="unselect_playlist">Unselect playlists</string>
+    <string name="unselect_playlist_summary">Unselect all selected playlists</string>
+    <string name="run_playlist">Run playlists</string>
+    <string name="run_playlist_summary">Run all the playlists and change the wallpaper randomly</string>
+</resources>
