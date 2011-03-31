@@ -47,8 +47,8 @@ public class FoldersDBAdapter {
 		return cursorToFolder(c);
 	}
 
-	public ArrayList<Folder> getFolders(int folderId){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME}, ID+" = "+folderId+"", null, null, null, null);
+	public ArrayList<Folder> getFolders(){
+		Cursor c = getCursor();
 		return cursorToFolders(c);
 	}
 	
