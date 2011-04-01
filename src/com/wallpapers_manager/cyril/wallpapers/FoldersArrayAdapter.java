@@ -29,14 +29,14 @@ import com.wallpapers_manager.cyril.playlists.Playlist;
 import com.wallpapers_manager.cyril.playlists.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.playlists.WallpapersPlaylistDBAdapter;
 
-public class FoldersArrayAdapter extends ArrayAdapter {
+public class FoldersArrayAdapter extends ArrayAdapter<Folder> {
 	private final Context 			mContext;
 	private Resources				mResource;
 	private LayoutInflater			mInflater;
 	
-	public FoldersArrayAdapter(Context context, int textViewResourceId, List objects) {
+	public FoldersArrayAdapter(Context context, int textViewResourceId, List<Folder> objects) {
 		super(context, textViewResourceId, objects);
-		mInflater = LayoutInflater.from(context);
+		mInflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mContext = context;
 		mResource = context.getResources();
 	}
@@ -44,11 +44,8 @@ public class FoldersArrayAdapter extends ArrayAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final Folder folder = (Folder) this.getItem(position);
 		View view = convertView;
-		if(view == null){
-			LayoutInflater li = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        //le layout représentant la ligne dans le listView
-	        view = li.inflate(R.layout.folder, null);
-		}
+		if(view == null)
+	        view = mInflater.inflate(R.layout.folder, null);
 		
 		ImageView image_view = (ImageView) view.findViewById(R.id.image);
 		image_view.setImageResource(R.drawable.folder);
