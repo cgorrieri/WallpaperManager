@@ -19,34 +19,52 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int folder=0x7f020000;
-        public static final int ic_new_folder=0x7f020001;
-        public static final int ic_new_playlist=0x7f020002;
-        public static final int ic_playlist_tab=0x7f020003;
-        public static final int ic_playlists_tab=0x7f020004;
-        public static final int ic_quit=0x7f020005;
-        public static final int ic_settings=0x7f020006;
-        public static final int ic_wallpapers_tab=0x7f020007;
-        public static final int icon=0x7f020008;
-        public static final int playlist=0x7f020009;
-        public static final int selected_playlist=0x7f02000a;
+        public static final int checkbox=0x7f020000;
+        public static final int checkbox_off_background=0x7f020001;
+        public static final int checkbox_off_background_focus_yellow=0x7f020002;
+        public static final int checkbox_on_background=0x7f020003;
+        public static final int checkbox_on_background_focus_yellow=0x7f020004;
+        public static final int folder=0x7f020005;
+        public static final int ic_new_folder=0x7f020006;
+        public static final int ic_new_playlist=0x7f020007;
+        public static final int ic_playlist_tab=0x7f020008;
+        public static final int ic_playlists_tab=0x7f020009;
+        public static final int ic_quit=0x7f02000a;
+        public static final int ic_settings=0x7f02000b;
+        public static final int ic_wallpapers_tab=0x7f02000c;
+        public static final int icon=0x7f02000d;
+        public static final int playlist=0x7f02000e;
+        public static final int selected_playlist=0x7f02000f;
     }
     public static final class id {
+        public static final int add_to=0x7f060008;
+        public static final int buttonLayout=0x7f060006;
+        public static final int buttonLayout1=0x7f06000c;
+        public static final int copy_to=0x7f06000e;
+        public static final int delete=0x7f060007;
         public static final int folder_view=0x7f060000;
-        public static final int gridview=0x7f060005;
+        public static final int gridview=0x7f06000b;
         public static final int image=0x7f060001;
+        public static final int itemCheckBox=0x7f060003;
+        public static final int move_to=0x7f06000d;
         public static final int name=0x7f060002;
-        public static final int playlist_view=0x7f060003;
-        public static final int wallpaper=0x7f060004;
+        public static final int playlist_view=0x7f060009;
+        public static final int selectButonLayout=0x7f060004;
+        public static final int select_all=0x7f060005;
+        public static final int wallpaper=0x7f06000a;
     }
     public static final class layout {
         public static final int folder=0x7f030000;
-        public static final int folders_list=0x7f030001;
-        public static final int playlist=0x7f030002;
-        public static final int playlists_list=0x7f030003;
-        public static final int playlists_preferences=0x7f030004;
-        public static final int wallpaper=0x7f030005;
-        public static final int wallpapers_grid=0x7f030006;
+        public static final int folder_selectable=0x7f030001;
+        public static final int folders_list=0x7f030002;
+        public static final int folders_selectable_list=0x7f030003;
+        public static final int playlist=0x7f030004;
+        public static final int playlists_list=0x7f030005;
+        public static final int playlists_preferences=0x7f030006;
+        public static final int wallpaper=0x7f030007;
+        public static final int wallpaper_selectable=0x7f030008;
+        public static final int wallpapers_grid=0x7f030009;
+        public static final int wallpapers_selectable_grid=0x7f03000a;
     }
     public static final class string {
         public static final int actions=0x7f05000f;

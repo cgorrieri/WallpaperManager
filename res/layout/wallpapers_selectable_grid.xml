@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:gravity="center">
+
+	<LinearLayout android:id="@+id/selectButonLayout"
+		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_alignParentTop="true">
+
+		<CheckedTextView android:layout_width="fill_parent"
+			android:layout_height="50dp" android:id="@+id/select_all"
+			android:checked="false" android:clickable="true" android:focusable="false"
+			android:textSize="25px" android:gravity="center_vertical"
+			android:paddingLeft="10dp" android:paddingRight="10dp"
+			android:background="#777777" android:text="Select All"
+			android:layout_marginTop="25dp" android:checkMark="@drawable/checkbox" />
+	</LinearLayout>
+
+	<LinearLayout android:id="@+id/buttonLayout1"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:orientation="horizontal">
+
+		<Button android:id="@+id/move_to" android:layout_height="wrap_content" android:onClick="onButtonClick" android:text="Move to" android:layout_width="wrap_content" android:layout_weight="1"/>
+
+		<Button android:id="@+id/copy_to" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:onClick="onButtonClick" android:text="Copy to" android:layout_weight="1"/>
+
+		<Button android:id="@+id/delete" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:onClick="onButtonClick" android:text="Delete" android:layout_weight="1"/>
+
+		<Button android:id="@+id/add_to" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:onClick="onButtonClick" android:text="Add to" android:layout_weight="1"/>
+	</LinearLayout>
+
+	<com.wallpapers_manager.cyril.widget.MultiSelectGridView
+		android:id="@+id/gridview" android:layout_height="fill_parent"
+		android:columnWidth="90dp" android:numColumns="auto_fit"
+		android:verticalSpacing="10dp" android:horizontalSpacing="10dp"
+		android:stretchMode="columnWidth" android:gravity="center"
+		android:layout_above="@id/buttonLayout1" android:layout_below="@id/select_all"
+		android:layout_width="wrap_content" android:layout_marginLeft="5dp"
+		android:layout_marginTop="75dp" android:layout_marginBottom="5dp" />
+
+	<TextView android:id="@+id/name" android:layout_width="fill_parent"
+		android:text="folder_name" android:gravity="center" android:textColor="#FFFFFF"
+		android:background="#666666" android:textSize="22sp"
+		android:layout_above="@id/select_all" android:layout_height="wrap_content" />
+</RelativeLayout>

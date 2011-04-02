@@ -17,8 +17,10 @@
 		<activity android:name=".playlists.WallpapersPlaylistActivity" />
 		<activity android:name=".playlists.PlaylistsSettingActivity" />
 		<activity android:name=".WallpapersTabActivityGroup" />
-		<activity android:name=".wallpapers.FoldersActivity" />
+		<activity android:name=".folders.FoldersActivity" />
+		<activity android:name=".folders.FoldersSelectableActivity" />
 		<activity android:name=".wallpapers.WallpapersActivity" />
+		<activity android:name=".wallpapers.WallpapersSelectableActivity" />
 		<service android:name="RunPlaylistService" />
 	</application>
 </manifest> 

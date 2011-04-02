@@ -1,12 +1,10 @@
 package com.wallpapers_manager.cyril;
 
-import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
 
-import com.wallpapers_manager.cyril.wallpapers.FoldersActivity;
+import com.wallpapers_manager.cyril.folders.FoldersActivity;
 import com.wallpapers_manager.cyril.wallpapers.WallpapersActivity;
 
 public class WallpapersTabActivityGroup extends TabActivityGroup {

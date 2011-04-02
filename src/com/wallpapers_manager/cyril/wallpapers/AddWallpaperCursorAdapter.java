@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.WallpaperManagerConstants;
 import com.wallpapers_manager.cyril.WallpapersTabActivityGroup;
+import com.wallpapers_manager.cyril.folders.Folder;
 
 public class AddWallpaperCursorAdapter extends CursorAdapter {
 	protected final LayoutInflater 	mInflater;

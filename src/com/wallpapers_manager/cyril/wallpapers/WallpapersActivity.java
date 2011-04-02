@@ -17,12 +17,15 @@ import android.widget.TextView;
 
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.WallpapersTabActivityGroup;
+import com.wallpapers_manager.cyril.folders.Folder;
+import com.wallpapers_manager.cyril.folders.FoldersDBAdapter;
 
 //public class WallpapersActivity extends ListActivity {
 public class WallpapersActivity extends Activity {
 	/* MENU */
 	private static final int MENU_ADD_CURRENT_WALLPAPER = 0;
 	private static final int MENU_SET_AND_ADD_NEW_WALLPAPER = 1;
+	private static final int MENU_MORE = 2;
 	private static final int REQUEST_CODE = 0;
 	
 	private Context 		mContext;
@@ -53,7 +56,7 @@ public class WallpapersActivity extends Activity {
         wallpapersDBAdapter.open();
 	        Cursor cursor = wallpapersDBAdapter.getCursor(folderId);
 	        this.mGridView = (GridView) findViewById(R.id.gridview);
-	        this.mGridView.setAdapter(new WallpaperCursorAdapter(mContext,cursor));
+	        this.mGridView.setAdapter(new WallpapersCursorAdapter(mContext,cursor));
         wallpapersDBAdapter.close();
   
         this.mTextView = (TextView) findViewById(R.id.name);
@@ -65,7 +68,7 @@ public class WallpapersActivity extends Activity {
 		Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
                 wallpapersDBAdapter.open();
-                	mGridView.setAdapter(new WallpaperCursorAdapter(mContext,wallpapersDBAdapter.getCursor(mFolder.getId())));
+                	mGridView.setAdapter(new WallpapersCursorAdapter(mContext,wallpapersDBAdapter.getCursor(mFolder.getId())));
 				wallpapersDBAdapter.close();
                 mDialog.dismiss();
 			}
@@ -77,6 +80,7 @@ public class WallpapersActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
     	menu.add(0, MENU_ADD_CURRENT_WALLPAPER, 0, mResources.getText(R.string.wallpaper_context_menu_add_current));
         menu.add(0, MENU_SET_AND_ADD_NEW_WALLPAPER, 0, mResources.getText(R.string.wallpaper_context_menu_set_and_add));
+        menu.add(0, MENU_MORE, 0, "More");
         return true;
     }
 
@@ -91,6 +95,10 @@ public class WallpapersActivity extends Activity {
 	        	intent.setAction(Intent.ACTION_SET_WALLPAPER);
 	        	WallpapersTabActivityGroup._group.startActivityForResult(intent, REQUEST_CODE);
 	            return true;
+	        case MENU_MORE:
+	        	Intent intent2 = new Intent(mContext, WallpapersSelectableActivity.class);
+	        	WallpapersTabActivityGroup._group.startChildActivity("WallpapersSelectableActivity", intent2);
+	        	return true;
         }
         return false;
     }

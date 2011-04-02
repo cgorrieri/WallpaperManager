@@ -22,7 +22,6 @@ public class AddWallpaperInPlaylistCursorAdapter extends CursorAdapter {
 	protected final Context 		mContext;
 	
 	private Wallpaper 	mWallpaper;
-	private Folder 		mFolder;
 	private Dialog 		mDialog;
 	
 	public AddWallpaperInPlaylistCursorAdapter(Context context, Cursor cursor, Wallpaper wpp, Dialog dg) {
@@ -30,14 +29,6 @@ public class AddWallpaperInPlaylistCursorAdapter extends CursorAdapter {
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
 		mWallpaper = wpp;
-		mDialog = dg;
-	}
-	
-	public AddWallpaperInPlaylistCursorAdapter(Context context, Cursor cursor, Folder fd, Dialog dg) {
-		super(context, cursor);
-		mInflater = LayoutInflater.from(context);
-		mContext = context;
-		mFolder = fd;
 		mDialog = dg;
 	}
 	
@@ -55,11 +46,8 @@ public class AddWallpaperInPlaylistCursorAdapter extends CursorAdapter {
 			public void onClick(View view) {
 				WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
 				wallpapersPlaylistDBAdapter.open();
-					if(mWallpaper != null) {
-						WallpaperPlaylist wallpaperPlaylist = new WallpaperPlaylist(mWallpaper.getId(), playlist.getId());
-						wallpapersPlaylistDBAdapter.insertWallpaperPlaylist(wallpaperPlaylist);
-					} else
-						wallpapersPlaylistDBAdapter.insertPlaylistWallpaperForFolder(mFolder, playlist);
+					WallpaperPlaylist wallpaperPlaylist = new WallpaperPlaylist(mWallpaper.getId(), playlist.getId());
+					wallpapersPlaylistDBAdapter.insertWallpaperPlaylist(wallpaperPlaylist);
 				wallpapersPlaylistDBAdapter.close();
 				Intent intentBroadcast = new Intent("com.wallpaper_manager.playlists.updateWallpapersPlaylistCursor");
 				mContext.sendBroadcast(intentBroadcast);
