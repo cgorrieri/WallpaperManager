@@ -13,7 +13,7 @@
 			android:textSize="25px" android:gravity="center_vertical"
 			android:paddingLeft="10dp" android:paddingRight="10dp"
 			android:background="#777777" android:text="Select All"
-			android:layout_marginTop="25dp" android:checkMark="@drawable/checkbox" />
+			android:layout_marginTop="25dp" android:checkMark="@drawable/checkbox_square_small" />
 	</LinearLayout>
 
 	<LinearLayout android:id="@+id/buttonLayout1"

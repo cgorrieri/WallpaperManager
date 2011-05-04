@@ -4,13 +4,13 @@
 	xmlns:marvinlabs="http://schemas.android.com/apk/res/fr.marvinlabs.selectablelisttutorial"
 	android:layout_width="90dp" android:layout_height="90dp">
 
-	<ImageView android:id="@+id/wallpaper" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:scaleType="centerInside" />
+	<ImageView android:id="@+id/wallpaper" android:scaleType="centerInside"
+		android:layout_width="90dp" android:layout_height="90dp"/>
 
 	<com.wallpapers_manager.cyril.widget.InertCheckBox
 		android:id="@+id/itemCheckBox" android:layout_width="25dp"
 		android:layout_height="25dp" android:layout_alignParentBottom="true"
 		android:layout_alignParentRight="true" android:focusable="false"
-		android:button="@drawable/checkbox" />
+		android:button="@drawable/checkbox_square_small" />
 
 </com.wallpapers_manager.cyril.widget.CheckableRelativeLayout>

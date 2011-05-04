@@ -21,6 +21,6 @@
 		android:layout_alignParentRight="true" 
 		android:layout_centerVertical="true" 
 		android:focusable="false" 
-		android:button="@drawable/checkbox" />
+		android:button="@drawable/checkbox_square_big" />
 		
 </com.wallpapers_manager.cyril.widget.CheckableRelativeLayout>
