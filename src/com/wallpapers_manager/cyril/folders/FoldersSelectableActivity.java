@@ -15,6 +15,8 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckedTextView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -26,6 +28,7 @@ import com.wallpapers_manager.cyril.WallpapersTabActivityGroup;
 import com.wallpapers_manager.cyril.playlists.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.wallpapers.Wallpaper;
 import com.wallpapers_manager.cyril.wallpapers.WallpapersDBAdapter;
+import com.wallpapers_manager.cyril.widget.CheckableRelativeLayout;
 
 public class FoldersSelectableActivity extends ListActivity {	
 	private Context 				mContext;
@@ -51,6 +54,15 @@ public class FoldersSelectableActivity extends ListActivity {
         setListAdapter(new FoldersArrayAdapter(mContext, foldersList));
         mListView = getListView();
 		mListView.setItemsCanFocus(false);
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3) {
+				CheckableRelativeLayout view = (CheckableRelativeLayout) v;
+				if(view.isChecked() && mCheckedTextView.isChecked())
+					mCheckedTextView.setChecked(false);
+			}
+		});
 		
 		mCheckedTextView = (CheckedTextView) findViewById(R.id.select_all);
 		mCheckedTextView.setOnClickListener(new OnClickListener() {
@@ -94,13 +106,9 @@ public class FoldersSelectableActivity extends ListActivity {
 		WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
 		Folder folder;
 		for (int i = 0; i < checkedItemsCount; ++i) {
-			// This tells us the item position we are looking at
-			// --
 			final int position = checkedItems.keyAt(i);
 			folder = (Folder) mListView.getItemAtPosition(position);
 
-			// This tells us the item status at the above position
-			// --
 			final boolean isChecked = checkedItems.valueAt(i);
 
 			if (isChecked) {

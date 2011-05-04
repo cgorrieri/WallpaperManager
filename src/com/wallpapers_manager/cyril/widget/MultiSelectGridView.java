@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.SparseBooleanArray;
 import android.widget.GridView;
 
 public class MultiSelectGridView extends GridView {
@@ -20,6 +21,16 @@ public class MultiSelectGridView extends GridView {
 		super(context);
 	}
 	
+	public SparseBooleanArray getCheckedItemPositions() {
+		int size = getCount();
+		SparseBooleanArray positionList = new SparseBooleanArray();
+		for(int i = 0; i<size;i++) {
+			positionList.append((int)getItemIdAtPosition(i), ((CheckableRelativeLayout)getChildAt(i)).isChecked());
+		}
+		
+		return positionList.size() > 0 ? positionList : null;
+	}
+	
 	public long[] getCheckItemIds() {
 		int size = getCount();
 		ArrayList<Long> idList = new ArrayList<Long>();
@@ -32,7 +43,7 @@ public class MultiSelectGridView extends GridView {
 		for(int i = 0; i< result.length; i++)
 			result[i] = idList.get(i);
 		
-		return result;
+		return result.length > 0 ? result : null;
 	}
 	
 	public void setItemChecked(int position, boolean checked) {
