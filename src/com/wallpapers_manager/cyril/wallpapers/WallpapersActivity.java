@@ -96,8 +96,9 @@ public class WallpapersActivity extends Activity {
 	        	WallpapersTabActivityGroup._group.startActivityForResult(intent, REQUEST_CODE);
 	            return true;
 	        case MENU_MORE:
-	        	Intent intent2 = new Intent(mContext, WallpapersSelectableActivity.class);
-	        	WallpapersTabActivityGroup._group.startChildActivity("WallpapersSelectableActivity", intent2);
+	        	Intent wallpapersSelectable = new Intent(mContext, WallpapersSelectableActivity.class);
+	        	wallpapersSelectable.putExtra("folderId", mFolder.getId());
+	        	WallpapersTabActivityGroup._group.startChildActivity("WallpapersSelectableActivity", wallpapersSelectable);
 	        	return true;
         }
         return false;

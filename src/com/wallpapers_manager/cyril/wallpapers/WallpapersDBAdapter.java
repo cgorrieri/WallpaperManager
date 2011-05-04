@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.wallpapers_manager.cyril.WMSQLiteOpenHelper;
 import com.wallpapers_manager.cyril.folders.Folder;
-import com.wallpapers_manager.cyril.playlists.WallpapersPlaylistDBAdapter;
+import com.wallpapers_manager.cyril.wallpapers_playlist.WallpapersPlaylistDBAdapter;
 
 import android.content.ContentValues;
 import android.content.Context;

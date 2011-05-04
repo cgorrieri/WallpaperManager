@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,9 +64,11 @@ public class WallpapersSelectableActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 				CheckableRelativeLayout checkableRelativeLayout = (CheckableRelativeLayout)view;
-				if(checkableRelativeLayout.isChecked())
+				if(checkableRelativeLayout.isChecked()) {
 					checkableRelativeLayout.setChecked(false);
-				else
+					if(mCheckedTextView.isChecked())
+						mCheckedTextView.setChecked(false);
+				} else
 					checkableRelativeLayout.setChecked(true);
 			}
 		});
@@ -89,7 +92,7 @@ public class WallpapersSelectableActivity extends Activity {
     public void onButtonClick(View v) {
 		switch (v.getId()) {
 		case R.id.delete:
-			showSelectedItemIds();
+			deleteWallpapers();
 			break;
 //		case R.id.viewCheckedItemsButton:
 //			showSelectedItems();
@@ -105,32 +108,30 @@ public class WallpapersSelectableActivity extends Activity {
 	 * ListView#getCheckItemIds() on Android 1.6 at least @see
 	 * http://code.google.com/p/android/issues/detail?id=6609
 	 */
-	private void showSelectedItemIds() {
-		final StringBuffer sb = new StringBuffer("Selection: ");
-
-		// Get an array that contains the IDs of the list items that are checked
-		// --
-		final long[] checkedItemIds = mGridView.getCheckItemIds();
-		if (checkedItemIds == null) {
-			Toast.makeText(this, "No selection", Toast.LENGTH_LONG).show();
+	private void deleteWallpapers() {
+		final SparseBooleanArray checkedItems = mGridView.getCheckedItemPositions();
+		if (checkedItems == null) {
+			Toast.makeText(this, "No folder selected",
+					Toast.LENGTH_LONG).show();
 			return;
 		}
-
-		// For each ID in the status array
-		// --
-		boolean isFirstSelected = true;
-		final int checkedItemsCount = checkedItemIds.length;
+		final int checkedItemsCount = checkedItems.size();
+		WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
+		Wallpaper wallpaper;
 		for (int i = 0; i < checkedItemsCount; ++i) {
-			if (!isFirstSelected) {
-				sb.append(", ");
-			}
-			sb.append(checkedItemIds[i]);
-			isFirstSelected = false;
-		}
+			final int position = checkedItems.keyAt(i);
+			wallpaper = (Wallpaper) mGridView.getItemAtPosition(position);
 
-		// Show a message with the country IDs that are selected
-		// --
-		Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+			final boolean isChecked = checkedItems.valueAt(i);
+
+			if (isChecked) {
+				wallpapersDBAdapter.open();
+						wallpaper.delete(wallpapersDBAdapter);
+				wallpapersDBAdapter.close();
+			}
+		}
+		
+		WallpapersTabActivityGroup._group.finishFromChild(this);
 	}
 
 	/**

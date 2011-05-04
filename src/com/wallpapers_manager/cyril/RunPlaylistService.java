@@ -16,9 +16,9 @@ import android.preference.PreferenceManager;
 
 import com.wallpapers_manager.cyril.playlists.Playlist;
 import com.wallpapers_manager.cyril.playlists.PlaylistsSettingActivity;
-import com.wallpapers_manager.cyril.playlists.WallpapersPlaylistDBAdapter;
 import com.wallpapers_manager.cyril.playlists.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.wallpapers.Wallpaper;
+import com.wallpapers_manager.cyril.wallpapers_playlist.WallpapersPlaylistDBAdapter;
 
 public class RunPlaylistService extends Service {
 	private static Random _rand = new Random();

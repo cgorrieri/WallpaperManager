@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.PlaylistsTabActivityGroup;
+import com.wallpapers_manager.cyril.wallpapers_playlist.WallpapersPlaylistActivity;
 
 public class PlaylistsCursorAdapter extends CursorAdapter {
 	private final LayoutInflater 	mInflater;

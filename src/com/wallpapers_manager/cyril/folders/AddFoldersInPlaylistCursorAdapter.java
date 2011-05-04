@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.playlists.Playlist;
-import com.wallpapers_manager.cyril.playlists.WallpapersPlaylistDBAdapter;
+import com.wallpapers_manager.cyril.wallpapers_playlist.WallpapersPlaylistDBAdapter;
 
 public class AddFoldersInPlaylistCursorAdapter extends CursorAdapter {
 	protected final LayoutInflater 	mInflater;

@@ -25,10 +25,10 @@ import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.WallpapersTabActivityGroup;
 import com.wallpapers_manager.cyril.playlists.Playlist;
 import com.wallpapers_manager.cyril.playlists.PlaylistsDBAdapter;
-import com.wallpapers_manager.cyril.playlists.WallpapersPlaylistDBAdapter;
 import com.wallpapers_manager.cyril.wallpapers.Wallpaper;
 import com.wallpapers_manager.cyril.wallpapers.WallpapersActivity;
 import com.wallpapers_manager.cyril.wallpapers.WallpapersDBAdapter;
+import com.wallpapers_manager.cyril.wallpapers_playlist.WallpapersPlaylistDBAdapter;
 
 public class FoldersCursorAdapter extends CursorAdapter {
 	private final LayoutInflater 	mInflater;
