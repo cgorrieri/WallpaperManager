@@ -1,4 +1,4 @@
-package com.wallpapers_manager.cyril.playlists;
+package com.wallpapers_manager.cyril.wallpapers_playlist;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.PlaylistsTabActivityGroup;
+import com.wallpapers_manager.cyril.playlists.Playlist;
+import com.wallpapers_manager.cyril.playlists.PlaylistsDBAdapter;
 
 public class WallpapersPlaylistActivity extends Activity {
 	private Context 	mContext;

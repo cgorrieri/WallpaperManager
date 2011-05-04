@@ -1,4 +1,4 @@
-package com.wallpapers_manager.cyril.playlists;
+package com.wallpapers_manager.cyril.wallpapers_playlist;
 
 import android.database.Cursor;
 

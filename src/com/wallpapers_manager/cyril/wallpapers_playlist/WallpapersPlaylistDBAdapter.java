@@ -1,9 +1,10 @@
-package com.wallpapers_manager.cyril.playlists;
+package com.wallpapers_manager.cyril.wallpapers_playlist;
 
 import java.util.ArrayList;
 
 import com.wallpapers_manager.cyril.WMSQLiteOpenHelper;
 import com.wallpapers_manager.cyril.folders.Folder;
+import com.wallpapers_manager.cyril.playlists.Playlist;
 import com.wallpapers_manager.cyril.wallpapers.Wallpaper;
 import com.wallpapers_manager.cyril.wallpapers.WallpapersDBAdapter;
 
