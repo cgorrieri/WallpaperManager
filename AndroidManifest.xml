@@ -14,7 +14,8 @@
 		</activity>
 		<activity android:name=".PlaylistsTabActivityGroup" />
 		<activity android:name=".playlists.PlaylistsActivity" />
-		<activity android:name=".playlists.WallpapersPlaylistActivity" />
+		<activity android:name=".playlists.PlaylistsSelectableActivity" />
+		<activity android:name=".wallpapers_playlist.WallpapersPlaylistActivity" />
 		<activity android:name=".playlists.PlaylistsSettingActivity" />
 		<activity android:name=".WallpapersTabActivityGroup" />
 		<activity android:name=".folders.FoldersActivity" />

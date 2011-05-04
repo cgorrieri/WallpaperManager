@@ -3,6 +3,7 @@ package com.wallpapers_manager.cyril.playlists;
 import java.util.ArrayList;
 
 import com.wallpapers_manager.cyril.WMSQLiteOpenHelper;
+import com.wallpapers_manager.cyril.wallpapers_playlist.WallpapersPlaylistDBAdapter;
 
 
 
@@ -64,6 +65,11 @@ public class PlaylistsDBAdapter {
 		return cursorToPlaylist(c);
 	}
 
+	public ArrayList<Playlist> getPlaylists(){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, null, null, null, null, null);
+		return cursorToPlaylists(c);
+	}
+	
 	public ArrayList<Playlist> getPlaylists(int folderId){
 		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, ID+" = "+folderId+"", null, null, null, null);
 		return cursorToPlaylists(c);

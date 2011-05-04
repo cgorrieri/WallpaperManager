@@ -22,6 +22,7 @@ public class PlaylistsActivity extends ListActivity {
 	/* Menu */
 	private static final int 	MENU_NEW = 0;
 	private static final int 	MENU_SETTINGS = 1;
+	private static final int 	MENU_MORE = 2;
 	
 	private Context 			mContext;
 	private Resources			mResources;
@@ -82,6 +83,7 @@ public class PlaylistsActivity extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
     	menu.add(0, MENU_NEW, Menu.NONE, mResources.getText(R.string.new_playlist)).setIcon(R.drawable.ic_new_playlist);
     	menu.add(0, MENU_SETTINGS, Menu.NONE, mResources.getText(R.string.menu_settings)).setIcon(R.drawable.ic_settings);
+    	menu.add(0, MENU_MORE, Menu.NONE, "more");
         return true;
     }
 
@@ -94,6 +96,12 @@ public class PlaylistsActivity extends ListActivity {
 	        case MENU_SETTINGS:
 	        	Intent settings = new Intent(mContext, PlaylistsSettingActivity.class);
 	    		startActivity(settings);
+	            return true;
+	        case MENU_MORE:
+	        	Intent selectable = new Intent(mContext, PlaylistsSelectableActivity.class);
+	    		PlaylistsTabActivityGroup._group.startChildActivity(
+	    				"PlaylistsSelectableActivity",
+	    				selectable.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	            return true;
         }
         return false;
