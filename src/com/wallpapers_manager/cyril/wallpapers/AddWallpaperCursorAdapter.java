@@ -67,8 +67,9 @@ public class AddWallpaperCursorAdapter extends CursorAdapter {
 						mWallpaper.setAddress(mWallpaper.getAddress().replace(".", "c."));
 						copy_file(oldName, mWallpaper.getAddress());
 						wallpapersDBAdapter.insertWallpaper(mWallpaper);
-					} else
+					} else {
 						wallpapersDBAdapter.updateWallpaper(mWallpaper);
+					}
 				wallpapersDBAdapter.close();
 				mDialog.dismiss();
 				
@@ -76,9 +77,7 @@ public class AddWallpaperCursorAdapter extends CursorAdapter {
 				WallpapersTabActivityGroup._group.finishFromChild(WallpapersTabActivityGroup._group.getCurrentActivity());
 				Intent wallpapers = new Intent(mContext, WallpapersActivity.class);
 				wallpapers.putExtra("folder_id", mWallpaper.getFolderId());
-				WallpapersTabActivityGroup._group.startChildActivity(
-						"WallpapersActivity",
-						wallpapers.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+				WallpapersTabActivityGroup._group.startChildActivity("WallpapersActivity", wallpapers.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 		});
 	}
@@ -88,9 +87,7 @@ public class AddWallpaperCursorAdapter extends CursorAdapter {
 		return mInflater.inflate(R.layout.folder, parent, false);
 	}
 	
-	private void copy_file(String name, String nameDest)
-	{
-		
+	private void copy_file(String name, String nameDest) {
 		File file = new File(WallpaperManagerConstants._registrationFilesDir, name);
 		File fileDest = new File(WallpaperManagerConstants._registrationFilesDir, nameDest);
 

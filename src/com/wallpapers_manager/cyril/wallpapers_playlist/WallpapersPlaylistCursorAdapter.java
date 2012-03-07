@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 
-import com.wallpapers_manager.cyril.Helper;
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.WallpaperManagerConstants;
 import com.wallpapers_manager.cyril.wallpapers.Wallpaper;
@@ -42,7 +42,7 @@ public class WallpapersPlaylistCursorAdapter extends CursorAdapter {
         wallpapersDBAdapter.close();
 
 		File wallpaperFile = new File(WallpaperManagerConstants._registrationFilesDir, wallpaper.getAddress());
-		Bitmap wallpaperBitmap = Helper._decodeFile(wallpaperFile);
+		Bitmap wallpaperBitmap = BitmapFactory.decodeFile(wallpaperFile.getAbsolutePath());
 		
 		final ImageView wallpaperImageView = (ImageView) view.findViewById(R.id.wallpaper);
 		wallpaperImageView.setImageBitmap(wallpaperBitmap);

@@ -11,6 +11,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.RunPlaylistService;
@@ -59,13 +60,14 @@ public class PlaylistsSettingActivity extends PreferenceActivity {
 		final Intent serviceIntent = new Intent(mContext, RunPlaylistService.class);
 		
 		StartStopRotateListCheckBoxPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				boolean newBool = (Boolean) newValue;
 				StartStopRotateListCheckBoxPreference.setChecked(newBool);
 				if(newBool) {
+					Log.i("Service", "Start");
 					mContext.startService(serviceIntent);
 				} else {
+					Log.i("Service", "Stop");
 					mContext.stopService(serviceIntent);
 				}
 				return false;
@@ -81,7 +83,7 @@ public class PlaylistsSettingActivity extends PreferenceActivity {
 
 		for (int i = 0; i < servicesList.size(); i++) {
 			if ("com.wallpapers_manager.cyril".equals(servicesList.get(i).service.getPackageName())) {
-				if ("com.wallpapers_manager.cyril.RotateWallpaperService".equals(servicesList.get(i).service.getClassName())) {
+				if ("com.wallpapers_manager.cyril.RunPlaylistService".equals(servicesList.get(i).service.getClassName())) {
 					isServiceFound = true;
 				}
 			}

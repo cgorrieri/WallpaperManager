@@ -53,8 +53,8 @@ public class WallpapersPlaylistDBAdapter {
 	 * @param e_playlist_id
 	 * @return Cursor
 	 */
-	public Cursor getCursor(int rotateListId){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,WALLPAPER_ID,PLAYLIST_ID}, PLAYLIST_ID+" = "+rotateListId+"", null, null, null, null);
+	public Cursor getCursor(int playList){
+		Cursor c = mDataBase.query(TABLE, new String[] {ID,WALLPAPER_ID,PLAYLIST_ID}, PLAYLIST_ID+" = "+playList+"", null, null, null, null);
 		return c;
 	}
 	
@@ -76,8 +76,7 @@ public class WallpapersPlaylistDBAdapter {
 	 * @return ArrayList<Wallpaper>
 	 */
 	public ArrayList<Wallpaper> getWallpapersFromPlaylist(Playlist playlist){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,WALLPAPER_ID,PLAYLIST_ID}, PLAYLIST_ID+" = "+playlist.getId()+"", null, null, null, null);
-		return cursorToWallpapers(c);
+		return cursorToWallpapers(getCursor(playlist.getId()));
 	}
 	
 	/**
@@ -130,18 +129,18 @@ public class WallpapersPlaylistDBAdapter {
 	
 	/**
 	 * Get a ArrayList of Wallpaper from Cursor
-	 * @param c
-	 * @return ArrayList<Wallpaper>
+	 * @param c Cursor
+	 * @return If cursor not empty return ArrayList<Wallpaper>, null otherwise
 	 */
 	private ArrayList<Wallpaper> cursorToWallpapers(Cursor c) {
-		if(c.getCount() == 0) return new ArrayList<Wallpaper>(0);
+		if(c.moveToFirst() == false) return null;
 		
 		ArrayList<Wallpaper> wallpapersList = new ArrayList<Wallpaper>(c.getCount());
-		c.moveToFirst();
 		mWallpapersDBAdapter.open();
-			do{
-				wallpapersList.add(mWallpapersDBAdapter.getWallpaper(c.getInt(0)));
-			}while(c.moveToNext());
+			do {
+				int id = c.getInt(0);
+				wallpapersList.add(mWallpapersDBAdapter.getWallpaper(id));
+			} while(c.moveToNext());
 		mWallpapersDBAdapter.close();
 		c.close();
 		return wallpapersList;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ public class WallpapersArrayAdapter extends ArrayAdapter<Wallpaper> {
 	        view = mInflater.inflate(R.layout.wallpaper_selectable, null);
 		
 		File wallpaperFile = new File(WallpaperManagerConstants._registrationFilesDir, wallpaper.getAddress());
-		Bitmap wallpaperBitmap = Helper._decodeFile(wallpaperFile);
+		Bitmap wallpaperBitmap = BitmapFactory.decodeFile(wallpaperFile.getAbsolutePath());
 		
 		final ImageView wallpaperImageView = (ImageView) view.findViewById(R.id.wallpaper);
 		wallpaperImageView.setImageBitmap(wallpaperBitmap);

@@ -111,21 +111,20 @@ public class WallpapersDBAdapter {
 	}
 	
 	private Wallpaper cursorToWallpaper(Cursor c) {
-		if(c.getCount() == 0) return null;
-		c.moveToFirst();
+		if(c.moveToFirst() == false) return null;
 		Wallpaper w = new Wallpaper(c.getInt(ID_IC), c.getInt(FOLDER_ID_IC), c.getString(ADDRESS_IC));
 		c.close();
 		return w;
 	}
-	private ArrayList<Wallpaper> cursorToWallpapers(Cursor c) {
-		if(c.getCount() == 0) return new ArrayList<Wallpaper>(0);
+	private ArrayList<Wallpaper> cursorToWallpapers(Cursor cursor) {
+		if(cursor.getCount() == 0) return new ArrayList<Wallpaper>(0);
 		
-		ArrayList<Wallpaper> wallpapersList = new ArrayList<Wallpaper>(c.getCount());
-		c.moveToFirst();
-		do{
-			wallpapersList.add(new Wallpaper(c.getInt(ID_IC), c.getInt(FOLDER_ID_IC), c.getString(ADDRESS_IC)));
-		}while(c.moveToNext());
-		c.close();
+		ArrayList<Wallpaper> wallpapersList = new ArrayList<Wallpaper>(cursor.getCount());
+		cursor.moveToFirst();
+		do {
+			wallpapersList.add(new Wallpaper(cursor));
+		} while(cursor.moveToNext());
+		cursor.close();
 		return wallpapersList;
 	}
 }

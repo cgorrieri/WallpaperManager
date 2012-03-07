@@ -18,6 +18,7 @@ import android.widget.EditText;
 import com.wallpapers_manager.cyril.PlaylistsTabActivityGroup;
 import com.wallpapers_manager.cyril.R;
 
+/** Activity which contains the list of play list */
 public class PlaylistsActivity extends ListActivity {
 	/* Menu */
 	private static final int 	MENU_NEW = 0;
@@ -28,7 +29,7 @@ public class PlaylistsActivity extends ListActivity {
 	private Resources			mResources;
 	private AlertDialog.Builder mAddPlaylistDialog;
 	
-    /** Called when the activity is first created. */
+    /** Called when the activity is first created */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,7 @@ public class PlaylistsActivity extends ListActivity {
         mContext = PlaylistsTabActivityGroup._group;
         mResources = mContext.getResources();
         
+        // Get playlist list
         final PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
         playlistsDBAdapter.open();
 	        Cursor cursor = playlistsDBAdapter.getCursor();
@@ -44,6 +46,7 @@ public class PlaylistsActivity extends ListActivity {
 	        setListAdapter(cursorAdapter);
         playlistsDBAdapter.close();
         
+        // Create a dialog to add a new playlist
         mAddPlaylistDialog = new AlertDialog.Builder(mContext);
         mAddPlaylistDialog.setTitle(mResources.getText(R.string.new_playlist));
 
@@ -53,10 +56,8 @@ public class PlaylistsActivity extends ListActivity {
 
         mAddPlaylistDialog.setView(rotateListNameEditText).setIcon(R.drawable.ic_new_playlist);
         
-        
-        mAddPlaylistDialog.setPositiveButton("OK", new DialogInterface.OnClickListener()	{
-    		public void onClick(DialogInterface d, int which)
-    		{
+        mAddPlaylistDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    		public void onClick(DialogInterface d, int which) {
     			playlistsDBAdapter.open();
 	    			playlistsDBAdapter.insertPlaylist(new Playlist(rotateListNameEditText.getText().toString()));
 	    	        Cursor cursor = playlistsDBAdapter.getCursor();
@@ -65,6 +66,7 @@ public class PlaylistsActivity extends ListActivity {
     		}
     	});
         
+        // When a playlist is updated the playlist list is updated to
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -76,10 +78,10 @@ public class PlaylistsActivity extends ListActivity {
 				}
 			}
 		};
-		
 		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.playlists.updatePlaylistCursor"));
     }
     
+    /** Create the menu */
     public boolean onCreateOptionsMenu(Menu menu) {
     	menu.add(0, MENU_NEW, Menu.NONE, mResources.getText(R.string.new_playlist)).setIcon(R.drawable.ic_new_playlist);
     	menu.add(0, MENU_SETTINGS, Menu.NONE, mResources.getText(R.string.menu_settings)).setIcon(R.drawable.ic_settings);
@@ -87,7 +89,7 @@ public class PlaylistsActivity extends ListActivity {
         return true;
     }
 
-    /* Handles item selections */
+    /** Handles item selections in the menu */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 	        case MENU_NEW:

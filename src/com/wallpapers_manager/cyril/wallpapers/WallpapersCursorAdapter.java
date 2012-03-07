@@ -47,7 +47,7 @@ public class WallpapersCursorAdapter extends CursorAdapter {
 		final Wallpaper wallpaper = new Wallpaper(cursor);
 		// Toast.makeText(mContext, wallpaper.toString(), 1).show();
 		File wallpaperFile = new File(WallpaperManagerConstants._registrationFilesDir, wallpaper.getAddress());
-		Bitmap wallpaperBitmap = Helper._decodeFile(wallpaperFile);
+		Bitmap wallpaperBitmap = BitmapFactory.decodeFile(wallpaperFile.getAbsolutePath());
 		
 		final ImageView wallpaperImageView = (ImageView) view.findViewById(R.id.wallpaper);
 		wallpaperImageView.setImageBitmap(wallpaperBitmap);
@@ -63,11 +63,7 @@ public class WallpapersCursorAdapter extends CursorAdapter {
 		final Thread updatePhoneWallpaper = new Thread() {
 			public void run() {
 				try {
-					File wallpaperFile = new File(WallpaperManagerConstants._registrationFilesDir, wallpaper.getAddress());
-					Bitmap wallpaperBitmap = BitmapFactory.decodeFile(wallpaperFile.getAbsolutePath());
-					
-					WallpaperManager wallpaperManager = WallpaperManager.getInstance(mContext);
-					wallpaperManager.setBitmap(wallpaperBitmap);
+					Helper.setWallpaper(mContext, wallpaper.getAddress());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

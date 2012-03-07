@@ -105,7 +105,7 @@ public class PlaylistsDBAdapter {
 	}
 	
 	private Playlist cursorToPlaylist(Cursor cursor) {
-		if(cursor.getCount() == 0) {
+		if(cursor.moveToFirst() == false) {
 			cursor.close();
 			return null;
 		}
@@ -114,6 +114,7 @@ public class PlaylistsDBAdapter {
 		cursor.close();
 		return playlist;
 	}
+	
 	private ArrayList<Playlist> cursorToPlaylists(Cursor cursor) {
 		if(cursor.getCount() == 0){
 			cursor.close();
