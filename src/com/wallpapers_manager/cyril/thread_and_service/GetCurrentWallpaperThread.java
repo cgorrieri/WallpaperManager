@@ -56,7 +56,7 @@ public class GetCurrentWallpaperThread extends Thread {
 	            height = wallpaperManager.getDesiredMinimumHeight();
             } else {
                 width = wallpaperDrawable.getMinimumWidth();
-                height = wallpaperDrawable.getMinimumWidth();
+                height = wallpaperDrawable.getMinimumHeight();
             }
             
             /*/ Log for resolution

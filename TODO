@@ -1,5 +1,4 @@
 - Comments during coding : Everywhere
-- FIX Get wallpaper : com.wallpapers_manager.cyril.wallpapers.GetCurrentWallpaperThread
 - Fix get wallpaper into selected playlist : com.wallpapers_manager.cyril.ServiceThread
 - Make multiple play list runnable in service : com.wallpapers_manager.cyril.RunPlaylistService
 - Make code Better : Everywhere

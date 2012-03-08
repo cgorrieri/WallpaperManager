@@ -57,7 +57,6 @@ public class WallpapersPlaylistActivity extends Activity {
 				}
 			}
 		};
-		
 		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.cyril.updateWallpapersPlaylistCursor"));
     }
     

@@ -11,9 +11,9 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 
 import com.wallpapers_manager.cyril.R;
+import static com.wallpapers_manager.cyril.WallpaperManagerConstants.*;
 import com.wallpapers_manager.cyril.bdd.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.data.Playlist;
 import com.wallpapers_manager.cyril.thread_and_service.RunPlaylistService;
@@ -59,6 +59,10 @@ public class PlaylistsSettingActivity extends PreferenceActivity {
 			StartStopRotateListCheckBoxPreference.setChecked(false);
 		}
 		
+		if(playlist == null) {
+			StartStopRotateListCheckBoxPreference.setEnabled(false);
+		}
+		
 		final Intent serviceIntent = new Intent(mContext, RunPlaylistService.class);
 		
 		StartStopRotateListCheckBoxPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -66,10 +70,8 @@ public class PlaylistsSettingActivity extends PreferenceActivity {
 				boolean newBool = (Boolean) newValue;
 				StartStopRotateListCheckBoxPreference.setChecked(newBool);
 				if(newBool) {
-					Log.i("Service", "Start");
 					mContext.startService(serviceIntent);
 				} else {
-					Log.i("Service", "Stop");
 					mContext.stopService(serviceIntent);
 				}
 				return false;
@@ -82,10 +84,10 @@ public class PlaylistsSettingActivity extends PreferenceActivity {
 		final List<ActivityManager.RunningServiceInfo> servicesList = activityManager.getRunningServices(Integer.MAX_VALUE);
 
 		boolean isServiceFound = false;
-
+		String path = BASE_PACKAGE+"."+SERVICE_PACKAGE;
 		for (int i = 0; i < servicesList.size(); i++) {
-			if ("com.wallpapers_manager.cyril".equals(servicesList.get(i).service.getPackageName())) {
-				if ("com.wallpapers_manager.cyril.RunPlaylistService".equals(servicesList.get(i).service.getClassName())) {
+			if (path.equals(servicesList.get(i).service.getPackageName())) {
+				if ((path+".RunPlaylistService").equals(servicesList.get(i).service.getClassName())) {
 					isServiceFound = true;
 				}
 			}
