@@ -50,7 +50,7 @@ public class AddWallpaperInPlaylistCursorAdapter extends CursorAdapter {
 					WallpaperPlaylist wallpaperPlaylist = new WallpaperPlaylist(mWallpaper.getId(), playlist.getId());
 					wallpapersPlaylistDBAdapter.insertWallpaperPlaylist(wallpaperPlaylist);
 				wallpapersPlaylistDBAdapter.close();
-				Intent intentBroadcast = new Intent("com.wallpaper_manager.playlists.updateWallpapersPlaylistCursor");
+				Intent intentBroadcast = new Intent("com.wallpaper_manager.cyril.updateWallpapersPlaylistCursor");
 				mContext.sendBroadcast(intentBroadcast);
 				mDialog.dismiss();
 			}

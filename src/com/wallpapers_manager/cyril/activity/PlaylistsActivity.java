@@ -72,7 +72,7 @@ public class PlaylistsActivity extends ListActivity {
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if(intent.getAction().compareTo("com.wallpaper_manager.playlists.updatePlaylistCursor") == 0) {
+				if(intent.getAction().compareTo("com.wallpaper_manager.cyril.updatePlaylistCursor") == 0) {
 					playlistsDBAdapter.open();
 				        Cursor cursor = playlistsDBAdapter.getCursor();
 				        cursorAdapter.changeCursor(cursor);
@@ -80,7 +80,7 @@ public class PlaylistsActivity extends ListActivity {
 				}
 			}
 		};
-		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.playlists.updatePlaylistCursor"));
+		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.cyril.updatePlaylistCursor"));
     }
     
     /** Create the menu */

@@ -85,7 +85,7 @@ public class FoldersCursorAdapter extends CursorAdapter {
 							wallpapersPlaylistDBAdapter.open();							
 								wallpapersPlaylistDBAdapter.insertPlaylistWallpaperForFolder(folder, playlist);
 							wallpapersPlaylistDBAdapter.close();
-							Intent intentBroadcast = new Intent("com.wallpaper_manager.playlists.updatePlaylistCursor");
+							Intent intentBroadcast = new Intent("com.wallpaper_manager.cyril.updatePlaylistCursor");
 							mContext.sendBroadcast(intentBroadcast);
 							break;
 						case 2: // Add to rotate list

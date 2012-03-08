@@ -49,7 +49,7 @@ public class WallpapersPlaylistActivity extends Activity {
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if(intent.getAction().compareTo("com.wallpaper_manager.playlists.updateWallpapersPlaylistCursor") == 0) {
+				if(intent.getAction().compareTo("com.wallpaper_manager.cyril.updateWallpapersPlaylistCursor") == 0) {
 					wallpapersPlaylistDBAdapter.open();
 				        Cursor curs = wallpapersPlaylistDBAdapter.getCursor(mPlaylist.getId());
 				        mGridView.setAdapter(new WallpapersPlaylistCursorAdapter(mContext, curs));
@@ -58,7 +58,7 @@ public class WallpapersPlaylistActivity extends Activity {
 			}
 		};
 		
-		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.playlists.updateWallpapersPlaylistCursor"));
+		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.cyril.updateWallpapersPlaylistCursor"));
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
