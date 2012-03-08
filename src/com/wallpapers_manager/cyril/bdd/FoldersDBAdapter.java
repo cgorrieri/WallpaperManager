@@ -1,5 +1,6 @@
 package com.wallpapers_manager.cyril.bdd;
 
+import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
 
 import com.wallpapers_manager.cyril.data.Folder;
@@ -11,45 +12,30 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class FoldersDBAdapter {
-
-	private static final int VERSION = 1;
-	
+public class FoldersDBAdapter extends AbstractDBAdapter {
 	public static final String TABLE = "folders";
-	public static final String ID = "_id";
 	public static final String NAME = "name";
 	
-	private SQLiteDatabase mDataBase;
-	private WMSQLiteOpenHelper mBaseHelper;
-	
 	public FoldersDBAdapter(Context context) {
-		mBaseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
+		super(context);
 	}
 	
-	public void open() {
-		mDataBase = mBaseHelper.getWritableDatabase();
+	@Override
+	public String table() {
+		return TABLE;
 	}
-	
-	public void close() {
-		mDataBase.close();
-	}
-	
-	public SQLiteDatabase getDataBase() {
-		return mDataBase;
-	}
-	
-	public Cursor getCursor(){
-		return mDataBase.query(TABLE, new String[] {ID,NAME}, null, null, null, null, null);
+
+	@Override
+	public String[] columns() {
+		return new String[] {ID,NAME};
 	}
 
 	public Folder getFolder(int id){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME}, ID+" = "+id+"", null, null, null, null);
-		return cursorToFolder(c);
+		return cursorToFolder(select(ID+" = "+id));
 	}
 
 	public ArrayList<Folder> getFolders(){
-		Cursor c = getCursor();
-		return cursorToFolders(c);
+		return cursorToFolders(getCursor());
 	}
 	
 	public long insertFolder(Folder folder) {
@@ -69,33 +55,31 @@ public class FoldersDBAdapter {
 	}
 	
 	public int removeFolder(String name) {
-		return mDataBase.delete(TABLE, NAME+" = "+ name, null);
+		return delete(NAME+" = "+ name);
 	}
 	
 	public int removeFolder(int id) {
-		return mDataBase.delete(TABLE, ID+" = "+ id, null);
+		return delete(ID+" = "+ id);
 	}
 	
 	public int removeFolder(Folder folder) {
-		return mDataBase.delete(TABLE, ID+" = "+ folder.getId(), null);
+		return delete(ID+" = "+ folder.getId());
 	}
 	
-	private Folder cursorToFolder(Cursor c) {
-		if(c.getCount() == 0) return null;
-		c.moveToFirst();
-		Folder folder = new Folder(c.getInt(0), c.getString(1));
-		c.close();
+	private Folder cursorToFolder(Cursor cursor) {
+		if(cursor.moveToFirst() == false) return null;
+		Folder folder = new Folder(cursor);
+		cursor.close();
 		return folder;
 	}
-	private ArrayList<Folder> cursorToFolders(Cursor c) {
-		if(c.getCount() == 0) return new ArrayList<Folder>(0);
+	private ArrayList<Folder> cursorToFolders(Cursor cursor) {
+		if(cursor.moveToFirst() == false) return new ArrayList<Folder>(0);
 		
-		ArrayList<Folder> folders = new ArrayList<Folder>(c.getCount());
-		c.moveToFirst();
+		ArrayList<Folder> folders = new ArrayList<Folder>(cursor.getCount());
 		do{
-			folders.add(new Folder(c.getInt(0), c.getString(1)));
-		}while(c.moveToNext());
-		c.close();
+			folders.add(new Folder(cursor));
+		}while(cursor.moveToNext());
+		cursor.close();
 		return folders;
 	}
 }

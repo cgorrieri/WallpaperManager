@@ -10,60 +10,46 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class WallpapersDBAdapter {
-
-	private static final int VERSION = 1;
-	
+public class WallpapersDBAdapter extends AbstractDBAdapter {
 	private static final String 	TABLE = "wallpapers";
-	private static final String 	ID = "_id";
-	public static final int 		ID_IC = 0;
 	private static final String 	FOLDER_ID = "folder_id";
-	public static final int 		FOLDER_ID_IC = 1;
 	private static final String 	ADDRESS = "address";
-	public static final int 		ADDRESS_IC = 2;
 	
 	private Context 			mContext;
-	private SQLiteDatabase 		mDataBase;
-	private WMSQLiteOpenHelper 	mBaseHelper;
 	
 	public WallpapersDBAdapter(Context context) {
-		mBaseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
+		super(context);
 		mContext = context;
 	}
 	
-	public void open() {
-		mDataBase = mBaseHelper.getWritableDatabase();
+	@Override
+	public String table() {
+		return TABLE;
 	}
-	
-	public void close() {
-		mDataBase.close();
-	}
-	
-	public SQLiteDatabase getDataBase() {
-		return mDataBase;
+
+	@Override
+	public String[] columns() {
+		return new String[] {ID,FOLDER_ID,ADDRESS};
 	}
 	
 	public Cursor getCursor(){
-		return mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, null, null, null, null, null);
+		return select(null);
 	}
 	
 	public Cursor getCursor(int folderId){
-		return mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, FOLDER_ID+" = "+folderId+"", null, null, null, null);
+		return select(FOLDER_ID+" = "+folderId);
 	}
 	
 	public Wallpaper getWallpaper(String address){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, null, null, null, ADDRESS+" = '"+address+"'", null);
-		return cursorToWallpaper(c);
+		return cursorToWallpaper(select(ADDRESS+" = '"+address));
 	}
 
 	public Wallpaper getWallpaper(int id){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, ID+" = "+id+"", null, null, null, null);
-		return cursorToWallpaper(c);
+		return cursorToWallpaper(select(ID+" = "+id));
 	}
 
 	public ArrayList<Wallpaper> getWallpapersFromFolder(Folder folder){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,FOLDER_ID,ADDRESS}, FOLDER_ID+" = "+folder.getId()+"", null, null, null, null);
-		return cursorToWallpapers(c);
+		return cursorToWallpapers(select(FOLDER_ID+" = "+folder.getId()));
 	}
 	
 	public ArrayList<Wallpaper> getWallpapers(){
@@ -89,7 +75,7 @@ public class WallpapersDBAdapter {
 	}
 	
 	public int removeWallpaper(String address) {
-		return mDataBase.delete(TABLE, ADDRESS+" = "+ address, null);
+		return delete(ADDRESS+" = "+ address);
 	}
 	
 	public int removeWallpaper(int id) {
@@ -97,7 +83,7 @@ public class WallpapersDBAdapter {
 		wallpapersPlaylistDBAdapter.open();
 			wallpapersPlaylistDBAdapter.removeFromWallpaperId(id);
 		wallpapersPlaylistDBAdapter.close();
-		return mDataBase.delete(TABLE, ID+" = "+ id, null);
+		return delete(ID+" = "+ id);
 	}
 	
 	public int removeWallpaperFromFolder(Folder folder) {
@@ -106,20 +92,19 @@ public class WallpapersDBAdapter {
 		for(Wallpaper wallpaper : wallpapersList) {
 			result += removeWallpaper(wallpaper.getId());
 		}
-		return mDataBase.delete(TABLE, FOLDER_ID+" = "+ folder.getId(), null);
+		return delete(FOLDER_ID+" = "+ folder.getId());
 	}
 	
-	private Wallpaper cursorToWallpaper(Cursor c) {
-		if(c.moveToFirst() == false) return null;
-		Wallpaper w = new Wallpaper(c.getInt(ID_IC), c.getInt(FOLDER_ID_IC), c.getString(ADDRESS_IC));
-		c.close();
+	private Wallpaper cursorToWallpaper(Cursor cursor) {
+		if(cursor.moveToFirst() == false) return null;
+		Wallpaper w = new Wallpaper(cursor);
+		cursor.close();
 		return w;
 	}
 	private ArrayList<Wallpaper> cursorToWallpapers(Cursor cursor) {
-		if(cursor.getCount() == 0) return new ArrayList<Wallpaper>(0);
+		if(cursor.moveToFirst() == false) return new ArrayList<Wallpaper>(0);
 		
 		ArrayList<Wallpaper> wallpapersList = new ArrayList<Wallpaper>(cursor.getCount());
-		cursor.moveToFirst();
 		do {
 			wallpapersList.add(new Wallpaper(cursor));
 		} while(cursor.moveToNext());

@@ -11,67 +11,47 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class PlaylistsDBAdapter {
-
-	private static final int 		VERSION = 1;
+public class PlaylistsDBAdapter extends AbstractDBAdapter {
 	
 	private static final String 	TABLE = "playlist";
-	private static final String 	ID = "_id";
-	public static final int 		ID_IC = 0;
 	private static final String 	NAME = "name";
-	public static final int 		NAME_IC = 1;
 	private static final String 	SELECTED = "selected";
-	public static final int 		SELECTED_IC = 2;
 	
-	private SQLiteDatabase 					mDataBase;
-	private WMSQLiteOpenHelper 				mBaseHelper;
 	private WallpapersPlaylistDBAdapter 	mPlaylistWallpaperDBAdapter;
 	
 	public PlaylistsDBAdapter(Context context) {
-		mBaseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
+		super(context);
 		mPlaylistWallpaperDBAdapter = new WallpapersPlaylistDBAdapter(context);
 	}
 	
-	public void open() {
-		mDataBase = mBaseHelper.getWritableDatabase();
-		
+	@Override
+	public String table() {
+		return TABLE;
 	}
-	
-	public void close() {
-		mDataBase.close();
-	}
-	
-	public SQLiteDatabase getDataBase() {
-		return mDataBase;
-	}
-	
-	public Cursor getCursor(){
-		return mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, null, null, null, null, null);
+
+	@Override
+	public String[] columns() {
+		return new String[] {ID,NAME,SELECTED};
 	}
 	
 	public Playlist getPlaylist(String name){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, NAME+" = '"+name+"'",null, null, null,  null);
-		return cursorToPlaylist(c);
+		return cursorToPlaylist(select(NAME+" = '"+name));
 	}
 	
 	public Playlist getSelectedPlaylist(){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, SELECTED+" = 1", null, null, null, null);
-		return cursorToPlaylist(c);
+		return cursorToPlaylist(select(SELECTED+" = 1"));
 	}
 
 	public Playlist getPlaylist(int id){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, ID+" = "+id+"", null, null, null, null);
-		return cursorToPlaylist(c);
+		return cursorToPlaylist(select(ID+" = "+id));
 	}
 
 	public ArrayList<Playlist> getPlaylists(){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, null, null, null, null, null);
-		return cursorToPlaylists(c);
+		return cursorToPlaylists(select(null));
 	}
 	
 	public ArrayList<Playlist> getPlaylists(int folderId){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,NAME,SELECTED}, ID+" = "+folderId+"", null, null, null, null);
-		return cursorToPlaylists(c);
+		return cursorToPlaylists(select(ID+" = "+folderId));
 	}
 	
 	public long insertPlaylist(Playlist playlist) {
@@ -93,7 +73,7 @@ public class PlaylistsDBAdapter {
 	}
 	
 	public void removePlaylist(int id) {
-		mDataBase.delete(TABLE, ID+" = "+ id, null);
+		delete(ID+" = "+ id);
 		mPlaylistWallpaperDBAdapter.open();
 			mPlaylistWallpaperDBAdapter.removeFromPlaylistId(id);
 		mPlaylistWallpaperDBAdapter.close();
@@ -108,22 +88,20 @@ public class PlaylistsDBAdapter {
 			cursor.close();
 			return null;
 		}
-		cursor.moveToFirst();
-		Playlist playlist = new Playlist(cursor.getInt(ID_IC), cursor.getString(NAME_IC), cursor.getInt(SELECTED_IC));
+		Playlist playlist = new Playlist(cursor);
 		cursor.close();
 		return playlist;
 	}
 	
 	private ArrayList<Playlist> cursorToPlaylists(Cursor cursor) {
-		if(cursor.getCount() == 0){
+		if(cursor.moveToFirst() == false){
 			cursor.close();
 			return new ArrayList<Playlist>(0);
 		}
 		
 		ArrayList<Playlist> playlists = new ArrayList<Playlist>(cursor.getCount());
-		cursor.moveToFirst();
 		do{
-			playlists.add(new Playlist(cursor.getInt(ID_IC), cursor.getString(NAME_IC), cursor.getInt(SELECTED_IC)));
+			playlists.add(new Playlist(cursor));
 		}while(cursor.moveToNext());
 		cursor.close();
 		return playlists;

@@ -14,37 +14,26 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class WallpapersPlaylistDBAdapter {
-
-	private static final int VERSION = 1;
-	
+public class WallpapersPlaylistDBAdapter extends AbstractDBAdapter {
 	private static final String 	TABLE = "playlist_wallpaper_assoc";
-	private static final String 	ID = "_id";
-	public 	static final int		ID_IC = 0;
 	private static final String 	WALLPAPER_ID = "wallpaper_id";
-	public 	static final int		WALLPAPER_ID_IC = 1;
 	private static final String 	PLAYLIST_ID = "playlist_id";
-	public 	static final int		PLAYLIST_ID_IC = 2;
-	
-	private SQLiteDatabase 			mDataBase;
-	private WMSQLiteOpenHelper 		mBaseHelper;
+
 	private WallpapersDBAdapter 	mWallpapersDBAdapter;
 	
 	public WallpapersPlaylistDBAdapter(Context context) {
-		mBaseHelper = new WMSQLiteOpenHelper(context, TABLE+".db", null, VERSION);
+		super(context);
 		mWallpapersDBAdapter = new WallpapersDBAdapter(context);
 	}
 	
-	public void open() {
-		mDataBase = mBaseHelper.getWritableDatabase();
+	@Override
+	public String table() {
+		return TABLE;
 	}
-	
-	public void close() {
-		mDataBase.close();
-	}
-	
-	public SQLiteDatabase getDataBase() {
-		return mDataBase;
+
+	@Override
+	public String[] columns() {
+		return new String[] {ID,WALLPAPER_ID,PLAYLIST_ID};
 	}
 	
 	/**
@@ -53,8 +42,7 @@ public class WallpapersPlaylistDBAdapter {
 	 * @return Cursor
 	 */
 	public Cursor getCursor(int playList){
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,WALLPAPER_ID,PLAYLIST_ID}, PLAYLIST_ID+" = "+playList+"", null, null, null, null);
-		return c;
+		return select(PLAYLIST_ID+" = "+playList);
 	}
 	
 	/**
@@ -62,8 +50,8 @@ public class WallpapersPlaylistDBAdapter {
 	 * @param wallpaperPlaylist
 	 * @return true if exist, false otherwise
 	 */
-	public boolean rtlWppExist(WallpaperPlaylist wallpaperPlaylist) {
-		Cursor c = mDataBase.query(TABLE, new String[] {ID,WALLPAPER_ID,PLAYLIST_ID}, PLAYLIST_ID+" = "+wallpaperPlaylist.getPlaylistId()+" AND "+WALLPAPER_ID+" = "+wallpaperPlaylist.getWallpaperId(), null, null, null, null);
+	public boolean playListWallpaperExist(WallpaperPlaylist wallpaperPlaylist) {
+		Cursor c = select(PLAYLIST_ID+" = "+wallpaperPlaylist.getPlaylistId()+" AND "+WALLPAPER_ID+" = "+wallpaperPlaylist.getWallpaperId());
 		int count = c.getCount();
 		c.close();
 		return count == 1;
@@ -84,7 +72,7 @@ public class WallpapersPlaylistDBAdapter {
 	 * @return id of the new PlaylistWallpaper, -1 otherwise
 	 */
 	public long insertWallpaperPlaylist(WallpaperPlaylist wallpaperPlaylist) {
-		if(wallpaperPlaylist.getPlaylistId() == -1 || wallpaperPlaylist.getWallpaperId() == -1 || rtlWppExist(wallpaperPlaylist))
+		if(wallpaperPlaylist.getPlaylistId() == -1 || wallpaperPlaylist.getWallpaperId() == -1 || playListWallpaperExist(wallpaperPlaylist))
 			return -1;
 		
 		ContentValues values = new ContentValues();
@@ -115,15 +103,16 @@ public class WallpapersPlaylistDBAdapter {
 	 * @return 1 if the row is deleted, 0 otherwise
 	 */
 	public int remove(WallpaperPlaylist wallpaperPlaylist) {
-		return mDataBase.delete(TABLE, WALLPAPER_ID+" = "+ wallpaperPlaylist.getWallpaperId()+" AND "+PLAYLIST_ID+" = "+ wallpaperPlaylist.getPlaylistId(), null);
+		return delete(WALLPAPER_ID+" = "+ wallpaperPlaylist.getWallpaperId()+
+				" AND "+PLAYLIST_ID+" = "+ wallpaperPlaylist.getPlaylistId());
 	}
 	
 	public int removeFromWallpaperId(int wallpaperId) {
-		return mDataBase.delete(TABLE, WALLPAPER_ID+" = "+ wallpaperId, null);
+		return delete(WALLPAPER_ID+" = "+ wallpaperId);
 	}
 	
 	public int removeFromPlaylistId(int rotateListId) {
-		return mDataBase.delete(TABLE, PLAYLIST_ID+" = "+ rotateListId, null);
+		return delete(PLAYLIST_ID+" = "+ rotateListId);
 	}
 	
 	/**

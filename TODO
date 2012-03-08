@@ -3,4 +3,3 @@
 - Fix get wallpaper into selected playlist : com.wallpapers_manager.cyril.ServiceThread
 - Make multiple play list runnable in service : com.wallpapers_manager.cyril.RunPlaylistService
 - Make code Better : Everywhere
-- Create an abstract class for DBAdapter
