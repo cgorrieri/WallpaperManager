@@ -3,25 +3,26 @@
 	android:versionCode="1" android:versionName="1.0" package="com.wallpapers_manager.cyril">
 	<uses-permission android:name="android.permission.SET_WALLPAPER" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-sdk android:minSdkVersion="7"/>
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:debuggable="true">
-		<activity android:name=".HomeTabActivity" android:label="@string/app_name"
+		<activity android:name=".activity.HomeTabActivity" android:label="@string/app_name"
 			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".PlaylistsTabActivityGroup" />
-		<activity android:name=".playlists.PlaylistsActivity" />
-		<activity android:name=".playlists.PlaylistsSelectableActivity" />
-		<activity android:name=".wallpapers_playlist.WallpapersPlaylistActivity" />
-		<activity android:name=".playlists.PlaylistsSettingActivity" />
-		<activity android:name=".WallpapersTabActivityGroup" />
-		<activity android:name=".folders.FoldersActivity" />
-		<activity android:name=".folders.FoldersSelectableActivity" />
-		<activity android:name=".wallpapers.WallpapersActivity" />
-		<activity android:name=".wallpapers.WallpapersSelectableActivity" />
-		<service android:name="RunPlaylistService" />
+		<activity android:name=".activity.PlaylistsTabActivityGroup" />
+		<activity android:name=".activity.PlaylistsActivity" />
+		<activity android:name=".activity.PlaylistsSelectableActivity" />
+		<activity android:name=".activity.WallpapersPlaylistActivity" />
+		<activity android:name=".activity.PlaylistsSettingActivity" />
+		<activity android:name=".activity.WallpapersTabActivityGroup" />
+		<activity android:name=".activity.FoldersActivity" />
+		<activity android:name=".activity.FoldersSelectableActivity" />
+		<activity android:name=".activity.WallpapersActivity" />
+		<activity android:name=".activity.WallpapersSelectableActivity" />
+		<service android:name=".thread_and_service.RunPlaylistService" />
 	</application>
 </manifest> 
