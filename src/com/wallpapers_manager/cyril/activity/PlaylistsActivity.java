@@ -19,6 +19,7 @@ import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.adapter.PlaylistsCursorAdapter;
 import com.wallpapers_manager.cyril.bdd.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.data.Playlist;
+import static com.wallpapers_manager.cyril.WallpaperManagerConstants.*;
 
 /** Activity which contains the list of play list */
 public class PlaylistsActivity extends ListActivity {
@@ -72,7 +73,7 @@ public class PlaylistsActivity extends ListActivity {
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if(intent.getAction().compareTo("com.wallpaper_manager.cyril.updatePlaylistCursor") == 0) {
+				if(intent.getAction().compareTo(BROADCAST_UPDATE_PL) == 0) {
 					playlistsDBAdapter.open();
 				        Cursor cursor = playlistsDBAdapter.getCursor();
 				        cursorAdapter.changeCursor(cursor);
@@ -80,7 +81,7 @@ public class PlaylistsActivity extends ListActivity {
 				}
 			}
 		};
-		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.cyril.updatePlaylistCursor"));
+		registerReceiver(broadcastReceiver, new IntentFilter(BROADCAST_UPDATE_PL));
     }
     
     /** Create the menu */

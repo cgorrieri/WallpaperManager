@@ -1,6 +1,7 @@
 package com.wallpapers_manager.cyril.activity;
 
 import android.app.Activity;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import com.wallpapers_manager.cyril.adapter.WallpapersPlaylistCursorAdapter;
 import com.wallpapers_manager.cyril.bdd.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.bdd.WallpapersPlaylistDBAdapter;
 import com.wallpapers_manager.cyril.data.Playlist;
+import static com.wallpapers_manager.cyril.WallpaperManagerConstants.*;
 
 public class WallpapersPlaylistActivity extends Activity {
 	private Context 	mContext;
@@ -49,7 +51,7 @@ public class WallpapersPlaylistActivity extends Activity {
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if(intent.getAction().compareTo("com.wallpaper_manager.cyril.updateWallpapersPlaylistCursor") == 0) {
+				if(intent.getAction().compareTo(BROADCAST_UPDATE_WPP_PL) == 0) {
 					wallpapersPlaylistDBAdapter.open();
 				        Cursor curs = wallpapersPlaylistDBAdapter.getCursor(mPlaylist.getId());
 				        mGridView.setAdapter(new WallpapersPlaylistCursorAdapter(mContext, curs));
@@ -57,7 +59,7 @@ public class WallpapersPlaylistActivity extends Activity {
 				}
 			}
 		};
-		registerReceiver(broadcastReceiver, new IntentFilter("com.wallpaper_manager.cyril.updateWallpapersPlaylistCursor"));
+		registerReceiver(broadcastReceiver, new IntentFilter(BROADCAST_UPDATE_WPP_PL));
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {

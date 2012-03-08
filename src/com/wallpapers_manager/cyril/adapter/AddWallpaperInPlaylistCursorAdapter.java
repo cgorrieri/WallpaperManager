@@ -17,6 +17,7 @@ import com.wallpapers_manager.cyril.bdd.WallpapersPlaylistDBAdapter;
 import com.wallpapers_manager.cyril.data.Playlist;
 import com.wallpapers_manager.cyril.data.Wallpaper;
 import com.wallpapers_manager.cyril.data.WallpaperPlaylist;
+import static com.wallpapers_manager.cyril.WallpaperManagerConstants.*;
 
 public class AddWallpaperInPlaylistCursorAdapter extends CursorAdapter {
 	protected final LayoutInflater 	mInflater;
@@ -50,7 +51,7 @@ public class AddWallpaperInPlaylistCursorAdapter extends CursorAdapter {
 					WallpaperPlaylist wallpaperPlaylist = new WallpaperPlaylist(mWallpaper.getId(), playlist.getId());
 					wallpapersPlaylistDBAdapter.insertWallpaperPlaylist(wallpaperPlaylist);
 				wallpapersPlaylistDBAdapter.close();
-				Intent intentBroadcast = new Intent("com.wallpaper_manager.cyril.updateWallpapersPlaylistCursor");
+				Intent intentBroadcast = new Intent(BROADCAST_UPDATE_WPP_PL);
 				mContext.sendBroadcast(intentBroadcast);
 				mDialog.dismiss();
 			}

@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.wallpapers_manager.cyril.Helper;
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.WallpaperManagerConstants;
 import com.wallpapers_manager.cyril.data.Wallpaper;
