@@ -84,7 +84,7 @@ public class FoldersCursorAdapter extends CursorAdapter {
 							playlistsDBAdapter.close();
 							WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
 							wallpapersPlaylistDBAdapter.open();							
-								wallpapersPlaylistDBAdapter.insertPlaylistWallpaperForFolder(folder, playlist);
+								wallpapersPlaylistDBAdapter.insertWallpaperIntoPlaylistFromFolder(folder, playlist);
 							wallpapersPlaylistDBAdapter.close();
 							Intent intentBroadcast = new Intent(BROADCAST_UPDATE_PL);
 							mContext.sendBroadcast(intentBroadcast);

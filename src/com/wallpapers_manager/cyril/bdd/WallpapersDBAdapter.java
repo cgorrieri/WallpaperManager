@@ -81,7 +81,7 @@ public class WallpapersDBAdapter extends AbstractDBAdapter {
 	public int removeWallpaper(int id) {
 		WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
 		wallpapersPlaylistDBAdapter.open();
-			wallpapersPlaylistDBAdapter.removeFromWallpaperId(id);
+			wallpapersPlaylistDBAdapter.removeByWallpaperId(id);
 		wallpapersPlaylistDBAdapter.close();
 		return delete(ID+" = "+ id);
 	}

@@ -2,17 +2,14 @@ package com.wallpapers_manager.cyril.bdd;
 
 import java.util.ArrayList;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+
 import com.wallpapers_manager.cyril.data.Folder;
 import com.wallpapers_manager.cyril.data.Playlist;
 import com.wallpapers_manager.cyril.data.Wallpaper;
 import com.wallpapers_manager.cyril.data.WallpaperPlaylist;
-
-
-
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 public class WallpapersPlaylistDBAdapter extends AbstractDBAdapter {
 	private static final String 	TABLE = "playlist_wallpaper_assoc";
@@ -63,7 +60,20 @@ public class WallpapersPlaylistDBAdapter extends AbstractDBAdapter {
 	 * @return ArrayList<Wallpaper>
 	 */
 	public ArrayList<Wallpaper> getWallpapersFromPlaylist(Playlist playlist){
-		return cursorToWallpapers(getCursor(playlist.getId()));
+		String sql = "SELECT wpp.* "+
+				"FROM wallpapers wpp INNER JOIN playlist_wallpaper_assoc pwa "+
+				"ON wpp._id=pwa.wallpaper_id WHERE pwa.playlist_id=?";
+
+		return cursorToWallpapers(mDataBase.rawQuery(sql, new String[]{String.valueOf(playlist.getId())}));
+	}
+	
+	public ArrayList<Wallpaper> getWallpapersFromSelectedPlaylist(){
+		String sql = "SELECT * FROM "+
+				"(playlist_wallpaper_assoc pwa INNER JOIN wallpapers wpp "+
+				"ON wpp._id=pwa.wallpaper_id) "+
+				"INNER JOIN playlist pll ON pll._id=pwa.playlist_id WHERE pll.selected=1;";
+
+		return cursorToWallpapers(mDataBase.rawQuery(sql, null));
 	}
 	
 	/**
@@ -86,7 +96,7 @@ public class WallpapersPlaylistDBAdapter extends AbstractDBAdapter {
 	 * @param folder
 	 * @param playlist
 	 */
-	public void insertPlaylistWallpaperForFolder(Folder folder, Playlist playlist) {
+	public void insertWallpaperIntoPlaylistFromFolder(Folder folder, Playlist playlist) {
 		mWallpapersDBAdapter.open();
 			ArrayList<Wallpaper> wallpapersList = mWallpapersDBAdapter.getWallpapersFromFolder(folder);
 		mWallpapersDBAdapter.close();
@@ -107,30 +117,28 @@ public class WallpapersPlaylistDBAdapter extends AbstractDBAdapter {
 				" AND "+PLAYLIST_ID+" = "+ wallpaperPlaylist.getPlaylistId());
 	}
 	
-	public int removeFromWallpaperId(int wallpaperId) {
+	public int removeByWallpaperId(int wallpaperId) {
 		return delete(WALLPAPER_ID+" = "+ wallpaperId);
 	}
 	
-	public int removeFromPlaylistId(int rotateListId) {
+	public int removeByPlaylistId(int rotateListId) {
 		return delete(PLAYLIST_ID+" = "+ rotateListId);
 	}
 	
 	/**
 	 * Get a ArrayList of Wallpaper from Cursor
-	 * @param c Cursor
+	 * @param cursor Cursor
 	 * @return If cursor not empty return ArrayList<Wallpaper>, null otherwise
 	 */
-	private ArrayList<Wallpaper> cursorToWallpapers(Cursor c) {
-		if(c.moveToFirst() == false) return null;
+	private ArrayList<Wallpaper> cursorToWallpapers(Cursor cursor) {
+		if(cursor.moveToFirst() == false) return null;
 		
-		ArrayList<Wallpaper> wallpapersList = new ArrayList<Wallpaper>(c.getCount());
-		mWallpapersDBAdapter.open();
+		ArrayList<Wallpaper> wallpapersList = new ArrayList<Wallpaper>(cursor.getCount());
 			do {
-				int id = c.getInt(0);
-				wallpapersList.add(mWallpapersDBAdapter.getWallpaper(id));
-			} while(c.moveToNext());
-		mWallpapersDBAdapter.close();
-		c.close();
+				Wallpaper wpp = new Wallpaper(cursor);
+				wallpapersList.add(wpp);
+			} while(cursor.moveToNext());
+		cursor.close();
 		return wallpapersList;
 	}
 }

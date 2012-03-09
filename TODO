@@ -2,4 +2,4 @@
 - Fix get wallpaper into selected playlist : com.wallpapers_manager.cyril.ServiceThread
 - Make multiple play list runnable in service : com.wallpapers_manager.cyril.RunPlaylistService
 - Make code Better : Everywhere
-- Fix bug when add a wallpaper in a playlist and after switch to the playlist content
+- Fix bug when add a wallpaper in a playlist and after switch to the playlist content : works with SGS but not with VDM

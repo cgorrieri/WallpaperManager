@@ -75,7 +75,7 @@ public class PlaylistsDBAdapter extends AbstractDBAdapter {
 	public void removePlaylist(int id) {
 		delete(ID+" = "+ id);
 		mPlaylistWallpaperDBAdapter.open();
-			mPlaylistWallpaperDBAdapter.removeFromPlaylistId(id);
+			mPlaylistWallpaperDBAdapter.removeByPlaylistId(id);
 		mPlaylistWallpaperDBAdapter.close();
 	}
 	

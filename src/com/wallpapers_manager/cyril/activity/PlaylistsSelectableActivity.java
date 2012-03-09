@@ -99,7 +99,7 @@ public class PlaylistsSelectableActivity extends ListActivity {
 
 			if (isChecked) {
 				wallpapersPlaylistDBAdapter.open();
-					wallpapersPlaylistDBAdapter.removeFromPlaylistId(playlist.getId());
+					wallpapersPlaylistDBAdapter.removeByPlaylistId(playlist.getId());
 				wallpapersPlaylistDBAdapter.close();
 				playlistsDBAdapter.open();
 					playlistsDBAdapter.removePlaylist(playlist);

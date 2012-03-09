@@ -7,9 +7,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.wallpapers_manager.cyril.Helper;
-import com.wallpapers_manager.cyril.bdd.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.bdd.WallpapersPlaylistDBAdapter;
-import com.wallpapers_manager.cyril.data.Playlist;
 import com.wallpapers_manager.cyril.data.Wallpaper;
 
 /** A trhead which change the system wallpaper every x time */
@@ -36,32 +34,28 @@ public class ServiceThread extends Thread {
 			// TODO Send notification
 			e1.printStackTrace();
 		}
-		WallpapersPlaylistDBAdapter rotateListWallpaperDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
-		PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
-		Wallpaper oldWallpaper = new Wallpaper(-1, -1, "");
-		Wallpaper currentWallpaper = null;
-		ArrayList<Wallpaper> wallpapersList = null;
-		Playlist playlist = null;
-		
-		// get selected playlist
-		playlistsDBAdapter.open();
-		playlist = playlistsDBAdapter.getSelectedPlaylist();
-		playlistsDBAdapter.close();
-		// it never append
-		if (playlist == null) throw new NullPointerException("No playlist selected");
-		
-		// get playlist's wallpaper
-		rotateListWallpaperDBAdapter.open();
-		/* -- ERROR wallpaperList contains Null reference -- */
-		wallpapersList = rotateListWallpaperDBAdapter.getWallpapersFromPlaylist(playlist);
-		rotateListWallpaperDBAdapter.close();
-		
-		if (wallpapersList.size() < 2) {
-			// notification error
-		}
 		
 		boolean kill = false;
 		long sleepInMillis = this.mSleepTimeInMillis;
+		
+		WallpapersPlaylistDBAdapter playListWallpaperDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
+		Wallpaper oldWallpaper = new Wallpaper(-1, -1, "");
+		Wallpaper currentWallpaper = null;
+		ArrayList<Wallpaper> wallpapersList = null;
+				
+		// get playlist's wallpaper
+		playListWallpaperDBAdapter.open();
+		/* -- ERROR wallpaperList contains Null reference -- */
+		wallpapersList = playListWallpaperDBAdapter.getWallpapersFromSelectedPlaylist();
+		playListWallpaperDBAdapter.close();
+		
+		if (wallpapersList == null) {
+			// TODO: notify
+			kill = true;
+			synchronized (this) {
+				this.kill();
+			}
+		}
 		
 		while (!kill) {
 			try {
