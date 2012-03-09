@@ -9,7 +9,7 @@
 		<CheckedTextView android:layout_width="fill_parent"
 			android:layout_height="50dp" android:id="@+id/select_all"
 			android:checked="false" android:clickable="true" android:focusable="false"
-			android:textSize="25px" android:gravity="center_vertical"
+			android:textSize="25dp" android:gravity="center_vertical"
 			android:paddingLeft="10dp" android:paddingRight="10dp"
 			android:background="#777777" android:text="Select All"
 			android:checkMark="@drawable/checkbox_square_big" />
