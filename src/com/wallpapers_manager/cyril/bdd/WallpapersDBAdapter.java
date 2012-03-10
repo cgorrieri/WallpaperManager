@@ -2,13 +2,12 @@ package com.wallpapers_manager.cyril.bdd;
 
 import java.util.ArrayList;
 
-import com.wallpapers_manager.cyril.data.Folder;
-import com.wallpapers_manager.cyril.data.Wallpaper;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+
+import com.wallpapers_manager.cyril.data.Folder;
+import com.wallpapers_manager.cyril.data.Wallpaper;
 
 public class WallpapersDBAdapter extends AbstractDBAdapter {
 	private static final String 	TABLE = "wallpapers";
@@ -60,18 +59,14 @@ public class WallpapersDBAdapter extends AbstractDBAdapter {
 		ContentValues values = new ContentValues();
 		values.put(FOLDER_ID, wallpaper.getFolderId());
 		values.put(ADDRESS, wallpaper.getAddress());
-		return mDataBase.insert(TABLE, null, values);
+		return insert(values);
 	}
 	
 	public int updateWallpaper(Wallpaper wallpaper) {
 		ContentValues values = new ContentValues();
 		values.put(FOLDER_ID, wallpaper.getFolderId());
 		values.put(ADDRESS, wallpaper.getAddress());
-		return mDataBase.update(TABLE, values, ID+" = "+wallpaper.getId(), null);
-	}
-	
-	public int updateWallpaper(ContentValues values, String where, String[] whereArgs) {
-		return mDataBase.update(TABLE, values, where, whereArgs);
+		return update(ID+" = "+wallpaper.getId(), values);
 	}
 	
 	public int removeWallpaper(String address) {

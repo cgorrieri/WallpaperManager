@@ -2,14 +2,11 @@ package com.wallpapers_manager.cyril.bdd;
 
 import java.util.ArrayList;
 
-import com.wallpapers_manager.cyril.data.Playlist;
-
-
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+
+import com.wallpapers_manager.cyril.data.Playlist;
 
 public class PlaylistsDBAdapter extends AbstractDBAdapter {
 	
@@ -57,7 +54,7 @@ public class PlaylistsDBAdapter extends AbstractDBAdapter {
 	public long insertPlaylist(Playlist playlist) {
 		ContentValues values = new ContentValues();
 		values.put(NAME, playlist.getName());
-		return mDataBase.insert(TABLE, null, values);
+		return insert(values);
 	}
 	
 	public int updatePlaylist(Playlist playlist) {
@@ -65,11 +62,7 @@ public class PlaylistsDBAdapter extends AbstractDBAdapter {
 		values.put(ID, playlist.getId());
 		values.put(NAME, playlist.getName());
 		values.put(SELECTED, playlist.getSelected());
-		return mDataBase.update(TABLE, values, ID+" = "+playlist.getId(), null);
-	}
-	
-	public int updatePlaylist(ContentValues values, String where, String[] whereArgs) {
-		return mDataBase.update(TABLE, values, where, whereArgs);
+		return update(ID+" = "+playlist.getId(), values);
 	}
 	
 	public void removePlaylist(int id) {

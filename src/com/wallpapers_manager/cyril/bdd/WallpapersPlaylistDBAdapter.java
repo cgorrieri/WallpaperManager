@@ -68,7 +68,7 @@ public class WallpapersPlaylistDBAdapter extends AbstractDBAdapter {
 	}
 	
 	public ArrayList<Wallpaper> getWallpapersFromSelectedPlaylist(){
-		String sql = "SELECT * FROM "+
+		String sql = "SELECT wpp.* FROM "+
 				"(playlist_wallpaper_assoc pwa INNER JOIN wallpapers wpp "+
 				"ON wpp._id=pwa.wallpaper_id) "+
 				"INNER JOIN playlist pll ON pll._id=pwa.playlist_id WHERE pll.selected=1;";
@@ -88,7 +88,7 @@ public class WallpapersPlaylistDBAdapter extends AbstractDBAdapter {
 		ContentValues values = new ContentValues();
 		values.put(WALLPAPER_ID, wallpaperPlaylist.getWallpaperId());
 		values.put(PLAYLIST_ID, wallpaperPlaylist.getPlaylistId());
-		return mDataBase.insert(TABLE, null, values);
+		return insert(values);
 	}
 	
 	/**

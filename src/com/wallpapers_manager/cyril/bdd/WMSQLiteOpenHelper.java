@@ -1,13 +1,12 @@
 package com.wallpapers_manager.cyril.bdd;
 
-import com.wallpapers_manager.cyril.R;
-import com.wallpapers_manager.cyril.R.string;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.wallpapers_manager.cyril.R;
 
 public class WMSQLiteOpenHelper extends SQLiteOpenHelper {
 	private Resources 	mResources;

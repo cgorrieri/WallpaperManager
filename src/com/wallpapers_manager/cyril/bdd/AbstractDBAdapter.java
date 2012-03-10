@@ -1,5 +1,6 @@
 package com.wallpapers_manager.cyril.bdd;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,7 +13,7 @@ public abstract class AbstractDBAdapter {
 	protected WMSQLiteOpenHelper mBaseHelper;
 
 	public AbstractDBAdapter(Context context) {
-		mBaseHelper = new WMSQLiteOpenHelper(context, table() + ".db", null, VERSION);
+		mBaseHelper = new WMSQLiteOpenHelper(context, "database.db", null, VERSION);
 	}
 
 	/**
@@ -38,6 +39,14 @@ public abstract class AbstractDBAdapter {
 
 	protected Cursor select(String condition) {
 		return mDataBase.query(table(), columns(), condition, null, null, null, null);
+	}
+	
+	protected long insert(ContentValues values) {
+		return mDataBase.insert(table(), null, values);
+	}
+	
+	protected int update(String where, ContentValues values) {
+		return mDataBase.update(table(), values, where, null);
 	}
 
 	protected int delete(String condition) {

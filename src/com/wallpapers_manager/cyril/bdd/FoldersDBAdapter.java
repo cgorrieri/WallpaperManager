@@ -1,16 +1,12 @@
 package com.wallpapers_manager.cyril.bdd;
 
-import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
-
-import com.wallpapers_manager.cyril.data.Folder;
-
-
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+
+import com.wallpapers_manager.cyril.data.Folder;
 
 public class FoldersDBAdapter extends AbstractDBAdapter {
 	public static final String TABLE = "folders";
@@ -41,17 +37,13 @@ public class FoldersDBAdapter extends AbstractDBAdapter {
 	public long insertFolder(Folder folder) {
 		ContentValues values = new ContentValues();
 		values.put(NAME, folder.getName());
-		return mDataBase.insert(TABLE, null, values);
+		return insert(values);
 	}
 	
 	public int updateFolder(Folder folder) {
 		ContentValues values = new ContentValues();
 		values.put(NAME, folder.getName());
-		return mDataBase.update(TABLE, values, ID+" = "+folder.getId(), null);
-	}
-	
-	public int updateFolder(ContentValues values, String where, String[] whereArgs) {
-		return mDataBase.update(TABLE, values, where, whereArgs);
+		return update(ID+" = "+folder.getId(), values);
 	}
 	
 	public int removeFolder(String name) {
@@ -72,6 +64,7 @@ public class FoldersDBAdapter extends AbstractDBAdapter {
 		cursor.close();
 		return folder;
 	}
+	
 	private ArrayList<Folder> cursorToFolders(Cursor cursor) {
 		if(cursor.moveToFirst() == false) return new ArrayList<Folder>(0);
 		
