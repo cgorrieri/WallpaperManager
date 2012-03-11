@@ -1,9 +1,5 @@
 package com.wallpapers_manager.cyril.activity;
 
-import com.wallpapers_manager.cyril.R;
-import com.wallpapers_manager.cyril.R.drawable;
-import com.wallpapers_manager.cyril.R.string;
-
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -11,6 +7,8 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TabHost;
+
+import com.wallpapers_manager.cyril.R;
 
 public class HomeTabActivity extends TabActivity{
 

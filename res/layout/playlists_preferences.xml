@@ -3,14 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <!-- <ListPreference -->
-    <!-- android:defaultValue="hour" -->
-    <!-- android:entries="@array/rotate_time_entries" -->
-    <!-- android:entryValues="@array/rotate_time_values" -->
-    <!-- android:key="rotate_time" -->
-    <!-- android:summary="@string/rotate_time_summary" -->
-    <!-- android:title="@string/rotate_time" /> -->
-
     <Preference
         android:key="disable_playlist"
         android:summary="@string/unselect_playlist_summary"
@@ -23,9 +15,9 @@
         android:title="@string/run_playlist" />
 
     <com.wallpapers_manager.cyril.TimePickerPreference
-        android:summary="@string/rotate_time_summary"
-        android:title="@string/rotate_time"
+        android:defaultValue="01:00"
         android:key="playlist_change_time"
-        android:defaultValue="01:00" />
+        android:summary="@string/rotate_time_summary"
+        android:title="@string/rotate_time" />
 
 </PreferenceScreen>

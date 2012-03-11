@@ -1,34 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-	<LinearLayout android:id="@+id/selectButonLayout"
-		android:orientation="horizontal" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_alignParentTop="true">
+    <LinearLayout
+        android:id="@+id/selectButonLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal" >
 
-		<CheckedTextView android:layout_width="fill_parent"
-			android:layout_height="50dp" android:id="@+id/select_all"
-			android:checked="false" android:clickable="true" android:focusable="false"
-			android:textSize="25dp" android:gravity="center_vertical"
-			android:paddingLeft="10dp" android:paddingRight="10dp"
-			android:background="#777777" android:text="Select All"
-			android:checkMark="@drawable/checkbox_square_big" />
-	</LinearLayout>
+        <CheckedTextView
+            android:id="@+id/select_all"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="#777777"
+            android:checkMark="@drawable/checkbox_square_big"
+            android:checked="false"
+            android:clickable="true"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Select All"
+            android:textSize="25dp" />
+    </LinearLayout>
 
-	<LinearLayout android:id="@+id/buttonLayout"
-		android:orientation="horizontal" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
 
-		<Button android:id="@+id/delete" android:layout_width="0dip"
-			android:layout_height="wrap_content" android:layout_weight="0.30"
-			android:layout_marginTop="2dp" android:layout_marginBottom="2dp"
-			android:onClick="onButtonClick" android:text="Delete" />
-	</LinearLayout>
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0.30"
+            android:onClick="onButtonClick"
+            android:text="Delete" />
+    </LinearLayout>
 
-	<ListView android:id="@+id/android:list" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_alignParentTop="true"
-		android:layout_above="@id/buttonLayout" android:layout_below="@id/select_all"
-		android:layout_marginTop="50dp" android:layout_marginBottom="5dp"
-		android:layout_marginLeft="5dp" android:choiceMode="multipleChoice" />
+    <ListView
+        android:id="@+id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/buttonLayout"
+        android:layout_alignParentTop="true"
+        android:layout_below="@id/select_all"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="50dp"
+        android:choiceMode="multipleChoice" />
 
 </RelativeLayout>

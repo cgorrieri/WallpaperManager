@@ -83,9 +83,8 @@ public class WallpapersDBAdapter extends AbstractDBAdapter {
 	
 	public int removeWallpaperFromFolder(Folder folder) {
 		ArrayList<Wallpaper> wallpapersList = getWallpapersFromFolder(folder);
-		int result = 0;
 		for(Wallpaper wallpaper : wallpapersList) {
-			result += removeWallpaper(wallpaper.getId());
+			removeWallpaper(wallpaper.getId());
 		}
 		return delete(FOLDER_ID+" = "+ folder.getId());
 	}

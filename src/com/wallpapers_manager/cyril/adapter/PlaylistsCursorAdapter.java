@@ -78,10 +78,6 @@ public class PlaylistsCursorAdapter extends CursorAdapter {
 								cursor = playlistsDBAdapter.getCursor();
 								cursorAdapter.changeCursor(cursor);
 							playlistsDBAdapter.close();
-
-							playlistsDBAdapter.open();
-								Playlist p = playlistsDBAdapter.getPlaylist(playlist.getId());
-							playlistsDBAdapter.close();
 							break;
 						case 2:
 							AlertDialog.Builder renamePlaylistDialog = new AlertDialog.Builder(mContext);
