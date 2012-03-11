@@ -68,15 +68,19 @@ public class PlaylistsCursorAdapter extends CursorAdapter {
 						final PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
 						Cursor cursor = null;
 						switch (item) {
-						case 0:
+						case 0: // Open
 							openPlaylist(playlist);
 							break;
-						case 1:
+						case 1: // Select or UnSelect
 							playlistsDBAdapter.open();
 								playlist.setSelected(playlist.isSelected() ? 0 : 1);
 								playlistsDBAdapter.updatePlaylist(playlist);
 								cursor = playlistsDBAdapter.getCursor();
 								cursorAdapter.changeCursor(cursor);
+							playlistsDBAdapter.close();
+
+							playlistsDBAdapter.open();
+								Playlist p = playlistsDBAdapter.getPlaylist(playlist.getId());
 							playlistsDBAdapter.close();
 							break;
 						case 2:

@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
-import com.wallpapers_manager.cyril.activity.PlaylistsSettingActivity;
-
 public class RunPlaylistService extends Service {
 
 	private SharedPreferences mSharedPreferences;
@@ -20,17 +18,6 @@ public class RunPlaylistService extends Service {
 	}
 
 	public void onStart(Intent intent, int startId) {
-		// Time in millisecond to wait before start thread
-		String result = mSharedPreferences.getString("rotate_time", PlaylistsSettingActivity.MINUTE);
-		long timeToWaitBeforeStart = 0;
-		if (result.compareTo(PlaylistsSettingActivity.DAY) == 0) {
-			// wait to next day
-		} else if (result.compareTo(PlaylistsSettingActivity.HOUR) == 0) {
-			// wait to next hour
-		} else {
-			// wait to next minute
-		}
-		mThread.setTimeToSleepBeforeStart(timeToWaitBeforeStart);
 		mThread.start();
 	}
 
@@ -40,15 +27,11 @@ public class RunPlaylistService extends Service {
 
 	/** Get the time in millisecond according to preferences */
 	private long getTimeInMillis() {
-		String result = mSharedPreferences.getString("rotate_time",	PlaylistsSettingActivity.HOUR);
-		if (result.compareTo(PlaylistsSettingActivity.DAY) == 0) {
-			return 60000 * 60 * 24;
-		} else if (result.compareTo(PlaylistsSettingActivity.MINUTE) == 0) {
-			return 10000;
-		} else {
-			//return 60000 * 60;
-			return 10000;
-		}
+		String result = mSharedPreferences.getString("playlist_change_time", "01:00");
+		String[] split = result.split(":");
+	    int hour = Integer.parseInt(split[0]);
+	    int minute = Integer.parseInt(split[1]);
+	    return hour*60*60*1000 + minute*60*1000;
 	}
 
 	public IBinder onBind(Intent arg0) {

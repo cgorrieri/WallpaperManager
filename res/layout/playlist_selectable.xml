@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wallpapers_manager.cyril.widget.CheckableRelativeLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:marvinlabs="http://schemas.android.com/apk/res/fr.marvinlabs.selectablelisttutorial"
-	android:layout_width="fill_parent" 
-	android:layout_height="50dp"
-	android:layout_marginRight="10dp"
-	android:paddingTop="5dp"
-	android:paddingBottom="5dp">
-	
-	<ImageView android:id="@+id/image" android:contentDescription="Icone playlist"
-		android:layout_width="wrap_content" android:layout_height="wrap_content" />
-	<TextView android:id="@+id/name"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:layout_x="120dp" android:layout_y="30dp" android:textSize="25dp"  />
-		
-	<com.wallpapers_manager.cyril.widget.InertCheckBox android:id="@+id/itemCheckBox"
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:layout_marginRight="5dp"
-		android:layout_alignParentRight="true" 
-		android:layout_centerVertical="true" 
-		android:focusable="false" 
-		android:button="@drawable/checkbox_square_big" />
-		
+<com.wallpapers_manager.cyril.widget.CheckableRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:marvinlabs="http://schemas.android.com/apk/res/fr.marvinlabs.selectablelisttutorial"
+    android:layout_width="fill_parent"
+    android:layout_height="50dp"
+    android:layout_marginRight="10dp"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp" >
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Icone playlist" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="120dp"
+        android:layout_y="30dp"
+        android:textSize="25dp" />
+
+    <com.wallpapers_manager.cyril.widget.InertCheckBox
+        android:id="@+id/itemCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:button="@drawable/checkbox_square_big"
+        android:focusable="false" />
+
 </com.wallpapers_manager.cyril.widget.CheckableRelativeLayout>

@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<ListPreference android:title="@string/rotate_time"
-		android:summary="@string/rotate_time_summary" android:key="rotate_time"
-		android:defaultValue="hour" android:entries="@array/rotate_time_entries"
-		android:entryValues="@array/rotate_time_values" />
-	<Preference android:title="@string/unselect_playlist"
-		android:summary="@string/unselect_playlist_summary" android:key="disable_playlist" />
-	<CheckBoxPreference
-        android:title="@string/run_playlist"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <!-- <ListPreference -->
+    <!-- android:defaultValue="hour" -->
+    <!-- android:entries="@array/rotate_time_entries" -->
+    <!-- android:entryValues="@array/rotate_time_values" -->
+    <!-- android:key="rotate_time" -->
+    <!-- android:summary="@string/rotate_time_summary" -->
+    <!-- android:title="@string/rotate_time" /> -->
+
+    <Preference
+        android:key="disable_playlist"
+        android:summary="@string/unselect_playlist_summary"
+        android:title="@string/unselect_playlist" />
+
+    <CheckBoxPreference
         android:defaultValue="false"
+        android:key="start_stop_playlist"
         android:summary="@string/run_playlist_summary"
-        android:key="start_stop_playlist" />
+        android:title="@string/run_playlist" />
+
+    <com.wallpapers_manager.cyril.TimePickerPreference
+        android:summary="@string/rotate_time_summary"
+        android:title="@string/rotate_time"
+        android:key="playlist_change_time"
+        android:defaultValue="01:00" />
+
 </PreferenceScreen>

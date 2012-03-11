@@ -17,23 +17,15 @@ public class ServiceThread extends Thread {
 	
 	private Context mContext;
 	private long mSleepTimeInMillis;
-	private long mTimeInMillisBeforeStart;
 	
 	public ServiceThread(Context mContext, long mSleepInMillis) {
 		super();
 		this.mContext = mContext;
 		this.mSleepTimeInMillis = mSleepInMillis;
-		this.mTimeInMillisBeforeStart = 0;
 	}
 
 	public void run() {
 		Log.i("Thread", "RUN");
-		try {
-			sleep(mTimeInMillisBeforeStart);
-		} catch (InterruptedException e1) {
-			// TODO Send notification
-			e1.printStackTrace();
-		}
 		
 		boolean kill = false;
 		long sleepInMillis = this.mSleepTimeInMillis;
@@ -88,10 +80,5 @@ public class ServiceThread extends Thread {
 	/** Change the sleep duration between two wallpaper */
 	public synchronized void changeSleep(long timeInMillis) {
 		this.mSleepTimeInMillis = timeInMillis;
-	}
-	
-	/** Change the sleep duration between two wallpaper */
-	public void setTimeToSleepBeforeStart(long timeInMillis) {
-		this.mTimeInMillisBeforeStart = timeInMillis;
 	}
 }

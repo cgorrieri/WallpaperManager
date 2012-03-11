@@ -29,14 +29,12 @@ public class Playlist {
 	public int getSelected() { return mSelected; }
 	public boolean isSelected() { return mSelected == 1 ? true : false; }
 	public void setSelected(int selected) { this.mSelected = selected; }
-	public void setSelected(boolean selected) { this.mSelected = selected ? 1 : 0; }
+	public void setSelected(boolean selected) { this.mSelected = (selected ? 1 : 0); }
 
 	public void setId(int mId) { this.mId = mId; }
-
 	public int getId() { return mId; }
-
+	
 	public void setName(String mName) { this.mName = mName; }
-
 	public String getName() { return mName; }
 
 }
