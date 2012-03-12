@@ -1,5 +1,6 @@
 - Comments during coding : Everywhere
 - Make code Better : Everywhere
+- Make action on multiple selection
 - Fix bug when add a wallpaper in a playlist and after switch to the playlist content : works with SGS but not with VDM
 - Make adding wallpaper in playlist affect on service
 - Make internalisation
