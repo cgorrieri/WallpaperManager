@@ -19,17 +19,18 @@ import android.widget.Toast;
 
 import com.wallpapers_manager.cyril.R;
 import com.wallpapers_manager.cyril.adapter.WallpapersArrayAdapter;
-import com.wallpapers_manager.cyril.bdd.FoldersDBAdapter;
-import com.wallpapers_manager.cyril.bdd.WallpapersDBAdapter;
-import com.wallpapers_manager.cyril.data.Folder;
+import com.wallpapers_manager.cyril.bdd.PlaylistsDBAdapter;
+import com.wallpapers_manager.cyril.bdd.WallpapersPlaylistDBAdapter;
+import com.wallpapers_manager.cyril.data.Playlist;
 import com.wallpapers_manager.cyril.data.Wallpaper;
+import com.wallpapers_manager.cyril.data.WallpaperPlaylist;
 import com.wallpapers_manager.cyril.widget.CheckableRelativeLayout;
 import com.wallpapers_manager.cyril.widget.MultiSelectGridView;
 
 //public class WallpapersActivity extends ListActivity {
-public class WallpapersSelectableActivity extends Activity {	
+public class WallpapersPlaylistSelectableActivity extends Activity {	
 	private Context 		mContext;
-	private Folder 			mFolder;
+	private Playlist 			mPlaylist;
 	
 	private MultiSelectGridView 	mGridView;
 	private TextView 				mTextView;
@@ -41,23 +42,23 @@ public class WallpapersSelectableActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallpapers_selectable_grid);
         
-        mContext = WallpapersTabActivityGroup._group;
+        mContext = PlaylistsTabActivityGroup._group;
         
-        int folderId = this.getIntent().getIntExtra("folderId", 0);
-        FoldersDBAdapter foldersDBAdapter = new FoldersDBAdapter(mContext);
-        foldersDBAdapter.open();
-        	mFolder = foldersDBAdapter.getFolder(folderId);
-        foldersDBAdapter.close();
+        int playlistId = this.getIntent().getIntExtra("playlistId", 0);
+        PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
+        playlistsDBAdapter.open();
+        	mPlaylist = playlistsDBAdapter.getPlaylist(playlistId);
+        playlistsDBAdapter.close();
         
         mTextView = (TextView) findViewById(R.id.name);
-        mTextView.setText(mFolder.getName());
+        mTextView.setText(mPlaylist.getName());
 
         mGridView = (MultiSelectGridView) findViewById(R.id.gridview);
         
-        final WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
-        wallpapersDBAdapter.open();
-        	ArrayList<Wallpaper> wallpapersList = wallpapersDBAdapter.getWallpapersFromFolder(mFolder);
-        wallpapersDBAdapter.close();
+        final WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
+        wallpapersPlaylistDBAdapter.open();
+        	ArrayList<Wallpaper> wallpapersList = wallpapersPlaylistDBAdapter.getWallpapersFromPlaylist(mPlaylist);
+        wallpapersPlaylistDBAdapter.close();
         
         mGridView.setAdapter(new WallpapersArrayAdapter(mContext, wallpapersList));
         
@@ -94,7 +95,7 @@ public class WallpapersSelectableActivity extends Activity {
     public void onButtonClick(View v) {
 		switch (v.getId()) {
 		case R.id.delete:
-			deleteWallpapers();
+			deleteWallpapersInPlaylist();
 			break;
 //		case R.id.viewCheckedItemsButton:
 //			showSelectedItems();
@@ -110,26 +111,25 @@ public class WallpapersSelectableActivity extends Activity {
 	 * ListView#getCheckItemIds() on Android 1.6 at least @see
 	 * http://code.google.com/p/android/issues/detail?id=6609
 	 */
-	private void deleteWallpapers() {
+	private void deleteWallpapersInPlaylist() {
 		final SparseBooleanArray checkedItems = mGridView.getCheckedItemPositions();
 		if (checkedItems == null) {
-			Toast.makeText(this, "No folder selected",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "No wallpaper selected", Toast.LENGTH_LONG).show();
 			return;
 		}
 		final int checkedItemsCount = checkedItems.size();
-		WallpapersDBAdapter wallpapersDBAdapter = new WallpapersDBAdapter(mContext);
+		WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
 		for (int i = 0; i < checkedItemsCount; ++i) {
 			boolean isChecked = checkedItems.valueAt(i);
 			if (isChecked) {
 				int id = checkedItems.keyAt(i);
-				wallpapersDBAdapter.open();
-					wallpapersDBAdapter.removeWallpaper(id);
-				wallpapersDBAdapter.close();
+				wallpapersPlaylistDBAdapter.open();
+					wallpapersPlaylistDBAdapter.remove(new WallpaperPlaylist(id, mPlaylist.getId()));
+				wallpapersPlaylistDBAdapter.close();
 			}
 		}
 		
-		WallpapersTabActivityGroup._group.finishFromChild(this);
+		PlaylistsTabActivityGroup._group.finishFromChild(this);
 	}
 
 	/**

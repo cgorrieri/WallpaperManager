@@ -1,7 +1,7 @@
 package com.wallpapers_manager.cyril.activity;
 
+import static com.wallpapers_manager.cyril.WallpaperManagerConstants.BROADCAST_UPDATE_WPP_PL;
 import android.app.Activity;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -17,9 +18,9 @@ import com.wallpapers_manager.cyril.adapter.WallpapersPlaylistCursorAdapter;
 import com.wallpapers_manager.cyril.bdd.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.bdd.WallpapersPlaylistDBAdapter;
 import com.wallpapers_manager.cyril.data.Playlist;
-import static com.wallpapers_manager.cyril.WallpaperManagerConstants.*;
 
 public class WallpapersPlaylistActivity extends Activity {
+	private static final int MENU_MORE = 0;
 	private Context 	mContext;
 	private Playlist 	mPlaylist;
 	private GridView 	mGridView;
@@ -63,6 +64,19 @@ public class WallpapersPlaylistActivity extends Activity {
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, MENU_MORE, 0, "More");
         return true;
-    } 
+    }
+
+    /* Handles item selections */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+	        case MENU_MORE:
+	        	Intent intent = new Intent(mContext, WallpapersPlaylistSelectableActivity.class);
+	        	intent.putExtra("playlistId", mPlaylist.getId());
+	        	PlaylistsTabActivityGroup._group.startChildActivity("WallpapersPlaylistSelectableActivity", intent);
+	        	return true;
+        }
+        return false;
+    }
 }

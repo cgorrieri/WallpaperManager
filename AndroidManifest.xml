@@ -13,16 +13,17 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".activity.PlaylistsTabActivityGroup" />
-		<activity android:name=".activity.PlaylistsActivity" />
-		<activity android:name=".activity.PlaylistsSelectableActivity" />
-		<activity android:name=".activity.WallpapersPlaylistActivity" />
-		<activity android:name=".activity.PlaylistsSettingActivity" />
 		<activity android:name=".activity.WallpapersTabActivityGroup" />
 		<activity android:name=".activity.FoldersActivity" />
 		<activity android:name=".activity.FoldersSelectableActivity" />
 		<activity android:name=".activity.WallpapersActivity" />
 		<activity android:name=".activity.WallpapersSelectableActivity" />
+		<activity android:name=".activity.PlaylistsTabActivityGroup" />
+		<activity android:name=".activity.PlaylistsActivity" />
+		<activity android:name=".activity.PlaylistsSelectableActivity" />
+		<activity android:name=".activity.PlaylistsSettingActivity" />
+		<activity android:name=".activity.WallpapersPlaylistActivity" />
+		<activity android:name=".activity.WallpapersPlaylistSelectableActivity" />
 		<service android:name=".thread_and_service.RunPlaylistService" />
 	</application>
 </manifest> 
