@@ -1,115 +1,36 @@
 package com.wallpapers_manager.cyril.activity;
 
-
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CheckedTextView;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.wallpapers_manager.cyril.R;
-import com.wallpapers_manager.cyril.adapter.WallpapersArrayAdapter;
 import com.wallpapers_manager.cyril.bdd.PlaylistsDBAdapter;
 import com.wallpapers_manager.cyril.bdd.WallpapersPlaylistDBAdapter;
 import com.wallpapers_manager.cyril.data.Playlist;
 import com.wallpapers_manager.cyril.data.Wallpaper;
 import com.wallpapers_manager.cyril.data.WallpaperPlaylist;
-import com.wallpapers_manager.cyril.widget.CheckableRelativeLayout;
-import com.wallpapers_manager.cyril.widget.MultiSelectGridView;
 
 //public class WallpapersActivity extends ListActivity {
-public class WallpapersPlaylistSelectableActivity extends Activity {	
-	private Context 		mContext;
-	private Playlist 			mPlaylist;
-	
-	private MultiSelectGridView 	mGridView;
-	private TextView 				mTextView;
-	private CheckedTextView		mCheckedTextView;
+public class WallpapersPlaylistSelectableActivity extends WallpapersSelectableActivityAbstract {
+	private static final int DELETE = 10;
+	private Playlist mPlaylist;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wallpapers_selectable_grid);
-        
-        mContext = PlaylistsTabActivityGroup._group;
-        
-        int playlistId = this.getIntent().getIntExtra("playlistId", 0);
-        PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
-        playlistsDBAdapter.open();
-        	mPlaylist = playlistsDBAdapter.getPlaylist(playlistId);
-        playlistsDBAdapter.close();
-        
-        mTextView = (TextView) findViewById(R.id.name);
-        mTextView.setText(mPlaylist.getName());
-
-        mGridView = (MultiSelectGridView) findViewById(R.id.gridview);
-        
-        final WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
-        wallpapersPlaylistDBAdapter.open();
-        	ArrayList<Wallpaper> wallpapersList = wallpapersPlaylistDBAdapter.getWallpapersFromPlaylist(mPlaylist);
-        wallpapersPlaylistDBAdapter.close();
-        
-        mGridView.setAdapter(new WallpapersArrayAdapter(mContext, wallpapersList));
-        
-        mGridView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-				CheckableRelativeLayout checkableRelativeLayout = (CheckableRelativeLayout)view;
-				if(checkableRelativeLayout.isChecked()) {
-					checkableRelativeLayout.setChecked(false);
-					if(mCheckedTextView.isChecked())
-						mCheckedTextView.setChecked(false);
-				} else
-					checkableRelativeLayout.setChecked(true);
-			}
-		});
-        
-        mCheckedTextView = (CheckedTextView) findViewById(R.id.select_all);
-		mCheckedTextView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(mCheckedTextView.isChecked()) {
-					clearSelection();
-					mCheckedTextView.setChecked(false);
-				} else {
-					selectAll();
-					mCheckedTextView.setChecked(true);
-				}
-			}
-		});
     }
-    
-    public void onButtonClick(View v) {
-		switch (v.getId()) {
-		case R.id.delete:
-			deleteWallpapersInPlaylist();
-			break;
-//		case R.id.viewCheckedItemsButton:
-//			showSelectedItems();
-//			break;
-//		case R.id.toggleChoiceModeButton:
-//			toggleChoiceMode();
-//			break;
-		}
-	}
 
 	/**
-	 * Show a message giving the selected item IDs. There seems to be a bug with
-	 * ListView#getCheckItemIds() on Android 1.6 at least @see
-	 * http://code.google.com/p/android/issues/detail?id=6609
+	 * Remove selected wallpaper from the playlist
 	 */
 	private void deleteWallpapersInPlaylist() {
 		final SparseBooleanArray checkedItems = mGridView.getCheckedItemPositions();
@@ -131,35 +52,50 @@ public class WallpapersPlaylistSelectableActivity extends Activity {
 		
 		PlaylistsTabActivityGroup._group.finishFromChild(this);
 	}
-
-	/**
-	 * Uncheck all the items
-	 */
-	private void clearSelection() {
-		final int itemCount = mGridView.getCount();
-		for (int i = 0; i < itemCount; ++i) {
-			mGridView.setItemChecked(i, false);
-		}
-	}
 	
-	/**
-	 * Check all the items
-	 */
-	private void selectAll() {
-		final int itemCount = mGridView.getCount();
-		for (int i = 0; i < itemCount; ++i) {
-			mGridView.setItemChecked(i, true);
-		}
-	}
-	
-    
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
+	@Override
+	protected void initConteneur() {
+		int playlistId = this.getIntent().getIntExtra("playlistId", 0);
+        PlaylistsDBAdapter playlistsDBAdapter = new PlaylistsDBAdapter(mContext);
+        playlistsDBAdapter.open();
+        	mPlaylist = playlistsDBAdapter.getPlaylist(playlistId);
+        playlistsDBAdapter.close();
+	}  
 
-    /* Handles item selections */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return false;
-    }
-    
+	@Override
+	protected ArrayList<Wallpaper> getWallpapers() {
+        final WallpapersPlaylistDBAdapter wallpapersPlaylistDBAdapter = new WallpapersPlaylistDBAdapter(mContext);
+        wallpapersPlaylistDBAdapter.open();
+        	ArrayList<Wallpaper> wallpapersList = wallpapersPlaylistDBAdapter.getWallpapersFromPlaylist(mPlaylist);
+        wallpapersPlaylistDBAdapter.close();
+        return wallpapersList;
+	}
+
+	@Override
+	protected String getConteneurName() {
+		return mPlaylist.getName();
+	}
+
+	@Override
+	protected void displayButtonAction() {
+		mLayoutForButton = (LinearLayout) findViewById(R.id.buttonLayout);
+    	/* DELETE */
+		Button buttonDelete = new Button(mContext);
+		buttonDelete.setId(DELETE);
+		// TODO use @string
+		buttonDelete.setText("Delete");
+		buttonDelete.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				deleteWallpapersInPlaylist();
+			}
+		});
+		mLayoutForButton.addView(buttonDelete);
+		// TODO copy, move
+	}
+
+	@Override
+	protected Context getContext() {
+		return PlaylistsTabActivityGroup._group;
+	}  
 }

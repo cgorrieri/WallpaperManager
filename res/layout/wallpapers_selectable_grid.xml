@@ -29,50 +29,17 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/buttonLayout1"
+        android:id="@+id/buttonLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/move_to"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onButtonClick"
-            android:text="Move to" />
-
-        <Button
-            android:id="@+id/copy_to"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onButtonClick"
-            android:text="Copy to" />
-
-        <Button
-            android:id="@+id/delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onButtonClick"
-            android:text="Delete" />
-
-        <Button
-            android:id="@+id/add_to"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onButtonClick"
-            android:text="Add to" />
-    </LinearLayout>
+        android:orientation="horizontal" />
 
     <com.wallpapers_manager.cyril.widget.MultiSelectGridView
         android:id="@+id/gridview"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_above="@id/buttonLayout1"
+        android:layout_above="@id/buttonLayout"
         android:layout_below="@id/select_all"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"

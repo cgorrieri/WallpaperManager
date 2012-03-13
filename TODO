@@ -1,8 +1,9 @@
 ## TODO ##
 - Comments during coding : Everywhere
 - Make code Better : Everywhere
-- Create miniature for performence
+- Create miniature for performance
 - Make action on multiple selection
+- Share layout
 - Fix bug when add a wallpaper in a playlist and after switch to the playlist content : works with SGS but not with VDM
 - Make adding wallpaper in playlist affect on service
 - Make internalisation

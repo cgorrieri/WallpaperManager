@@ -25,8 +25,7 @@ public class WallpapersArrayAdapter extends ArrayAdapter<Wallpaper> {
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+	public View getView(int position, View convertView, ViewGroup parent) {
 		final Wallpaper wallpaper = this.getItem(position);
 		View view = convertView;
 		if(view == null)
